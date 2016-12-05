@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\GTAVEnv.h" />
+    <ClInclude Include="..\include\GTAVController.h" />
+    <ClInclude Include="..\include\GTAVControllerSharedMemory.h" />
+    <ClInclude Include="..\include\GTAVKeyboardController.h" />
+    <ClInclude Include="..\include\GTAVRewardCalculator.h" />
+    <ClInclude Include="..\include\SharedAgentMemory.h" />
+    <ClInclude Include="..\include\stdafx.h" />
+    <ClInclude Include="..\include\targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\GTAVEnv.cpp" />
+    <ClCompile Include="..\src\GTAVController.cpp" />
+    <ClCompile Include="..\src\GTAVControllerSharedMemory.cpp" />
+    <ClCompile Include="..\src\GTAVKeyboardController.cpp" />
+    <ClCompile Include="..\src\GTAVRewardCalculator.cpp" />
+    <ClCompile Include="..\src\stdafx.cpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E69FDA73-8F0D-4C8D-9042-D008B2362DF6}</ProjectGuid>
+    <RootNamespace>GTAVController</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <RestorePackages>true</RestorePackages>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">.\</SolutionDir>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="..\..\..\vnc-windows\CommonController\.nuget\NuGet.targets" Condition="Exists('..\..\..\vnc-windows\CommonController\.nuget\NuGet.targets')" />
+    <Import Project="..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_log-vc120.1.61.0.0\build\native\boost_log-vc120.targets" Condition="Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_log-vc120.1.61.0.0\build\native\boost_log-vc120.targets')" />
+    <Import Project="..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_log_setup-vc120.1.61.0.0\build\native\boost_log_setup-vc120.targets" Condition="Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_log_setup-vc120.1.61.0.0\build\native\boost_log_setup-vc120.targets')" />
+    <Import Project="..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_filesystem-vc120.1.61.0.0\build\native\boost_filesystem-vc120.targets" Condition="Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_filesystem-vc120.1.61.0.0\build\native\boost_filesystem-vc120.targets')" />
+    <Import Project="..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_atomic-vc120.1.61.0.0\build\native\boost_atomic-vc120.targets" Condition="Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_atomic-vc120.1.61.0.0\build\native\boost_atomic-vc120.targets')" />
+    <Import Project="..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_date_time-vc120.1.61.0.0\build\native\boost_date_time-vc120.targets" Condition="Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_date_time-vc120.1.61.0.0\build\native\boost_date_time-vc120.targets')" />
+    <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros">
+    <NuGetPackageImportStamp>70ed4852</NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
+    <ExecutablePath>$(VC_ExecutablePath_x86);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);</ExecutablePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ExecutablePath>$(VC_ExecutablePath_x86);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);</ExecutablePath>
+  </PropertyGroup>
+  <Import Project="..\..\..\vnc-windows\CommonController\VisualStudio\common.props" />
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\include;..\..\..\vnc-windows\CommonController\VisualStudio\packages\AutoItX.3.3.12.0\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>..\vendor\AutoIt\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>AutoItX3_DLL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Link>
+      <AdditionalLibraryDirectories>..\..\..\vnc-windows\CommonController\VisualStudio\packages\AutoItX.3.3.12.0\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>AutoItX3_DLL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command />
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message />
+    </PostBuildEvent>
+    <ClCompile>
+      <MinimalRebuild>true</MinimalRebuild>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Link>
+      <AdditionalLibraryDirectories>..\..\..\vnc-windows\CommonController\VisualStudio\packages\AutoItX.3.3.12.0\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>AutoItX3_DLL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command />
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message />
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\vnc-windows\CommonController\VisualStudio\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\vnc-windows\CommonController\VisualStudio\.nuget\NuGet.targets'))" />
+    <Error Condition="!Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_log-vc120.1.61.0.0\build\native\boost_log-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_log-vc120.1.61.0.0\build\native\boost_log-vc120.targets'))" />
+    <Error Condition="!Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_log_setup-vc120.1.61.0.0\build\native\boost_log_setup-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_log_setup-vc120.1.61.0.0\build\native\boost_log_setup-vc120.targets'))" />
+    <Error Condition="!Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_filesystem-vc120.1.61.0.0\build\native\boost_filesystem-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_filesystem-vc120.1.61.0.0\build\native\boost_filesystem-vc120.targets'))" />
+    <Error Condition="!Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_atomic-vc120.1.61.0.0\build\native\boost_atomic-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_atomic-vc120.1.61.0.0\build\native\boost_atomic-vc120.targets'))" />
+    <Error Condition="!Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_date_time-vc120.1.61.0.0\build\native\boost_date_time-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_date_time-vc120.1.61.0.0\build\native\boost_date_time-vc120.targets'))" />
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+</Project>

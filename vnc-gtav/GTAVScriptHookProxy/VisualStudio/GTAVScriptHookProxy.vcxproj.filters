@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Scenario">
+      <UniqueIdentifier>{d75f5c9e-a42e-4d04-82fa-f33014e3860e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scenario">
+      <UniqueIdentifier>{c8f8add6-ce8d-4c11-bed3-6576a3f39119}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\script.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ScriptHookSharedMemory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\AbstractActor.cpp">
+      <Filter>Source Files\Scenario</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\AbstractVehicleActor.cpp">
+      <Filter>Source Files\Scenario</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PedestrianActor.cpp">
+      <Filter>Source Files\Scenario</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PlayerActor.cpp">
+      <Filter>Source Files\Scenario</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Scenario.cpp">
+      <Filter>Source Files\Scenario</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ScenarioFactory.cpp">
+      <Filter>Source Files\Scenario</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ScenarioManager.cpp">
+      <Filter>Source Files\Scenario</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TaskFactory.cpp">
+      <Filter>Source Files\Scenario</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\VehicleActor.cpp">
+      <Filter>Source Files\Scenario</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\nodes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\rewards.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tinyxml2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Keyboard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\script.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ScriptHookSharedMemory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\AbstractActor.h">
+      <Filter>Header Files\Scenario</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\AbstractVehicleActor.h">
+      <Filter>Header Files\Scenario</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\BringVehicleToHalt.h">
+      <Filter>Header Files\Scenario</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\DriveToCoordinate.h">
+      <Filter>Header Files\Scenario</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\IActor.h">
+      <Filter>Header Files\Scenario</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ITask.h">
+      <Filter>Header Files\Scenario</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\LightActor.h">
+      <Filter>Header Files\Scenario</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\PedestrianActor.h">
+      <Filter>Header Files\Scenario</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\PedList.h">
+      <Filter>Header Files\Scenario</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\PlayerActor.h">
+      <Filter>Header Files\Scenario</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Scenario.h">
+      <Filter>Header Files\Scenario</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ScenarioFactory.h">
+      <Filter>Header Files\Scenario</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ScenarioManager.h">
+      <Filter>Header Files\Scenario</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\TaskFactory.h">
+      <Filter>Header Files\Scenario</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\VehicleActor.h">
+      <Filter>Header Files\Scenario</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\VehicleList.h">
+      <Filter>Header Files\Scenario</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\WalkToCoordinate.h">
+      <Filter>Header Files\Scenario</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\nodes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\rewards.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\tinyxml2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Keyboard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>

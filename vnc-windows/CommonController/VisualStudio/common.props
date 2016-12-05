@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_PropertySheetDisplayName>common-controller</_PropertySheetDisplayName>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)\..\bin</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)\$(Configuration)\$(ProjectName)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)..\bin</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</IgnoreImportLibrary>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <RunCodeAnalysis Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</RunCodeAnalysis>
+    <CodeAnalysisIgnoreGeneratedCode Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</CodeAnalysisIgnoreGeneratedCode>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)</TargetName>
+    <NuGetPackageImportStamp>3a9e7cc8</NuGetPackageImportStamp>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\vnc-windows\CommonController\VisualStudio\..\include;..\include;..\..\..\vnc-windows\CommonController\VisualStudio\..\vendor\jsoncpp-0.10.5\dist;..\..\..\vnc-windows\CommonController\VisualStudio\..\vendor\websocketpp-0.6.0;..\..\..\vnc-windows\CommonController\VisualStudio\..\vendor\vjoy-2.1.5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;WIN32;NDEBUG;_WINDOWS;ROMEBOT_EXPORTS;NOMINMAX;CURL_STATICLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>..\..\..\vnc-windows\CommonController\VisualStudio\$(Configuration);..\..\..\vnc-windows\CommonController\VisualStudio\..\vendor\vjoy-2.1.5;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>CommonController.lib;vJoyInterface.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+    <!--<PostBuildEvent>-->
+      <!--<Command>call xcopy /S /Y "..\..\..\vnc-windows\CommonController\VisualStudio\..\bin\*.*" "$(TargetDir)"</Command>-->
+    <!--</PostBuildEvent>-->
+    <!--<PostBuildEvent>-->
+      <!--<Message>copy common dlls</Message>-->
+    <!--</PostBuildEvent>-->
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Optimization>Disabled</Optimization>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <EnablePREfast>false</EnablePREfast>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <BrowseInformation>true</BrowseInformation>
+    </ClCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateMapFile>true</GenerateMapFile>
+    </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost.1.61.0.0\build\native\boost.targets" Condition="Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost.1.61.0.0\build\native\boost.targets')" />
+    <Import Project="..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_thread-vc120.1.61.0.0\build\native\boost_thread-vc120.targets" Condition="Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_thread-vc120.1.61.0.0\build\native\boost_thread-vc120.targets')" />
+    <Import Project="..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_date_time-vc120.1.61.0.0\build\native\boost_date_time-vc120.targets" Condition="Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_date_time-vc120.1.61.0.0\build\native\boost_date_time-vc120.targets')" />
+    <Import Project="..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_system-vc120.1.61.0.0\build\native\boost_system-vc120.targets" Condition="Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_system-vc120.1.61.0.0\build\native\boost_system-vc120.targets')" />
+    <Import Project="..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_chrono-vc120.1.61.0.0\build\native\boost_chrono-vc120.targets" Condition="Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_chrono-vc120.1.61.0.0\build\native\boost_chrono-vc120.targets')" />
+    <Import Project="..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_regex-vc120.1.61.0.0\build\native\boost_regex-vc120.targets" Condition="Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_regex-vc120.1.61.0.0\build\native\boost_regex-vc120.targets')" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros">
+    <NuGetPackageImportStamp>8a597509</NuGetPackageImportStamp>
+  </PropertyGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost.1.61.0.0\build\native\boost.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost.1.61.0.0\build\native\boost.targets'))" />
+    <Error Condition="!Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_thread-vc120.1.61.0.0\build\native\boost_thread-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_thread-vc120.1.61.0.0\build\native\boost_thread-vc120.targets'))" />
+    <Error Condition="!Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_date_time-vc120.1.61.0.0\build\native\boost_date_time-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_date_time-vc120.1.61.0.0\build\native\boost_date_time-vc120.targets'))" />
+    <Error Condition="!Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_system-vc120.1.61.0.0\build\native\boost_system-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_system-vc120.1.61.0.0\build\native\boost_system-vc120.targets'))" />
+    <Error Condition="!Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_chrono-vc120.1.61.0.0\build\native\boost_chrono-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_chrono-vc120.1.61.0.0\build\native\boost_chrono-vc120.targets'))" />
+    <Error Condition="!Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_regex-vc120.1.61.0.0\build\native\boost_regex-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_regex-vc120.1.61.0.0\build\native\boost_regex-vc120.targets'))" />
+  </Target>
+</Project>

@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\AbstractActor.cpp" />
+    <ClCompile Include="..\src\AbstractVehicleActor.cpp" />
+    <ClCompile Include="..\src\Keyboard.cpp" />
+    <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\nodes.cpp" />
+    <ClCompile Include="..\src\PedestrianActor.cpp" />
+    <ClCompile Include="..\src\PlayerActor.cpp" />
+    <ClCompile Include="..\src\rewards.cpp" />
+    <ClCompile Include="..\src\Scenario.cpp" />
+    <ClCompile Include="..\src\ScenarioFactory.cpp" />
+    <ClCompile Include="..\src\ScenarioManager.cpp" />
+    <ClCompile Include="..\src\script.cpp" />
+    <ClCompile Include="..\src\ScriptHookSharedMemory.cpp" />
+    <ClCompile Include="..\src\TaskFactory.cpp" />
+    <ClCompile Include="..\src\tinyxml2.cpp" />
+    <ClCompile Include="..\src\VehicleActor.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\AbstractActor.h" />
+    <ClInclude Include="..\include\AbstractVehicleActor.h" />
+    <ClInclude Include="..\include\BringVehicleToHalt.h" />
+    <ClInclude Include="..\include\DriveToCoordinate.h" />
+    <ClInclude Include="..\include\IActor.h" />
+    <ClInclude Include="..\include\ITask.h" />
+    <ClInclude Include="..\include\Keyboard.h" />
+    <ClInclude Include="..\include\LightActor.h" />
+    <ClInclude Include="..\include\nodes.h" />
+    <ClInclude Include="..\include\PedestrianActor.h" />
+    <ClInclude Include="..\include\PedList.h" />
+    <ClInclude Include="..\include\PlayerActor.h" />
+    <ClInclude Include="..\include\rewards.h" />
+    <ClInclude Include="..\include\Scenario.h" />
+    <ClInclude Include="..\include\ScenarioFactory.h" />
+    <ClInclude Include="..\include\ScenarioManager.h" />
+    <ClInclude Include="..\include\script.h" />
+    <ClInclude Include="..\include\ScriptHookSharedMemory.h" />
+    <ClInclude Include="..\include\TaskFactory.h" />
+    <ClInclude Include="..\include\tinyxml2.h" />
+    <ClInclude Include="..\include\VehicleActor.h" />
+    <ClInclude Include="..\include\VehicleList.h" />
+    <ClInclude Include="..\include\WalkToCoordinate.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{5E802DBF-5F7A-4240-B4B1-F36324502EE4}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>GTAVScriptHookProxy</RootNamespace>
+    <ProjectName>GTAVScriptHookProxy</ProjectName>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\vnc-windows\CommonController\VisualStudio\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros">
+    <NuGetPackageImportStamp>e0a892c5</NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <TargetExt>.asi</TargetExt>
+    <OutDir>..\bin\</OutDir>
+    <IntDir>tmp\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;Pools_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <AdditionalIncludeDirectories>..\..\GTAVController\include;..\include;..\vendor\ScriptHookV\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalOptions>..\vendor\ScriptHookV\lib\ScriptHookV.lib %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <PostBuildEvent>
+      <Command>echo copy "$(ProjectDir)..\bin\GTAVScriptHookProxy.asi" "$(GTAV_DIR)"
+copy "$(ProjectDir)..\bin\GTAVScriptHookProxy.asi" "$(GTAV_DIR)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost.1.61.0.0\build\native\boost.targets" Condition="Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost.1.61.0.0\build\native\boost.targets')" />
+    <Import Project="..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_system-vc120.1.61.0.0\build\native\boost_system-vc120.targets" Condition="Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_system-vc120.1.61.0.0\build\native\boost_system-vc120.targets')" />
+    <Import Project="..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_filesystem-vc120.1.61.0.0\build\native\boost_filesystem-vc120.targets" Condition="Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_filesystem-vc120.1.61.0.0\build\native\boost_filesystem-vc120.targets')" />
+    <Import Project="..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_thread-vc120.1.61.0.0\build\native\boost_thread-vc120.targets" Condition="Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_thread-vc120.1.61.0.0\build\native\boost_thread-vc120.targets')" />
+    <Import Project="..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_log_setup-vc120.1.61.0.0\build\native\boost_log_setup-vc120.targets" Condition="Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_log_setup-vc120.1.61.0.0\build\native\boost_log_setup-vc120.targets')" />
+    <Import Project="..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_chrono-vc120.1.61.0.0\build\native\boost_chrono-vc120.targets" Condition="Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_chrono-vc120.1.61.0.0\build\native\boost_chrono-vc120.targets')" />
+    <Import Project="..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_atomic-vc120.1.61.0.0\build\native\boost_atomic-vc120.targets" Condition="Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_atomic-vc120.1.61.0.0\build\native\boost_atomic-vc120.targets')" />
+    <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+    <Import Project="..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_log-vc120.1.61.0.0\build\native\boost_log-vc120.targets" Condition="Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_log-vc120.1.61.0.0\build\native\boost_log-vc120.targets')" />
+    <Import Project="..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_date_time-vc120.1.61.0.0\build\native\boost_date_time-vc120.targets" Condition="Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_date_time-vc120.1.61.0.0\build\native\boost_date_time-vc120.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost.1.61.0.0\build\native\boost.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost.1.61.0.0\build\native\boost.targets'))" />
+    <Error Condition="!Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_system-vc120.1.61.0.0\build\native\boost_system-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_system-vc120.1.61.0.0\build\native\boost_system-vc120.targets'))" />
+    <Error Condition="!Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_filesystem-vc120.1.61.0.0\build\native\boost_filesystem-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_filesystem-vc120.1.61.0.0\build\native\boost_filesystem-vc120.targets'))" />
+    <Error Condition="!Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_thread-vc120.1.61.0.0\build\native\boost_thread-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_thread-vc120.1.61.0.0\build\native\boost_thread-vc120.targets'))" />
+    <Error Condition="!Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_log_setup-vc120.1.61.0.0\build\native\boost_log_setup-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_log_setup-vc120.1.61.0.0\build\native\boost_log_setup-vc120.targets'))" />
+    <Error Condition="!Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_chrono-vc120.1.61.0.0\build\native\boost_chrono-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_chrono-vc120.1.61.0.0\build\native\boost_chrono-vc120.targets'))" />
+    <Error Condition="!Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_atomic-vc120.1.61.0.0\build\native\boost_atomic-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_atomic-vc120.1.61.0.0\build\native\boost_atomic-vc120.targets'))" />
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+    <Error Condition="!Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_log-vc120.1.61.0.0\build\native\boost_log-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_log-vc120.1.61.0.0\build\native\boost_log-vc120.targets'))" />
+    <Error Condition="!Exists('..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_date_time-vc120.1.61.0.0\build\native\boost_date_time-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\vnc-windows\CommonController\VisualStudio\packages\boost_date_time-vc120.1.61.0.0\build\native\boost_date_time-vc120.targets'))" />
+  </Target>
+</Project>
