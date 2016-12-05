@@ -52,6 +52,8 @@ Install requirements (one line at a time, or in different Powershell windows to 
 
 ```
 choco feature enable -n allowGlobalConfirmation
+choco install vcpython27
+choco install tightvnc
 choco install python2
 choco install vcredist2013 vcredist2015
 choco install autoit
