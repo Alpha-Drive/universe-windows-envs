@@ -7,7 +7,11 @@ HINT: To Paste commands into Powershell, make sure you don't have anything selec
 
 Windows update - AMI only - Run Windows Update and restart if necessary. It will stay at downloading 0kbps for a few minutes while it allocates disk space. The update takes several minutes, but you can continue to install things while it takes place.
 
-Disable Windows update to prevent the install notification from interfering with VNC sessions by running this at startup
+Disable Windows update to prevent the install notification from interfering with VNC sessions by running this [at startup](http://www.howtogeek.com/208224/how-to-add-programs-files-and-folders-to-system-startup-in-windows-8.1/)
+
+Open the “Run” dialog box by pressing the Windows key + R. Type “shell:startup” (without the quotes) in the “Open” edit box and click “OK.”
+
+Create a file called `disable-windows-update.bat`, right click -> Edit, and paste the following.
 ```
  net stop wuauserv
 ```
