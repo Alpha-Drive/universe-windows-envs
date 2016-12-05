@@ -63,7 +63,7 @@ Open a new PowerShell window.
 
 Run the install script (WARNING: If you play GTAV and have saved games or other settings, this will overwrite them. Your settings will be backed up to `~/Documents`)
 ```
-cd $env:UNIVERSE_ENVS_DIR\vnc-gtav
+cd $env:UNIVERSE_WINDOWS_ENVS_DIR\vnc-gtav
 python install.py
 ```
 
@@ -82,15 +82,23 @@ _Xbox360ce is a gamepad emulator that we will need in order to route control fro
 * Close "Vjoy Feeder Demo" and xbox360ce_x64.exe so that GTAVController.exe can take command of the virtual joystick device.
 * Also, if you ever find that your mouse behaves strangely after running the simulator, open Vjoy Feeder Demo to reset things.
 
+### Add vJoy and AutoIT to your system path
+
+Add the following to your [system path](http://www.howtogeek.com/118594/how-to-edit-your-system-path-for-easy-command-line-access/).
+
+```
+C:\Program Files\vJoy\x86;C:\Program Files (x86)\AutoIt3\AutoItX;
+```
+
 ### Run the environment
 In PowerShell
 ```
-python.exe $env:UNIVERSE_ENVS_DIR/vnc-gtav/run_vnc_env.py
+python.exe $env:UNIVERSE_WINDOWS_ENVS_DIR/vnc-gtav/run_vnc_env.py
 ```
 
 Have the server start on admin boot (likely AWS only)
 ```
-Copy-Item "$env:UNIVERSE_ENVS_DIR/vnc-gtav/run_vnc_env_gtav_shortcut.lnk" "$env:USERPROFILE\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup"
+Copy-Item "$env:UNIVERSE_WINDOWS_ENVS_DIR/vnc-gtav/run_vnc_env_gtav_shortcut.lnk" "$env:USERPROFILE\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup"
 ```
 
 ## Connecting a client
@@ -100,22 +108,15 @@ In \*nix, install [universe](https://github.com/openai/universe)
 Run your agent
 ```
 cd universe
-bin/random_agent.py -e VNCGTAVSpeed-v0 -r vnc://<your-windows-ip>:5900+15900 --fps 20
+bin/random_agent.py -e gtav.SaneDriving-v0 -r vnc://<your-windows-ip>:5900+15900 --fps 20
 ```
-
-(Note: VNCGTAVSpeed is a simplified reward system based on speed only. Work is in progress on rewards for following traffic rules, providing a comfortable ride, and navigating to a destination.) 
 
 ## Development
 
 Open the project with Visual Studio
 
 ```
-start "C:\Workspace\universe-envs\vnc-windows\GTAVController\VisualStudio\GTAVController.sln"
-```
-
-Right click the GTAVController project -> Properties -> Configuration Properties -> Select _All Configurations_ -> Debugging -> Environment and add
-```
-PATH=C:\Program Files\vJoy\x86;C:\Program Files (x86)\AutoIt3\AutoItX;%PATH%
+start "C:\Workspace\universe-windows-envs\vnc-windows\GTAVController\VisualStudio\GTAVController.sln"
 ```
 
 ## Structure

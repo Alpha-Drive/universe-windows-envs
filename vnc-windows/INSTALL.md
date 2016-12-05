@@ -7,8 +7,6 @@ HINT: To Paste commands into Powershell, make sure you don't have anything selec
 
 Windows update - AMI only - Run Windows Update and restart if necessary. It will stay at downloading 0kbps for a few minutes while it allocates disk space. The update takes several minutes, but you can continue to install things while it takes place.
 
-We will be running commands that add to your `PATH`, so it's a good idea to save your system `PATH` and user `PATH` somewhere before getting started in case you want to revert back.
-
 Disable Windows update to prevent the install notification from interfering with VNC sessions by running this at startup
 ```
  net stop wuauserv
@@ -70,6 +68,8 @@ Set your PYTHONPATH
 setx PYTHONPATH "C:\tools\python2;C:\tools\python2\Lib;C:\tools\python2\DLLs;C:\tools\python2\Lib\lib-tk;C:\Workspace\universe" -m
 ```
 
+
+
 Set TightVNC to not run on startup
 ```
 & "C:/Program Files/TightVNC/tvnserver.exe" -remove
@@ -83,19 +83,19 @@ Restart PowerShell
 mkdir /Workspace
 ```
 
-Download the binaries (about 2GB) you'll need to control the game (including the source) [from here](https://www.dropbox.com/s/sqia27cqjkemwio/universe-envs.zip?dl=1)
+Download the binaries (about 2GB) you'll need to control the game (including the source) [from here](https://www.dropbox.com/s/ljx7uiodptxr0f3/universe-windows-envs.zip?dl=1)
 and extract them to `C:\Workspace` that you just created. 
 
 Now install our python dependencies
 ```
-cd /Workspace/universe-envs/vnc-windows
+cd /Workspace/universe-windows-envs/vnc-windows
 pip install -r requirements.txt
 ```
 
-Set up the UNIVERSE_ENVS_DIR environment variable
+Set up the UNIVERSE_WINDOWS_ENVS_DIR environment variable
 
 ```
-[Environment]::SetEnvironmentVariable("UNIVERSE_ENVS_DIR", "C:\Workspace\universe-envs", "User")
+[Environment]::SetEnvironmentVariable("UNIVERSE_WINDOWS_ENVS_DIR", "C:\Workspace\universe-windows-envs", "User")
 ```
 
 Restart PowerShell. Check that you can see these environment variables
@@ -149,7 +149,7 @@ Make sure dependencies are downloaded by right clicking the Solution in the Solu
 
 If you get the following error
 ```
-Error	4	error LNK1104: cannot open file 'libboost_system-vc120-mt-gd-1_61.lib'	C:\Workspace\universe-envs\vnc-gtav\GTAVController\VisualStudio\LINK	GTAVController
+Error	4	error LNK1104: cannot open file 'libboost_system-vc120-mt-gd-1_61.lib'	C:\Workspace\universe-windows-envs\vnc-gtav\GTAVController\VisualStudio\LINK	GTAVController
 ```
 
 Then open Tools -> Nuget Package Manager -> Package Manager Console and hit the `Restore` button in the banner that pops up in the console.
@@ -195,4 +195,3 @@ choco list -l
 If the User-Script is having problems, you can look around the following files:
 - `C:\Program Files\Amazon\Ec2ConfigService\Logs\Ec2ConfigLog.txt`
 - `C:\CFN\LOG\cfn-init.log`
-

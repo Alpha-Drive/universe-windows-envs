@@ -18,7 +18,7 @@ from enforce_version import enforce_version
 # TODO: Rearrange directories for a proper import
 CURR_DIR = os.path.dirname(os.path.realpath(__file__))
 GTAV_DIR = os.environ['GTAV_DIR']
-UNIVERSE_ENVS_DIR = os.environ['UNIVERSE_ENVS_DIR']
+UNIVERSE_WINDOWS_ENVS_DIR = os.environ['UNIVERSE_WINDOWS_ENVS_DIR']
 SAVED_GAMES_LOCATION = os.path.expanduser('~\\Documents\\Rockstar Games\\GTA V\\Profiles\\')
 sys.path.append(os.path.join(os.path.abspath(os.path.join(CURR_DIR, os.pardir)), 'vnc-windows'))
 import gym_windows
@@ -51,7 +51,7 @@ def setup():
 
 
 def copy_scripthook():
-    bin_dir = os.path.join(UNIVERSE_ENVS_DIR, 'vnc-gtav', 'GTAVScriptHookProxy', 'bin')
+    bin_dir = os.path.join(UNIVERSE_WINDOWS_ENVS_DIR, 'vnc-gtav', 'GTAVScriptHookProxy', 'bin')
     for filename in ['dinput8.dll', 'GTAVScriptHookProxy.asi', 'ScriptHookV.dev', 'ScriptHookV.dll', 'x360ce_x64.exe']:
         dest_path = os.path.join(GTAV_DIR, filename)
         if os.path.isfile(dest_path):

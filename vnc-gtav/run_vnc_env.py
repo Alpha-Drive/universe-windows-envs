@@ -67,9 +67,9 @@ def _gtav_is_running():
 
 # TODO: Create base class in gym_windows
 class GTAVEnvRunner(object):
-    def __init__(self, env_id, instance_id, skip_loading_saved_game, pause_for_attach, rewards_per_second):
+    def __init__(self, env_id, instance_id, skip_loading_saved_game, pause_for_attach, rewards_per_second, scenario):
         if _platform != "win32":
-            raise AttributeError("VNCGTAV only runs on Windows")
+            raise AttributeError("GTAV only runs on Windows")
         self.env_id = env_id
         self.instance_id = instance_id
         self.skip_loading_saved_game = skip_loading_saved_game
@@ -77,7 +77,7 @@ class GTAVEnvRunner(object):
         self.vnc_port = 5900
         self.websocket_port = 15900
         self.rewards_per_second = rewards_per_second
-
+        self.scenario = scenario
         self.tightvnc_server = None
         self.tightvnc_config = None
         self.gtav_proc = None
@@ -110,7 +110,7 @@ class GTAVEnvRunner(object):
         self.gtav_controller = subprocess.Popen(gtav_controller_command, shell=True, env=gtav_env)
 
     def _start_gtav_controller_command(self):
-        return r'"{GTAV_CONTROLLER_DIR}/bin/{CONTROLLER_PROCESS_NAME}" {env_id} {instance_id} {websocket_port} {rewards_per_second} {skip_loading_saved_game} {pause_for_attach}'.format(
+        return r'"{GTAV_CONTROLLER_DIR}/bin/{CONTROLLER_PROCESS_NAME}" {env_id} {instance_id} {websocket_port} {rewards_per_second} {skip_loading_saved_game} {pause_for_attach} {scenario}'.format(
             GTAV_CONTROLLER_DIR=GTAV_CONTROLLER_DIR,
             env_id=self.env_id,
             instance_id=self.instance_id,
@@ -118,6 +118,7 @@ class GTAVEnvRunner(object):
             skip_loading_saved_game=json.dumps(self.skip_loading_saved_game),
             rewards_per_second=self.rewards_per_second,
             pause_for_attach=json.dumps(self.pause_for_attach),
+            scenario=self.scenario,
             CONTROLLER_PROCESS_NAME=CONTROLLER_PROCESS_NAME,
         )
 
@@ -160,14 +161,21 @@ def try_stuff(fn, clean):
             traceback.print_exc()
         six.reraise(*exc_info)
 
+
 def main():
     parser = argparse.ArgumentParser(description=None)
     parser.add_argument('-v', '--verbose', action='count', dest='verbosity', default=0, help='Set verbosity.')
-    parser.add_argument('-e', '--env_id', default='VNCGTAVSpeed-v0', help='What GTAV sub-environment do you want to run?')
-    parser.add_argument('-s', '--skip-loading-saved-game', action='store_true', help='Do you want to skip reloading the saved game (useful for debugging)?')
-    parser.add_argument('-p', '--pause-for-attach', action='store_true', help='Do you want to pause the controller before running the environment so we can attach a debugger?')
-    parser.add_argument('-i', '--instance_id', default='env_PLACEHOLDER_ID', help='What is the id of this instance of the environment?')
+    parser.add_argument('-e', '--env_id', default='gtav.SaneDriving-v0',
+                        help='What GTAV sub-environment do you want to run?')
+    parser.add_argument('-s', '--skip-loading-saved-game', action='store_true',
+                        help='Do you want to skip reloading the saved game (useful for debugging)?')
+    parser.add_argument('-p', '--pause-for-attach', action='store_true',
+                        help='Do you want to pause the controller before running the environment so we can attach a debugger?')
+    parser.add_argument('-i', '--instance_id', default='env_PLACEHOLDER_ID',
+                        help='What is the id of this instance of the environment?')
     parser.add_argument('-r', '--rewards_per_second', default=8., help='How many rewards per second?')
+    parser.add_argument('-sc', '--scenario', default='', help='The scenario you want to run')
+
     args = parser.parse_args()
 
     logging.basicConfig()
@@ -180,7 +188,7 @@ def main():
     enforce_version(GTAV_DIR)
 
     runner = GTAVEnvRunner(args.env_id, args.instance_id, args.skip_loading_saved_game, args.pause_for_attach,
-                           args.rewards_per_second)
+                           args.rewards_per_second, args.scenario)
 
     try_stuff(runner.popen, runner.popen_cleanup)
 
@@ -194,6 +202,7 @@ def main():
                 except Exception as e:
                     logging.error('Error sending heartbeat \n' + traceback.format_exc())
         time.sleep(15 * 60)
+
 
 if __name__ == '__main__':
     sys.exit(main())

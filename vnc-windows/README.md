@@ -6,7 +6,7 @@ New Project
 -----------------
 Creating a new windows controller project is as easy as calling:
 ```
-python.exe $env:UNIVERSE_ENVS_DIR\windows-boilerplate\new-windows-controller.py --name "AwesomeGame"
+python.exe $env:UNIVERSE_WINDOWS_ENVS_DIR\windows-boilerplate\new-windows-controller.py --name "AwesomeGame"
 ```
 
 Property pages `.props` structure:
