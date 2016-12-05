@@ -138,7 +138,7 @@ $winlogon = "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\win
 
 OR if you like GUI's, install and enter your password into [autologon](https://technet.microsoft.com/en-us/sysinternals/bb963905) to have the server logon on startup.
 
-If you're just running an environment, you're done with the Windows setup portion! Proceed to [GTA setup](/vnc-gtav/README.md)?
+If you're just running an environment, you're done with the Windows setup portion! Back to [GTA setup](/vnc-gtav/README.md)?
 
 ## Developing
 
