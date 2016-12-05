@@ -90,7 +90,7 @@ mkdir /Workspace
 ```
 
 Download the binaries (about 2GB) you'll need to control the game (including the source) [from here](https://www.dropbox.com/s/ljx7uiodptxr0f3/universe-windows-envs.zip?dl=1)
-and extract them to `C:\Workspace` that you just created. 
+and extract the folder inside, `universe-windows-env`, to `C:\Workspace` that you just created.
 
 Now install our python dependencies
 ```
