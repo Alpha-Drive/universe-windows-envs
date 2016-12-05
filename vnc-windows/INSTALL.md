@@ -138,7 +138,8 @@ $winlogon = "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\win
 
 OR if you like GUI's, install and enter your password into [autologon](https://technet.microsoft.com/en-us/sysinternals/bb963905) to have the server logon on startup.
 
-If you're just running an environment, you're done with the Windows setup portion! 
+If you're just running an environment, you're done with the Windows setup portion! [Get back to where you once belonged?][1]
+[1]:javascript:window.history.back()
 
 ## Developing
 
