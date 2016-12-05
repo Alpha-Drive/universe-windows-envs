@@ -45,6 +45,7 @@ Follow the [vnc-windows setup](../vnc-windows/INSTALL.md)
 Environment setup
 -----------------
 * Install the Steam version of the game (the standalone version does not work on Windows Server 2012 as it's missing the necessary Windows Media Feature Pack). Otherwise the standalone version should work, and has the convenient `--offline` flag to keep the game from updating, but currently only the Steam version is tested.
+* Play GTAV to make sure it's working
 
 #### Set an environment variable to point to your GTAV directory
 
