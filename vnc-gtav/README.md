@@ -32,11 +32,11 @@ ami-8c5b5bde	(ap-southeast-1)
 ami-4d9eda77	(ap-southeast-2)
 ```
   * Choose the `g2.2xlarge` type in order to get the GPU required to run the game.
-  * In step four _Add Storage_, make sure to change the EBS size from 35GB to 500GB (GTAV is around ~80GB and we want some extra room as well).
+  * In step four _Add Storage_, make sure to change the EBS size from 35GB to 250GB+ (GTAV is around ~80GB and we want some extra room as well).
   * Don't worry about the keypair
   * The password for the instance is `rRmbgYum8g`. Once you log in using Microsoft Remote Desktop, you’ll be asked to change the Administrator password. Change it to something. If you’re on Windows, you’ll need to use a Mac or Linux or a mobile client to reset the password since there’s a bug in the Windows Remote Desktop client.
   * When you log in, search for *disk management* and open _Create and format hard disk partitions_
-    * Right click the C:\ drive and extend it to the full 500GB
+    * Right click the C:\ drive and extend it to the full amount
 
 Windows Setup
 -------------

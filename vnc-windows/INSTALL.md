@@ -7,7 +7,11 @@ HINT: To Paste commands into Powershell, make sure you don't have anything selec
 
 Windows update - AMI only - Run Windows Update and restart if necessary. It will stay at downloading 0kbps for a few minutes while it allocates disk space. The update takes several minutes, but you can continue to install things while it takes place.
 
-Disable Windows update to prevent the install notification from interfering with VNC sessions by running this at startup
+Disable Windows update to prevent the install notification from interfering with VNC sessions by running this [at startup](http://www.howtogeek.com/208224/how-to-add-programs-files-and-folders-to-system-startup-in-windows-8.1/)
+
+Open the “Run” dialog box by pressing the Windows key + R. Type “shell:startup” (without the quotes) in the “Open” edit box and click “OK.”
+
+Create a file called `disable-windows-update.bat`, right click -> Edit, and paste the following.
 ```
  net stop wuauserv
 ```
@@ -48,6 +52,8 @@ Install requirements (one line at a time, or in different Powershell windows to 
 
 ```
 choco feature enable -n allowGlobalConfirmation
+choco install vcpython27
+choco install tightvnc
 choco install python2
 choco install vcredist2013 vcredist2015
 choco install autoit
@@ -84,7 +90,7 @@ mkdir /Workspace
 ```
 
 Download the binaries (about 2GB) you'll need to control the game (including the source) [from here](https://www.dropbox.com/s/ljx7uiodptxr0f3/universe-windows-envs.zip?dl=1)
-and extract them to `C:\Workspace` that you just created. 
+and extract the folder inside, `universe-windows-env`, to `C:\Workspace` that you just created.
 
 Now install our python dependencies
 ```
@@ -132,7 +138,7 @@ $winlogon = "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\win
 
 OR if you like GUI's, install and enter your password into [autologon](https://technet.microsoft.com/en-us/sysinternals/bb963905) to have the server logon on startup.
 
-If you're just running an environment, you're done with the Windows setup portion! 
+If you're just running an environment, you're done with the Windows setup portion! Back to [GTA setup](/vnc-gtav/README.md#windows-setup)?
 
 ## Developing
 
