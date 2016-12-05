@@ -43,7 +43,6 @@ def download_paths_xml():
 
 
 def setup():
-    download_gtav_controller_binary()
     download_paths_xml()
     replace_saved_games()
     enforce_version(GTAV_DIR)
