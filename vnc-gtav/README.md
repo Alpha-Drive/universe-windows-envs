@@ -96,6 +96,8 @@ Add the following to your [system path](http://www.howtogeek.com/118594/how-to-e
 C:\Program Files\vJoy\x86;C:\Program Files (x86)\AutoIt3\AutoItX;
 ```
 
+Restart Windows
+
 ### Run the environment
 In PowerShell
 ```
