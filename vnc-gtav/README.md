@@ -68,6 +68,11 @@ cd $env:UNIVERSE_WINDOWS_ENVS_DIR\vnc-gtav
 python install.py
 ```
 
+Install Vjoy
+
+[Download the installer](https://drive.google.com/file/d/0B2UgaM91sqeAVE4wWWh3emFDbms/view) and run it. This is locked to a known working of version of vJoySetup.exe hosted in my Google Drive. You can install from vJoy's source forge if you're feeling [rebellious](https://sourceforge.net/projects/vjoystick/files/).
+
+
 #### Xbox360ce setup
 _Xbox360ce is a gamepad emulator that we will need in order to route control from vjoy to GTAV_
 * Close GTAV if it's open

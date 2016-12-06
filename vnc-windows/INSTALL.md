@@ -74,8 +74,6 @@ Set your PYTHONPATH
 setx PYTHONPATH "C:\tools\python2;C:\tools\python2\Lib;C:\tools\python2\DLLs;C:\tools\python2\Lib\lib-tk;C:\Workspace\universe" -m
 ```
 
-
-
 Set TightVNC to not run on startup
 ```
 & "C:/Program Files/TightVNC/tvnserver.exe" -remove

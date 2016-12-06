@@ -64,7 +64,3 @@ def configure_and_start_tightvnc(logger, windowname, port):
     return tightvnc_server, tightvnc_config
 
 
-def install_vjoy():
-    tmp_location = urllib.urlretrieve('https://www.dropbox.com/s/w4xgli1ni4o2zph/vJoySetup.exe?dl=1')[0]
-    # TODO: Automate GUI interactions that complete setup - or use native db commands for control per Aitor
-
