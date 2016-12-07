@@ -203,28 +203,34 @@ void AgentConn::on_websocket_msg_(websocketpp::connection_hdl websocket_cxn, mes
 void AgentConn::process_msg(const Json::Value& request)
 {
 	std::string pretty = json_dumps(request);
-	P_DEBUG("Processing request:" << std::endl << request);
+//	P_DEBUG("Processing request:" << std::endl << request);
+	int i = request["r"].asInt();
+	if (i % 100 == 0)
+	{
+		P_DEBUG("Processing request:" << std::endl << request);
+	}
 
-	if (request == Json::nullValue)
-	{
-		P_WARN("Skipping request with malformed JSON" << std::endl);
-		return;
-	}
-	else if (request["method"] == "v0.control.ping")
-	{
-		std::cout << "Received rpc control ping" << std::endl;
-		send_reply_control_ping(request);
-	}
-	else if (request["method"] == "v0.env.reset")
-	{
-		P_WARN("Received reset request from agent" << std::endl);
-		reset_signal_(request);
-	}
-	else if (request["method"] == "v0.agent.action")
-	{
-		P_INFO("Received action from agent" << std::endl);
-		action_signal_(request);
-	}
+
+//	if (request == Json::nullValue)
+//	{
+//		P_WARN("Skipping request with malformed JSON" << std::endl);
+//		return;
+//	}
+//	else if (request["method"] == "v0.control.ping")
+//	{
+//		std::cout << "Received rpc control ping" << std::endl;
+//		send_reply_control_ping(request);
+//	}
+//	else if (request["method"] == "v0.env.reset")
+//	{
+//		P_WARN("Received reset request from agent" << std::endl);
+//		reset_signal_(request);
+//	}
+//	else if (request["method"] == "v0.agent.action")
+//	{
+//		P_INFO("Received action from agent" << std::endl);
+//		action_signal_(request);
+//	}
 }
 
 void AgentConn::send_json_(std::string const& method, Json::Value const& body, int episode_id, const long long parent_message_id)
