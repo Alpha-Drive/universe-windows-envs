@@ -9,6 +9,8 @@
 #include <set>
 #include <thread>
 #include <boost/signals2.hpp>
+#include <queue>
+#include <boost/lockfree/queue.hpp>
 
 typedef websocketpp::server<websocketpp::config::asio> server;
 typedef boost::signals2::signal<void (const Json::Value agent_request)>  ResetSignal;
@@ -21,7 +23,6 @@ typedef server::message_ptr message_ptr;
 class AgentConn
 {
 public:
-	typedef AgentConn type;
 	AgentConn(int port);
 	~AgentConn();
 	void send_env_describe(std::string const& env_id, std::string const& env_state, int episode_id, int fps, std::string const& metadata="");
@@ -34,16 +35,28 @@ public:
 private:
 	int port_;
 	server websocket_server_;
+	server::timer_ptr message_timer_;
+	std::queue<Json::Value> inbox_;
+	std::queue<Json::Value> outbox_;
 	std::unique_ptr<std::thread> server_thread_;
+	std::unique_ptr<std::thread> event_loop_;
 	websocketpp::connection_hdl most_recent_websocket_cxn_;
 	typedef std::set<websocketpp::connection_hdl, std::owner_less<websocketpp::connection_hdl>> con_list;
 	con_list m_connections;
 	std::mutex m_connection_lock;
+	std::mutex inbox_lock_;
+	std::mutex outbox_lock_;
 
 	void on_websocket_open_(websocketpp::connection_hdl websocket_cxn);
 	void on_websocket_close_(websocketpp::connection_hdl websocket_cxn);
 	void on_websocket_msg_(websocketpp::connection_hdl websocket_cxn, message_ptr msg);
+	void process_msg(const Json::Value& request);
+	void set_message_timer();
+	void on_message_timer(websocketpp::lib::error_code const& ec);
 	void run_server_thread();
+	void check_inbox();
+	void check_outbox();
+	void run_event_loop();
 	Json::Value get_headers_(const long long message_id, int episode_id);
 	void send_json_(std::string const& method, Json::Value const& body, int episode_id, const long long parent_message_id=-1);
 	void populate_sent_at_in_headers_(Json::Value& headers);
