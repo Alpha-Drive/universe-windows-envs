@@ -124,7 +124,7 @@ bin/random_agent.py -e gtav.SaneDriving-v0 -r vnc://<your-windows-ip>:5900+15900
 Open the project with Visual Studio
 
 ```
-start "C:\Workspace\universe-windows-envs\vnc-windows\GTAVController\VisualStudio\GTAVController.sln"
+vnc-windows\CommonController\VisualStudio\GymWindowsControllers.sln
 ```
 
 ## Structure
