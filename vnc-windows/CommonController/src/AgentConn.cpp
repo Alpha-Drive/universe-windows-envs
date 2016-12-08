@@ -6,6 +6,7 @@
 #include <allocators>
 #include <thread>
 #include <Utils.h>
+#include <boost/signals2.hpp>
 
 using websocketpp::lib::placeholders::_1;
 using websocketpp::lib::placeholders::_2;
@@ -17,15 +18,15 @@ bool websocket_send(server* ws_server, websocketpp::connection_hdl& cxn, std::st
 		ws_server->send(cxn, msg, websocketpp::frame::opcode::text);
 		return true;
 	} catch (const websocketpp::lib::error_code& e) {
-		std::cout << "Send failed because: " << e
-			<< "(" << e.message() << ")" << std::endl;
+		BOOST_LOG_TRIVIAL(error) << "Echo failed because: " << e
+			<< "(" << e.message() << ")";
 		return false;
 	}
 }
 
 void AgentConn::run_server_thread()
 {
-	BOOST_LOG_TRIVIAL(info) << std::to_string(port_).c_str();
+	BOOST_LOG_TRIVIAL(info) << "Starting websocket server on port " << std::to_string(port_).c_str();
 	websocket_server_.set_open_handler(bind(&AgentConn::on_websocket_open_, this, ::_1));
 	websocket_server_.set_close_handler(bind(&AgentConn::on_websocket_close_, this, ::_1));
 	websocket_server_.set_message_handler(bind(&AgentConn::on_websocket_msg_, this, ::_1, ::_2));
@@ -33,65 +34,23 @@ void AgentConn::run_server_thread()
 	websocket_server_.listen(port_);
 	websocket_server_.start_accept();
 	websocket_server_.run();
-	P_INFO("Websocket server stopped" << std::endl);
+	BOOST_LOG_TRIVIAL(info) << "Websocket server stopped";
 }
 
-void AgentConn::check_inbox()
-{
-	std::lock_guard<std::mutex> guard(inbox_lock_);
-	if ( ! inbox_.empty())
-	{
-		Json::Value in_msg;
-		in_msg = inbox_.front();
-		inbox_.pop();
-		process_msg(in_msg);
-	}
-}
-
-void AgentConn::check_outbox()
-{
-	std::lock_guard<std::mutex> guard(outbox_lock_);
-	if ( ! outbox_.empty())
-	{
-		Json::Value out_msg;
-		out_msg = outbox_.front();
-		outbox_.pop();
-		websocket_send(&websocket_server_, most_recent_websocket_cxn_, json_dumps(out_msg));
-	}
-}
-
-void AgentConn::run_event_loop()
-{
-	BOOST_LOG_TRIVIAL(info) << "Starting event loop";
-	while (true)
-	{
-		// send reward
-		check_outbox();
-
-		// process action
-		check_inbox();
-
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
-	}
-}
-
-AgentConn::AgentConn(int port) : inbox_(), outbox_()
+AgentConn::AgentConn(int port)
 {
 	port_ = port;
 	server_thread_.reset(new std::thread(&AgentConn::run_server_thread, this));
 	server_thread_->detach();
-
-	event_loop_.reset(new std::thread(&AgentConn::run_event_loop, this));
-	event_loop_->detach();
 }
 
-AgentConn::~AgentConn() 
+AgentConn::~AgentConn()
 {
-	P_INFO("Agent conn shutting down" << std::endl);
+	BOOST_LOG_TRIVIAL(info) << "Agent conn shutting down";
 	websocket_server_.stop();
     websocketpp::lib::error_code ec;
     websocket_server_.stop_listening(ec);
-	P_INFO("Agent conn shutdown successfully" << std::endl);
+	BOOST_LOG_TRIVIAL(info) << "Agent conn shutdown successfully";
 }
 
 void AgentConn::send_env_describe(std::string const& env_id, std::string const& env_state, int episode_id, int fps, std::string const& metadata)
@@ -166,18 +125,18 @@ Json::Value AgentConn::get_headers_(const long long parent_message_id, int episo
 	}
 	if(episode_id != -1)
 	{
-		headers["episode_id"] = std::to_string(episode_id);	
+		headers["episode_id"] = std::to_string(episode_id);
 	}
 	return headers;
 }
 
 void AgentConn::on_websocket_open_(websocketpp::connection_hdl websocket_cxn) {
 	std::lock_guard<std::mutex> guard(m_connection_lock);
-	std::cout << "Web socket connection established" << std::endl;
+	BOOST_LOG_TRIVIAL(info) << "Web socket connection established";
 	if(m_connections.size() > 0 && m_connections.count(websocket_cxn) == 0)
 	{
 		// Multiple client connections
-		std::cout << "WARNING: " << (m_connections.size() + 1) << " client connections -- should be only one -- sending to most recent connection only." << std::endl;
+		BOOST_LOG_TRIVIAL(warning) << (m_connections.size() + 1) << " client connections -- should be only one -- sending to most recent connection only.";
 	}
 	m_connections.insert(websocket_cxn);
 	most_recent_websocket_cxn_ = websocket_cxn;
@@ -186,43 +145,31 @@ void AgentConn::on_websocket_open_(websocketpp::connection_hdl websocket_cxn) {
 void AgentConn::on_websocket_close_(websocketpp::connection_hdl websocket_cxn) {
 	std::lock_guard<std::mutex> guard(m_connection_lock);
 	m_connections.erase(websocket_cxn);
-	std::cout << "Web socket connection closed" << std::endl;
+	BOOST_LOG_TRIVIAL(info) << "Web socket connection closed";
 }
 
 void AgentConn::on_websocket_msg_(websocketpp::connection_hdl websocket_cxn, message_ptr msg) {
-	std::lock_guard<std::mutex> guard(inbox_lock_);
-    std::cout << "on_message called with message: " << msg->get_payload()
-              << std::endl;
-	
 	Json::Value request = json_loads(msg->get_payload());
-	std::string pretty = json_dumps(request);
-//	P_DEBUG("Received request:" << std::endl << request);
-	inbox_.push(request);
-}
-
-void AgentConn::process_msg(const Json::Value& request)
-{
-	std::string pretty = json_dumps(request);
-	P_DEBUG("Processing request:" << std::endl << request);
-
-	if (request == Json::nullValue)
+//	std::string pretty = json_dumps(request);
+//	BOOST_LOG_TRIVIAL(debug) << "Received request:" << std::endl << request);
+	if(request == Json::nullValue)
 	{
-		P_WARN("Skipping request with malformed JSON" << std::endl);
+		BOOST_LOG_TRIVIAL(warning) << "Skipping request with malformed JSON";
 		return;
 	}
-	else if (request["method"] == "v0.control.ping")
+	else if(request["method"] == "v0.control.ping")
 	{
-		std::cout << "Received rpc control ping" << std::endl;
+		BOOST_LOG_TRIVIAL(info) << "Received rpc control ping";
 		send_reply_control_ping(request);
 	}
-	else if (request["method"] == "v0.env.reset")
+	else if(request["method"] == "v0.env.reset")
 	{
-		P_WARN("Received reset request from agent" << std::endl);
+		BOOST_LOG_TRIVIAL(warning) <<  "Received reset request from agent";
 		reset_signal_(request);
 	}
-	else if (request["method"] == "v0.agent.action")
+	else if(request["method"] == "v0.agent.action")
 	{
-		P_INFO("Received action from agent" << std::endl);
+		BOOST_LOG_TRIVIAL(info) << "Received action from agent";
 		action_signal_(request);
 	}
 }
@@ -233,12 +180,12 @@ void AgentConn::send_json_(std::string const& method, Json::Value const& body, i
 	payload["method"] = method;
 	payload["body"] = body;
 	payload["headers"] = get_headers_(parent_message_id, episode_id);
+	std::string msg_string = json_dumps(payload);
 	if(m_connections.size() < 1)
 	{
-		P_INFO("No clients connected -- skipping message" << std::endl);
+		BOOST_LOG_TRIVIAL(info) << "No clients connected -- skipping message";
 		no_clients_signal_();
 		return;
 	}
-	std::lock_guard<std::mutex> guard(outbox_lock_);
-	outbox_.push(payload);
+	websocket_send(&websocket_server_, most_recent_websocket_cxn_, msg_string);
 }

@@ -93,7 +93,7 @@ void wait_for_script_hook_to_load(SharedAgentMemory * shared)
 		int game_seconds = shared->time.second;
 		std::this_thread::sleep_for(std::chrono::milliseconds(311)); // Should be about 30ms per game second, so wait ~10x that
 		has_loaded = shared->time.second != game_seconds;
-		P_INFO("Waiting for GTAVScriptHookProxy to load (is the game paused?) - game seconds not changing: " << game_seconds << std::endl);
+		P_INFO("Waiting for GTAVScriptHookProxy to load (try unpausing the game or running as Administrator) - game seconds not changing: " << game_seconds << std::endl);
 	}
 	P_INFO("GTAVScriptHookProxy has loaded" << std::endl);
 }

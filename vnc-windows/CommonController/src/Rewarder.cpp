@@ -32,7 +32,10 @@ void Rewarder::reset() {
 
 void Rewarder::sendReward_(const double reward, const bool done, Json::Value info)
 {
-	P_INFO("Sending reward" << std::endl);
+	if (episode_step_counter % 100 == 0)
+	{
+		BOOST_LOG_TRIVIAL(info) << "Reward num: " << episode_step_counter;
+	}
 	int episode_id = get_episode_id();
 	agent_conn_->send_reward(reward, episode_id, done, info);
 }
