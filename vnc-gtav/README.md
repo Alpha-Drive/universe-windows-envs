@@ -14,11 +14,38 @@ so we expect that you'll be using a separate \*nix machine for your agent.
 Connecting to an AWS region [30ms away](http://www.cloudping.info/) at 2MBps with `go-vncdriver` yields 20FPS @ 100ms latency and is very playable by a human,
 while a direct ethernet connection creates a nearly indistinguishable experience from playing on your PC at 60FPS.
 
+Using the prebuilt AMI
+-----------------------
+* On AWS, in EC2, select launch instance. 
+* Under Community AMIs, search for *universe-gtav-0.0.1* and select one of the following:
+```
+ami-	(us-east)
+ami-	(us-west-1)
+ami-3f9c375f	(us-west-2)
+ami-	(eu-west-1)
+ami-	(eu-central-1)
+ami-	(ap-northeast-1)
+ami-	(ap-southeast-1)
+ami-	(ap-southeast-2)
+```
+* Choose the `g2.2xlarge` type in order to get the GPU required to run the game.
+* Don't worry about the keypair
+* The password for the instance is `d33pdriveisalive!`. Once you log in using Microsoft Remote Desktop, you’ll be asked to change the Administrator password. Change it to something.
+* Purchase Steam version of GTAV and login to Steam on your new AWS instance
+* [optional] Open Autologon.exe on the desktop and input your credentials if you want Windows to logon automatically without an RDP session
+* Open GTAV and make sure you can play <kbd>Story Mode</kbd> (WARNING: NSFW)
+* Get our saved games
+  * Close GTAV (<kbd>Esc</kbd> -> Game -> Exit Game)
+  * Run Powershell as Adminsitrator
+  * Run the install script (WARNING: If you play GTAV and have saved games or other settings, this will overwrite them. Your settings will be backed up to `~/Documents`)
+```
+python $env:UNIVERSE_WINDOWS_ENVS_DIR\vnc-gtav\install.py
+```
+Now skip to [running the environment](#run-the-environment)!
 
-AMI setup
----------
-_If you want to run the environment on AWS, do the following first_
-* Get ec2gaming AMI
+AMI setup from scratch
+----------------------
+* Get the ec2gaming AMI
   * On AWS, in EC2, select launch instance. 
   * Under Community AMIs, search for *ec2gaming* and select one of the following:
 ```
@@ -34,7 +61,7 @@ ami-4d9eda77	(ap-southeast-2)
   * Choose the `g2.2xlarge` type in order to get the GPU required to run the game.
   * In step four _Add Storage_, make sure to change the EBS size from 35GB to 250GB+ (GTAV is around ~80GB and we want some extra room as well).
   * Don't worry about the keypair
-  * The password for the instance is `rRmbgYum8g`. Once you log in using Microsoft Remote Desktop, you’ll be asked to change the Administrator password. Change it to something. If you’re on Windows, you’ll need to use a Mac or Linux or a mobile client to reset the password since there’s a bug in the Windows Remote Desktop client.
+  * The password for the instance is `rRmbgYum8g`. Once you log in using Microsoft Remote Desktop, you’ll be asked to change the Administrator password. Change it to something.
   * When you log in, search for *disk management* and open _Create and format hard disk partitions_
     * Right click the C:\ drive and extend it to the full amount
 
