@@ -12,13 +12,30 @@ using websocketpp::lib::placeholders::_1;
 using websocketpp::lib::placeholders::_2;
 using websocketpp::lib::bind;
 
-bool websocket_send(server* ws_server, websocketpp::connection_hdl& cxn, std::string const& msg)
+AgentConn::AgentConn(int port, boost::log::sources::severity_logger_mt<ls::severity_level> lg)
+{
+	port_ = port;
+	lg_ = lg;
+	server_thread_.reset(new std::thread(&AgentConn::run_server_thread, this));
+	server_thread_->detach();
+}
+
+AgentConn::~AgentConn()
+{
+	BOOST_LOG_SEV(lg_, ls::info) << "Agent conn shutting down";
+	websocket_server_.stop();
+	websocketpp::lib::error_code ec;
+	websocket_server_.stop_listening(ec);
+	BOOST_LOG_SEV(lg_, ls::info) << "Agent conn shutdown successfully";
+}
+
+bool websocket_send(server* ws_server, websocketpp::connection_hdl& cxn, std::string const& msg, boost::log::sources::severity_logger_mt<ls::severity_level> lg)
 {
 	try {
 		ws_server->send(cxn, msg, websocketpp::frame::opcode::text);
 		return true;
 	} catch (const websocketpp::lib::error_code& e) {
-		BOOST_LOG_TRIVIAL(error) << "Echo failed because: " << e
+		BOOST_LOG_SEV(lg, ls::error) << "Echo failed because: " << e
 			<< "(" << e.message() << ")";
 		return false;
 	}
@@ -26,31 +43,18 @@ bool websocket_send(server* ws_server, websocketpp::connection_hdl& cxn, std::st
 
 void AgentConn::run_server_thread()
 {
-	BOOST_LOG_TRIVIAL(info) << "Starting websocket server on port " << std::to_string(port_).c_str();
+	BOOST_LOG_SEV(lg_, ls::info) << "Starting websocket server on port " << std::to_string(port_).c_str();
 	websocket_server_.set_open_handler(bind(&AgentConn::on_websocket_open_, this, ::_1));
 	websocket_server_.set_close_handler(bind(&AgentConn::on_websocket_close_, this, ::_1));
 	websocket_server_.set_message_handler(bind(&AgentConn::on_websocket_msg_, this, ::_1, ::_2));
+#ifndef PROJ_DEBUG
+	websocket_server_.clear_access_channels(websocketpp::log::alevel::frame_header | websocketpp::log::alevel::frame_payload);
+#endif
 	websocket_server_.init_asio();
 	websocket_server_.listen(port_);
 	websocket_server_.start_accept();
 	websocket_server_.run();
-	BOOST_LOG_TRIVIAL(info) << "Websocket server stopped";
-}
-
-AgentConn::AgentConn(int port)
-{
-	port_ = port;
-	server_thread_.reset(new std::thread(&AgentConn::run_server_thread, this));
-	server_thread_->detach();
-}
-
-AgentConn::~AgentConn()
-{
-	BOOST_LOG_TRIVIAL(info) << "Agent conn shutting down";
-	websocket_server_.stop();
-    websocketpp::lib::error_code ec;
-    websocket_server_.stop_listening(ec);
-	BOOST_LOG_TRIVIAL(info) << "Agent conn shutdown successfully";
+	BOOST_LOG_SEV(lg_, ls::info) << "Websocket server stopped";
 }
 
 void AgentConn::send_env_describe(std::string const& env_id, std::string const& env_state, int episode_id, int fps, std::string const& metadata)
@@ -131,45 +135,43 @@ Json::Value AgentConn::get_headers_(const long long parent_message_id, int episo
 }
 
 void AgentConn::on_websocket_open_(websocketpp::connection_hdl websocket_cxn) {
-	std::lock_guard<std::mutex> guard(m_connection_lock);
-	BOOST_LOG_TRIVIAL(info) << "Web socket connection established";
-	if(m_connections.size() > 0 && m_connections.count(websocket_cxn) == 0)
+	std::lock_guard<std::mutex> guard(m_connection_lock_);
+	BOOST_LOG_SEV(lg_, ls::info) << "Web socket connection established";
+	if(m_connections_.size() > 0 && m_connections_.count(websocket_cxn) == 0)
 	{
 		// Multiple client connections
-		BOOST_LOG_TRIVIAL(warning) << (m_connections.size() + 1) << " client connections -- should be only one -- sending to most recent connection only.";
+		BOOST_LOG_SEV(lg_, ls::warning) << (m_connections_.size() + 1) << " client connections -- should be only one -- sending to most recent connection only.";
 	}
-	m_connections.insert(websocket_cxn);
+	m_connections_.insert(websocket_cxn);
 	most_recent_websocket_cxn_ = websocket_cxn;
 }
 
 void AgentConn::on_websocket_close_(websocketpp::connection_hdl websocket_cxn) {
-	std::lock_guard<std::mutex> guard(m_connection_lock);
-	m_connections.erase(websocket_cxn);
-	BOOST_LOG_TRIVIAL(info) << "Web socket connection closed";
+	std::lock_guard<std::mutex> guard(m_connection_lock_);
+	m_connections_.erase(websocket_cxn);
+	BOOST_LOG_SEV(lg_, ls::info) << "Web socket connection closed";
 }
 
 void AgentConn::on_websocket_msg_(websocketpp::connection_hdl websocket_cxn, message_ptr msg) {
 	Json::Value request = json_loads(msg->get_payload());
-//	std::string pretty = json_dumps(request);
-//	BOOST_LOG_TRIVIAL(debug) << "Received request:" << std::endl << request);
 	if(request == Json::nullValue)
 	{
-		BOOST_LOG_TRIVIAL(warning) << "Skipping request with malformed JSON";
+		BOOST_LOG_SEV(lg_, ls::warning) << "Skipping request with malformed JSON";
 		return;
 	}
 	else if(request["method"] == "v0.control.ping")
 	{
-		BOOST_LOG_TRIVIAL(info) << "Received rpc control ping";
+		BOOST_LOG_SEV(lg_, ls::info) << "Received rpc control ping";
 		send_reply_control_ping(request);
 	}
 	else if(request["method"] == "v0.env.reset")
 	{
-		BOOST_LOG_TRIVIAL(warning) <<  "Received reset request from agent";
+		BOOST_LOG_SEV(lg_, ls::warning) <<  "Received reset request from agent";
 		reset_signal_(request);
 	}
 	else if(request["method"] == "v0.agent.action")
 	{
-		BOOST_LOG_TRIVIAL(info) << "Received action from agent";
+		BOOST_LOG_SEV(lg_, ls::debug) << "Received action from agent";
 		action_signal_(request);
 	}
 }
@@ -181,11 +183,11 @@ void AgentConn::send_json_(std::string const& method, Json::Value const& body, i
 	payload["body"] = body;
 	payload["headers"] = get_headers_(parent_message_id, episode_id);
 	std::string msg_string = json_dumps(payload);
-	if(m_connections.size() < 1)
+	if(m_connections_.size() < 1)
 	{
-		BOOST_LOG_TRIVIAL(info) << "No clients connected -- skipping message";
+		BOOST_LOG_SEV(lg_, ls::info) << "No clients connected -- skipping message";
 		no_clients_signal_();
 		return;
 	}
-	websocket_send(&websocket_server_, most_recent_websocket_cxn_, msg_string);
+	websocket_send(&websocket_server_, most_recent_websocket_cxn_, msg_string, lg_);
 }

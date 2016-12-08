@@ -4,6 +4,7 @@ from utils import set_reg_values
 from utils import processes_are_running
 from utils import download_file
 from utils import download_folder
+from utils import gtav_is_running
 from vnc import start_tvnserver_command
 from vnc import configure_tvnserver_command
 from vnc import configure_and_start_tightvnc

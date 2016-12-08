@@ -99,7 +99,7 @@ public:
 	boost::signals2::connection no_clients_connection;
 protected:
 	JoystickController joystick_;
-	boost::log::sources::severity_logger_mt<boost::log::trivial::severity_level> lg_;
+	boost::log::sources::severity_logger_mt<ls::severity_level> lg_;
 private:
 	std::string env_id_;
 	std::shared_ptr<AgentConn> agent_conn_;

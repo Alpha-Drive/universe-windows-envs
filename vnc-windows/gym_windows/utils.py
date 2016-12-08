@@ -14,6 +14,8 @@ import six
 from six.moves import input
 import logging
 
+from constants import *
+
 logger = logging.getLogger()
 
 
@@ -115,3 +117,4 @@ def download_folder(url, dirname):
     finally:
         zip_ref.close()
         os.remove(location)
+

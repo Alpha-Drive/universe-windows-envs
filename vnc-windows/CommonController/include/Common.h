@@ -20,16 +20,16 @@
 #include <boost/log/expressions/attr_fwd.hpp>
 #include <boost/log/expressions/attr.hpp>
 
-namespace ll = boost::log::trivial;
+namespace ls = boost::log::trivial;
 
 // -----------------------------------------------------------------------------
 
 #define PRINTING // take away if you don't want to print anything
 
+// _DEBUG is set by Visual Studio in debug mode. PROJ_DEBUG is our own flag that allows us to control debug statements separately from Visual Studio.
 #ifdef _DEBUG
+	// Note that printing debug messages to the console over RDP will significantly reduce throughput of the reward / action channel running over websockets.
     #define PROJ_DEBUG
-#else
-//    #define PROJ_DEBUG // Uncomment this to display debugging output
 #endif
 
 #define DEFAULT_BUFLEN 65536

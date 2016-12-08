@@ -24,7 +24,7 @@ def configure_tvnserver_command(window_name):
             logger.error('Multiple occurrences of target VNC window %s '
                          '-- Please close folders or other windows with the same name as the game', quoted_window_name)
         elif count == 0:
-            logging.error('Waiting for target VNC window to exist %s', quoted_window_name)
+            logging.error('Waiting for target VNC window, %s, to exist', quoted_window_name)
         else:
             # Command flags here: http://www.tightvnc.com/doc/win/TightVNC_2.7_for_Windows_Server_Command-Line_Options.pdf
             return r'"{TIGHTVNC_DIR}/tvnserver.exe" -controlapp -sharewindow "{windowname}"'.format(

@@ -9,6 +9,7 @@
 #include <set>
 #include <thread>
 #include <boost/signals2.hpp>
+#include <Common.h>
 
 typedef websocketpp::server<websocketpp::config::asio> server;
 typedef boost::signals2::signal<void (const Json::Value agent_request)>  ResetSignal;
@@ -21,7 +22,7 @@ typedef server::message_ptr message_ptr;
 class AgentConn
 {
 public:
-	AgentConn(int port);
+	AgentConn(int port, boost::log::sources::severity_logger_mt<ls::severity_level> lg);
 	~AgentConn();
 	void send_env_describe(std::string const& env_id, std::string const& env_state, int episode_id, int fps, std::string const& metadata="");
 	void send_reply_control_ping(Json::Value const& request);
@@ -36,8 +37,9 @@ private:
 	std::unique_ptr<std::thread> server_thread_;
 	websocketpp::connection_hdl most_recent_websocket_cxn_;
 	typedef std::set<websocketpp::connection_hdl, std::owner_less<websocketpp::connection_hdl>> con_list;
-	con_list m_connections;
-	std::mutex m_connection_lock;
+	con_list m_connections_;
+	std::mutex m_connection_lock_;
+	boost::log::sources::severity_logger_mt<ls::severity_level> lg_;
 
 	void on_websocket_open_(websocketpp::connection_hdl websocket_cxn);
 	void on_websocket_close_(websocketpp::connection_hdl websocket_cxn);

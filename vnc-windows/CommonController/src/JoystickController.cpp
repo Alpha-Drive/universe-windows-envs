@@ -17,7 +17,7 @@ JoystickController::JoystickController() : lg_()
 	// Get the driver attributes (Vendor ID, Product ID, Version Number)
 	if (!vJoyEnabled())
 	{
-		BOOST_LOG_SEV(lg_, ll::error) << "Failed Getting vJoy attributes. Is vJoy driver installed?";
+		BOOST_LOG_SEV(lg_, ls::error) << "Failed Getting vJoy attributes. Is vJoy driver installed?";
 		exit(1);
 	}
 
@@ -25,7 +25,7 @@ JoystickController::JoystickController() : lg_()
 	auto status  = GetVJDStatus(kJoyId_);
 	if( ! aqcuired )
 	{
-		BOOST_LOG_SEV(lg_, ll::error) << "Could not acquire vjoy. You may need to close other apps using Vjoy like Vjoy feeder.";
+		BOOST_LOG_SEV(lg_, ls::error) << "Could not acquire vjoy. You may need to close other apps using Vjoy like Vjoy feeder.";
 		exit(1);
 	}
 }

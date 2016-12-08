@@ -109,12 +109,12 @@ void GTAVEnv::reset_game()
 	wait_for_script_hook_to_load(shared_.get());
 	if(skip_loading_saved_game_)
 	{
-		BOOST_LOG_TRIVIAL(warning) << "skip_loading_saved_game is set, skipping reload - you should turn this off if you are not debugging, simulating reset delay...";
+		BOOST_LOG_SEV(lg_, ls::warning) << "skip_loading_saved_game is set, skipping reload - you should turn this off if you are not debugging, simulating reset delay...";
 
 		// Zero reset time causes a race condition in universe client where `completed_episode_id` differs from `_current_episode_id` too quickly
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 
-		BOOST_LOG_TRIVIAL(warning) << "fake reset done";
+		BOOST_LOG_SEV(lg_, ls::warning) << "fake reset done";
 	}
 	else
 	{
@@ -130,7 +130,7 @@ void GTAVEnv::after_reset()
 
 void GTAVEnv::when_no_clients()
 {
-	BOOST_LOG_TRIVIAL(info) << "no clients, sending noop";
+	BOOST_LOG_SEV(lg_, ls::info) << "no clients, sending noop";
 	noop();
 }
 
@@ -161,7 +161,7 @@ void GTAVEnv::change_settings(const Json::Value& settings)
 	if (settings[1].asString() == "use_custom_camera")
 	{
 		(*shared_).use_custom_camera = settings[2].asBool();
-		BOOST_LOG_TRIVIAL(info) << "agent set custom camera to true";
+		BOOST_LOG_SEV(lg_, ls::info) << "agent set custom camera to true";
 	}
 	if (settings[1].asString() == "desired_cam_x_offset")
 	{

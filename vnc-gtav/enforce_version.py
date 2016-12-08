@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+import csv
 import glob
 import hashlib
 import sys
@@ -9,6 +10,15 @@ import zipfile
 
 import shutil
 
+# This file is self-contained so as to allow use outside of this context.
+import subprocess
+
+try:
+    input = raw_input
+except NameError:
+    pass
+
+GTAV_PROCESS_NAME = 'GTA5.exe'
 
 def detect_binary_changes(gtav_dir):
     md5_paths = [
@@ -34,6 +44,22 @@ FILE CHANGE DETECTED - %s
     return False
 
 
+def gtav_is_running():
+    p_tasklist = subprocess.Popen('tasklist.exe /fo csv',
+                                  stdout=subprocess.PIPE,
+                                  universal_newlines=True)
+
+    pythons_tasklist = []
+    tasks = list(csv.DictReader(p_tasklist.stdout))
+    for p in tasks:
+        if p['Image Name'] == GTAV_PROCESS_NAME:
+            pythons_tasklist.append(p)
+    if len(pythons_tasklist) > 0:
+        return True
+    else:
+        return False
+
+
 def get_social_club_path(gtav_dir):
     return glob.glob(os.path.join(gtav_dir, 'Installers', 'Social-Club*.exe'))[0]
 
@@ -55,6 +81,11 @@ def hash_large_file(file_path):
 
 
 def restore_game_files(gtav_dir):
+    while gtav_is_running():
+        # TODO: Figure out nice way of closing GTAV programmatically (killing causes recovery splash next startup)
+        print(GTAV_PROCESS_NAME + ' is open, please close it and press any key to continue...')
+        input()
+    # TODO: reuse existing download if present
     print('Downloading GTAV binaries - these are 665MB, so could take a while...')
     location = urllib.urlretrieve('https://www.dropbox.com/sh/ymt2ja4st2mpvyd/AADZBlzxsxiEwQm15Y15nC1wa?dl=1')
     location = location[0]
@@ -72,10 +103,6 @@ def enforce_version(gtav_dir):
     print('Verifying GTAV version...')
     changes_detected = detect_binary_changes(gtav_dir)
     if changes_detected:
-        try:
-            input = raw_input
-        except NameError:
-            pass
         print('Detected change in GTAV files. This likely means the game was updated which breaks ScriptHookV and can cause unwanted changes to environment dynamics.')
         resp = input('Do you want to restore to a known working version of the game? \nNote that this WILL NOT re-download the entire game or circumvent DRM - it will just roll back the updated portion of the game (y/n)? ')
         if 'y' in resp.lower():
@@ -86,4 +113,6 @@ def enforce_version(gtav_dir):
         print('GTAV is at the correct version')
 
 if __name__ == '__main__':
+    if 'TEST_RESTORE_GTA' in os.environ:
+        restore_game_files(os.environ['GTAV_DIR'])
     sys.exit(enforce_version(os.environ['GTAV_DIR']))
