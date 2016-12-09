@@ -1,10 +1,7 @@
 import os
 import sys
 import logging
-import tempfile
-
 import shutil
-
 import six
 
 CURR_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -13,14 +10,14 @@ import gym_windows
 
 logger = logging.getLogger()
 
-TEMP_DIR = tempfile.gettempdir()
 UNIVERSE_BACKUP_NAME = 'universe-windows-envs'
 UNIVERSE_WINDOWS_ENVS_DIR = os.environ['UNIVERSE_WINDOWS_ENVS_DIR']
-BACKUP_DIR = os.path.join(TEMP_DIR, UNIVERSE_BACKUP_NAME)
+BACKUP_DIR = os.path.expanduser('~\\Documents\\Universe\\envs-update-backup')
 
 
 def backup_update_executables():
     gym_windows.run_win_cmd('rmdir %s /s /q' % BACKUP_DIR)
+    backed_up = False
     for dirpath, dnames, fnames in os.walk(UNIVERSE_WINDOWS_ENVS_DIR):
         for fname in fnames:
             if fname.endswith('.py'):
@@ -31,6 +28,11 @@ def backup_update_executables():
                 if not os.path.exists(new_dir):
                     os.makedirs(new_dir)
                 shutil.copy2(old_path, new_path)
+                backed_up = True
+
+    if not backed_up:
+        raise Exception('No files found in %s pointed to by the %s environment variable' % (
+            UNIVERSE_WINDOWS_ENVS_DIR, 'UNIVERSE_WINDOWS_ENVS_DIR'))
 
 
 def try_updating(update_fn, restore_fn):
@@ -53,8 +55,7 @@ def try_updating(update_fn, restore_fn):
 
 
 def update():
-    gym_windows.run_win_cmd('rmdir %s /s /q' % UNIVERSE_WINDOWS_ENVS_DIR)
-    gym_windows.download_folder('https://www.dropbox.com/s/ljx7uiodptxr0f3/universe-windows-envs.zip?dl=1',
+    logger.info('Updating windows environments, download SIZE is ~2GB');gym_windows.download_folder('https://www.dropbox.com/s/ljx7uiodptxr0f3/universe-windows-envs.zip?dl=1',
                                 os.path.dirname(os.environ['UNIVERSE_WINDOWS_ENVS_DIR']))
 
 
@@ -64,7 +65,9 @@ def restore():
 
 def main():
     backup_update_executables()  # In case the update fails, we can restore these and try again
+    gym_windows.run_win_cmd('rmdir %s /s /q' % UNIVERSE_WINDOWS_ENVS_DIR)
     try_updating(update, restore_fn=restore)
+    gym_windows.run_win_cmd('rmdir %s /s /q' % BACKUP_DIR)
     logger.info('Update complete')
 
 

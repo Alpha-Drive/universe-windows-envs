@@ -77,7 +77,7 @@ def replace_saved_games():
 
 def backup_saved_games():
     time_str = datetime.now().strftime('%Y%m%d_%H%M_%S')
-    backup_location = os.path.expanduser('~\\Documents\\GTAV_saved_games_backup_' + time_str)
+    backup_location = os.path.expanduser('~\\Documents\\Universe\\GTAV_saved_games_backup_' + time_str)
     logger.info('Backing up saved games in %s to %s', SAVED_GAMES_LOCATION, backup_location)
     shutil.copytree(SAVED_GAMES_LOCATION, backup_location)
 
