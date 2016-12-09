@@ -102,15 +102,8 @@ def download_folder(url, dirname):
         logger.warn('%s exists, do you want to re-download and overwrite the existing files (y/n)? ', path)
         overwrite = input()
         if 'n' in overwrite.lower():
-            logger.info('Using existing %s - Try rerunning and overwriting if you have problems down the line.', path)
+            logger.warn('USING EXISTING %s - Try rerunning and overwriting if you run into problems.', path)
             return
-        else:
-            def del_rw(action, name, exc):
-                os.chmod(name, stat.S_IWRITE)
-                os.remove(name)
-
-            shutil.rmtree(path, onerror=del_rw)
-
     logger.info('Downloading %s to %s', url, path)
     location = urllib.urlretrieve(url)
     location = location[0]
@@ -125,4 +118,19 @@ def download_folder(url, dirname):
     finally:
         zip_ref.close()
         os.remove(location)
+
+
+def run_win_cmd(cmd):
+    result = []
+    process = subprocess.Popen(cmd,
+                               shell=True,
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE)
+    for line in process.stdout:
+        result.append(line)
+    errcode = process.returncode
+    for line in result:
+        print(line)
+    if errcode is not None:
+        raise Exception('cmd %s failed, see above for details', cmd)
 
