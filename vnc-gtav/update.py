@@ -33,13 +33,13 @@ def backup_update_executables():
                 shutil.copy2(old_path, new_path)
 
 
-def try_updating(update, restore):
+def try_updating(update_fn, restore_fn):
     try:
-        update()
+        update_fn()
     except:
         exc_info = sys.exc_info()
         try:
-            restore()
+            restore_fn()
         except:
             # If this happens, it clobbers exc_info, which is why we had
             # to save it above
@@ -48,7 +48,7 @@ def try_updating(update, restore):
             traceback.print_exc()
             six.reraise(*exc_info)
         logger.error('Error updating, please retry. (You may need to close programs with universe-windows-envs files'
-                     ' open) See below for more details.')
+                     ' open). See below for more details.')
         six.reraise(*exc_info)
 
 
@@ -63,8 +63,8 @@ def restore():
 
 
 def main():
-    backup_update_executables()  # In case the update fails, we can restore these to try again
-    try_updating(update, restore=restore)
+    backup_update_executables()  # In case the update fails, we can restore these and try again
+    try_updating(update, restore_fn=restore)
     logger.info('Update complete')
 
 
