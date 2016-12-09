@@ -98,7 +98,7 @@ def download_folder(url, dirname, warn_existing=True):
     url_path = urlparse(url).path
     path = os.path.join(dirname, url_path.split('/')[-1])
     path = os.path.splitext(path)[0]
-    if os.path.exists(path):
+    if os.path.exists(path) and warn_existing:
         logger.warn('%s exists, do you want to re-download and overwrite the existing files (y/n)? ', path)
         overwrite = input()
         if 'n' in overwrite.lower():
