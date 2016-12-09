@@ -55,8 +55,9 @@ def try_updating(update_fn, restore_fn):
 
 
 def update():
-    logger.info('Updating windows environments, download SIZE is ~2GB');gym_windows.download_folder('https://www.dropbox.com/s/ljx7uiodptxr0f3/universe-windows-envs.zip?dl=1',
-                                os.path.dirname(os.environ['UNIVERSE_WINDOWS_ENVS_DIR']))
+    logger.info('Updating windows environments, download SIZE is ~2GB')
+    gym_windows.download_folder('https://www.dropbox.com/s/ljx7uiodptxr0f3/universe-windows-envs.zip?dl=1',
+                                os.path.dirname(os.environ['UNIVERSE_WINDOWS_ENVS_DIR']), warn_existing=False)
 
 
 def restore():
@@ -67,7 +68,6 @@ def main():
     backup_update_executables()  # In case the update fails, we can restore these and try again
     gym_windows.run_win_cmd('rmdir %s /s /q' % UNIVERSE_WINDOWS_ENVS_DIR)
     try_updating(update, restore_fn=restore)
-    gym_windows.run_win_cmd('rmdir %s /s /q' % BACKUP_DIR)
     logger.info('Update complete')
 
 

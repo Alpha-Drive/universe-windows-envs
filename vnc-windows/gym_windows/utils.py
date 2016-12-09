@@ -93,7 +93,7 @@ def download_file(url, path):
                 sys.stdout.flush()
 
 
-def download_folder(url, dirname):
+def download_folder(url, dirname, warn_existing=True):
     """Useful for downloading a folder / zip file from dropbox and unzipping it to path"""
     url_path = urlparse(url).path
     path = os.path.join(dirname, url_path.split('/')[-1])
