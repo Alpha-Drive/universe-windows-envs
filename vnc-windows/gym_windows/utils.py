@@ -7,7 +7,7 @@ import csv
 import subprocess
 import zipfile
 from urlparse import urlparse
-
+import shutil
 import requests
 import sys
 import six
@@ -103,6 +103,9 @@ def download_folder(url, dirname):
         if 'n' in overwrite.lower():
             logger.info('Using existing %s - Try rerunning and overwriting if you have problems down the line.', path)
             return
+        else:
+            shutil.rmtree(path)
+
     logger.info('Downloading %s to %s', url, path)
     location = urllib.urlretrieve(url)
     location = location[0]
