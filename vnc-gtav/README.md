@@ -131,7 +131,7 @@ In PowerShell
 python.exe $env:UNIVERSE_WINDOWS_ENVS_DIR/vnc-gtav/run_vnc_env.py
 ```
 
-Have the server start on admin boot (likely AWS only)
+Have the server start on admin boot (likely AWS only) - still needs RDP session for GTAV to start
 ```
 Copy-Item "$env:UNIVERSE_WINDOWS_ENVS_DIR/vnc-gtav/run_vnc_env_gtav_shortcut.lnk" "$env:USERPROFILE\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup"
 ```
