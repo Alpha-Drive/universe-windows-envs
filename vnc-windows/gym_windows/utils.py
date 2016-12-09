@@ -13,6 +13,7 @@ import sys
 import six
 from six.moves import input
 import logging
+import stat
 
 from constants import *
 
@@ -104,7 +105,11 @@ def download_folder(url, dirname):
             logger.info('Using existing %s - Try rerunning and overwriting if you have problems down the line.', path)
             return
         else:
-            shutil.rmtree(path)
+            def del_rw(action, name, exc):
+                os.chmod(name, stat.S_IWRITE)
+                os.remove(name)
+
+            shutil.rmtree(path, onerror=del_rw)
 
     logger.info('Downloading %s to %s', url, path)
     location = urllib.urlretrieve(url)
