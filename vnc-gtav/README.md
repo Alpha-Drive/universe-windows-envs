@@ -126,14 +126,12 @@ C:\Program Files\vJoy\x86;C:\Program Files (x86)\AutoIt3\AutoItX;
 Restart Windows
 
 ### Run the environment
-Run the `Universe GTAV.bat` file on the desktop of the AMI or
-
-In PowerShell
+Run the `Universe GTAV.bat` file on the desktop of the AMI or in PowerShell
 ```
 python.exe $env:UNIVERSE_WINDOWS_ENVS_DIR/vnc-gtav/run_vnc_env.py
 ```
 
-
+The run script will focus GTAV and send keys to load <kbd>Story Mode</kbd> if it's not already loaded. Sit back and let it do the work for you.
 
 Have the server start on admin boot (likely AWS only) - still needs RDP session for GTAV to start
 ```
