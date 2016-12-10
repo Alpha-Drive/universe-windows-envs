@@ -82,7 +82,7 @@ void try_loading_story_mode()
 	AU3_WinActivate(L"Grand Theft Auto V", L"");
 
 	// Go to game -> load game and select the most recently saved game
-	send_keys({"RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "ENTER", "ENTER"});
+	send_keys({ "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "ENTER", "ENTER" });
 }
 
 void wait_for_script_hook_to_load(SharedAgentMemory * shared)
