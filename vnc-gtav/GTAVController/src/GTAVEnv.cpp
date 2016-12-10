@@ -106,7 +106,6 @@ bool GTAVEnv::is_done()
 
 void GTAVEnv::reset_game()
 {
-	wait_for_script_hook_to_load(shared_.get());
 	if(skip_loading_saved_game_)
 	{
 		BOOST_LOG_SEV(lg_, ls::warning) << "skip_loading_saved_game is set, skipping reload - you should turn this off if you are not debugging, simulating reset delay...";
@@ -120,6 +119,7 @@ void GTAVEnv::reset_game()
 	{
 		load_saved_game();
 	}
+	wait_for_script_hook_to_load(shared_.get());
 	reward_calculator_.reset(shared_.get());
 }
 
