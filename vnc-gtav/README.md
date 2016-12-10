@@ -29,7 +29,7 @@ ami-	(ap-southeast-1)
 ami-	(ap-southeast-2)
 ```
 * Choose the `g2.2xlarge` type in order to get the GPU required to run the game.
-* Under <kbd>Configure Instance</kbd>/<kbd>EBS-optimized instance</kbd>, check <kbd>Launch as EBS-optimized instance</kbd>
+* Under <kbd>Configure Instance</kbd> -> <kbd>EBS-optimized instance</kbd>, check <kbd>Launch as EBS-optimized instance</kbd>
 * Don't worry about the keypair
 * The password for the instance is `d33pdriveisalive!`. Once you log in using Microsoft Remote Desktop, you’ll be asked to change the Administrator password. Change it to something.
 * Purchase Steam version of GTAV and login to Steam on your new AWS instance
