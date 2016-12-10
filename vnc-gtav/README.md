@@ -35,6 +35,7 @@ ami-	(ap-southeast-2)
 * Purchase Steam version of GTAV and login to Steam on your new AWS instance
 * [optional] Open Autologon.exe on the desktop and input your credentials if you want Windows to logon automatically without an RDP session
 * Open GTAV and make sure you can play <kbd>Story Mode</kbd> (WARNING: NSFW)
+* If GTAV is not starting or is slow, restart Windows (it's likely a good idea to do this after initial instance boot from AMI either way)
 * Get our saved games
   * Close GTAV (<kbd>Esc</kbd> -> Game -> Exit Game)
   * Run Powershell as Adminsitrator
