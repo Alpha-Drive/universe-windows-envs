@@ -37,7 +37,7 @@ ami-	(ap-southeast-2)
 * Open GTAV and make sure you can play <kbd>Story Mode</kbd> (WARNING: NSFW)
 * If GTAV is not starting or is slow, restart Windows (it's likely a good idea to do this after initial instance boot from AMI either way)
 * Get our saved games
-  * Close GTAV (<kbd>Esc</kbd> -> <kbd>Game</kbd> -> Exit Game)
+  * Close GTAV (<kbd>Esc</kbd> -> <kbd>Game</kbd> -> <kbd>Exit Game</kbd>)
   * Run Powershell as Adminsitrator
   * Run the install script (WARNING: If you play GTAV and have saved games or other settings, this will overwrite them. Your old settings will be backed up to `~/Documents`)
 ```
