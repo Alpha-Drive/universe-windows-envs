@@ -21,7 +21,7 @@ Using the prebuilt AMI
 ```
 ami-	(us-east)
 ami-	(us-west-1)
-ami-3f9c375f	(us-west-2)
+ami-11de7471	(us-west-2)
 ami-	(eu-west-1)
 ami-	(eu-central-1)
 ami-	(ap-northeast-1)
