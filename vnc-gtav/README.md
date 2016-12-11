@@ -43,7 +43,7 @@ ami-	(ap-southeast-2)
 ```
 python $env:UNIVERSE_WINDOWS_ENVS_DIR\vnc-gtav\install.py
 ```
-Now skip to [running the environment](#run-the-environment)!
+Skip to [running the environment](#run-the-environment)
 
 AMI setup from scratch
 ----------------------
