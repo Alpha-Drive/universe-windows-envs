@@ -133,7 +133,7 @@ Run the `Universe GTAV.bat` file on the desktop of the AMI or in PowerShell
 python.exe $env:UNIVERSE_WINDOWS_ENVS_DIR/vnc-gtav/run_vnc_env.py
 ```
 
-The run script will focus GTAV and send keys to load <kbd>Story Mode</kbd> if it's not already loaded. Sit back and let it do the work for you.
+The run script will focus GTAV and send keys to load <kbd>Story Mode</kbd> if it's not already loaded. Sit back and let it do the work for you. Note that closing your RDP session will kill the environment. The logout link on the desktop will is an attempt to circumvent this behavior, but it does not always work and can change the chrome of the GTA window. Any help with this problem would be greatly appreciated.
 
 Have the server start on admin boot (likely AWS only) - still needs RDP session for GTAV to start
 ```
