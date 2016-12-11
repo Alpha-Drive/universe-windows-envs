@@ -133,7 +133,7 @@ Run the `Universe GTAV.bat` file on the desktop of the AMI or in PowerShell
 python $env:UNIVERSE_WINDOWS_ENVS_DIR/vnc-gtav/run_vnc_env.py
 ```
 
-The run script will focus GTAV and send keys to load <kbd>Story Mode</kbd> if it's not already loaded. Sit back and let it do the work for you. Note that closing your RDP session will kill the environment. The logout link on the desktop will is an attempt to circumvent this behavior, but it does not always work and can change the chrome of the GTA window. (Help wanted!).
+The run script will focus GTAV and send keys to load <kbd>Story Mode</kbd> if it's not already loaded. Sit back and let it send the keys necessary. Note that closing your RDP session will kill the environment. The logout link on the desktop will is an attempt to circumvent this behavior, but it does not always work and can change the chrome of the GTA window. (Help wanted!).
 
 #### Skip reload
 To avoid loading the saved game every episode (which takes ~40s), you can pass <kbd>-s</kbd> to run_vnc_env.py
