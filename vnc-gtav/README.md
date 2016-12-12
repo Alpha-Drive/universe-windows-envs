@@ -2,7 +2,7 @@ This environment is focused on using GTAV as a self-driving car simulator with e
 Controls are continuous **steering** from right to left (-1 to 1) on the x-axis of the `JoyStickActionSpace` and reverse to forward **throttle** (-1 to 1) on the joystick's z-axis.
 
 GTAV only runs on Windows which makes this environment unique. 
-ML libraries do not traditionally have first-class [support](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/cmake) for [Windows](https://github.com/BVLC/caffe/tree/windows),
+ML libraries do not traditionally have first-class [support](https://github.com/tensorflow/tensorflow/blob/master/RELEASE.md#release-0120) for [Windows](https://github.com/BVLC/caffe/tree/windows),
 so we expect that you'll be using a separate \*nix machine for your agent.
 
 ## Requirements
