@@ -17,7 +17,7 @@ while a direct ethernet connection creates a nearly indistinguishable experience
 Using the prebuilt AMI
 -----------------------
 * On AWS, in EC2, select launch instance. 
-* Under Community AMIs, search for *universe-gtav-0.0.1* and select one of the following:
+* Under Community AMIs, search for *universe-gtav-0.0.6* and select one of the following:
 ```
 ami-	(us-east)
 ami-	(us-west-1)
