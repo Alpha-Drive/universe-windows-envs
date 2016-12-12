@@ -38,11 +38,8 @@ ami-	(ap-southeast-2)
 * If GTAV is not starting or is slow, restart Windows (it's likely a good idea to do this after initial instance boot from AMI either way)
 * Get our saved games
   * Close GTAV (<kbd>Esc</kbd> -> <kbd>Game</kbd> -> <kbd>Exit Game</kbd>)
-  * Run Powershell as Adminsitrator
-  * Run the install script (WARNING: If you play GTAV and have saved games or other settings, this will overwrite them. Your old settings will be backed up to `~/Documents`)
-```
-python $env:UNIVERSE_WINDOWS_ENVS_DIR\vnc-gtav\install.py
-```
+  * Run `Universe GTA install.bat` on the desktop (WARNING: If you play GTAV and have saved games or other settings, this will overwrite them. Your old settings will be backed up to `~/Documents`)
+  
 Skip to [running the environment](#run-the-environment)
 
 AMI setup from scratch
