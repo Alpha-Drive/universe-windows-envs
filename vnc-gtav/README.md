@@ -39,7 +39,7 @@ ami-734efc17 (ca-central-1)
 * Purchase Steam version of GTAV and login to Steam on your new AWS instance
 * [optional] Open Autologon.exe on the desktop and input your credentials if you want Windows to logon automatically without an RDP session
 * Open GTAV and make sure you can play <kbd>Story Mode</kbd> (WARNING: NSFW)
-* There is a known issue with programs not working on first boot. If GTAV takes more than 1 minute to load, restart Windows and try again
+* There are issues with programs running very slowly the first time they are loaded into memory on a new instance, so this may take 10-15 mins. Rest assured that subsequent loads will be much faster. Restarting Windows also seems to help here.
 * Get our saved games
   * Close GTAV (<kbd>Esc</kbd> -> <kbd>Game</kbd> -> <kbd>Exit Game</kbd>)
   * Run `Universe GTA install.bat` on the desktop (WARNING: If you play GTAV and have saved games or other settings, this will overwrite them. Your old settings will be backed up to `~/Documents`)
