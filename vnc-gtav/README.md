@@ -152,7 +152,7 @@ Copy-Item "$env:UNIVERSE_WINDOWS_ENVS_DIR/vnc-gtav/run_vnc_env_gtav_shortcut.lnk
 
 ### Pretrained models
 
-See [deepdrive-universe]
+See [deepdrive-universe](https://github.com/deepdrive/deepdrive-universe)
 
 ### Random Agent
 In \*nix, install [universe](https://github.com/openai/universe)
