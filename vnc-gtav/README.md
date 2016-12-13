@@ -44,7 +44,7 @@ ami-734efc17 (ca-central-1)
   * Close GTAV (<kbd>Esc</kbd> -> <kbd>Game</kbd> -> <kbd>Exit Game</kbd>)
   * Run `Universe GTA install.bat` on the desktop (WARNING: If you play GTAV and have saved games or other settings, this will overwrite them. Your old settings will be backed up to `~/Documents`)
   
-Skip to [running the environment](#run-the-environment)
+Now skip to [running the environment](#run-the-environment)
 
 AMI setup from scratch
 ----------------------
