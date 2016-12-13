@@ -112,7 +112,7 @@ _Xbox360ce is a gamepad emulator that we will need in order to route control fro
 * Open the x360ce.ini and replace everything from `AxisToDPadDeadZone` down with [our config](https://gist.githubusercontent.com/crizCraig/f680f65653641412eba28c3c47421bcf/raw/4abd3be3802555f57d96389bf0a189dad8cd90de/x360ce.ini) 
 * Save the file and reopen xbox360ce_x64.exe, your config should then look like this
 
-![xbox360ce config](https://www.dropbox.com/s/5a2huyxdcby1qjz/Screenshot%202016-10-29%2014.59.17.png?dl=1)
+![xbox360ce config](https://www.dropbox.com/s/adk9f5kme2weau6/Screen%20Shot%202016-12-12%20at%206.49.16%20PM.png?dl=1)
 
 * To test things out, open GTAV, the "Vjoy Feeder Demo", and repoen xbox360ce - Try sliding Axis X to steer the car and Axiz Z to control the car's throttle.
 * Close "Vjoy Feeder Demo" and xbox360ce_x64.exe so that GTAVController.exe can take command of the virtual joystick device.
