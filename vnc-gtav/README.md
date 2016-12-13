@@ -19,14 +19,18 @@ Using the prebuilt AMI
 * On AWS, in EC2, select launch instance. 
 * Under Community AMIs, search for *universe-gtav-0.0.6* and select one of the following:
 ```
-ami-	(us-east)
-ami-	(us-west-1)
+ami-b48984a3	(us-east)
+ami-934e18f3	(us-west-1)
 ami-11de7471	(us-west-2)
-ami-	(eu-west-1)
-ami-	(eu-central-1)
-ami-	(ap-northeast-1)
-ami-	(ap-southeast-1)
-ami-	(ap-southeast-2)
+ami-cd694ebe	(eu-west-1)
+ami-20ce0f4f	(eu-central-1)
+ami-dd620dba	(ap-northeast-1)
+ami-69f6590a	(ap-southeast-1)
+ami-c3ba82a0	(ap-southeast-2)
+ami-dd620dba (ap-northeast-1)
+ami-6a74a304 (ap-northeast-2)
+ami-4b9ceb24 (ap-south-1)
+ami-734efc17 (ca-central-1)
 ```
 * Choose the `g2.2xlarge` type in order to get the GPU required to run the game.
 * Under <kbd>Configure Instance</kbd> -> <kbd>EBS-optimized instance</kbd>, check <kbd>Launch as EBS-optimized instance</kbd>
