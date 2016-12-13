@@ -41,10 +41,11 @@ ami-734efc17 (ca-central-1)
 * Open Steam and purchase the game on your new instance (note that Steam will take a couple minutes to load the first time due to [EBS intialization](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-initialize.html)
 * [optional] Open Autologon.exe on the desktop and input your credentials if you want Windows to logon automatically without an RDP session
 * Recharge with some [meditation](http://marc.ucla.edu/mindful-meditations) for ~20 minutes while the game downloads
-* Open GTAV and make sure you can play <kbd>Story Mode</kbd> (WARNING: NSFW)
+* Run `Universe GTA install.bat` on the desktop (WARNING: If you play GTAV and have saved games or other settings, this will overwrite them. Your old settings will be backed up to `~/Documents`)
+* Open GTAV and make sure you can play <kbd>Story Mode</kbd> (WARNING: NSFW) - If you get an error about updating ScriptHook, then the install step above did not complete successfully. It's okay to rerun install if you need to.  
 * Finally, get our saved games
   * Close GTAV (<kbd>Esc</kbd> -> <kbd>Game</kbd> -> <kbd>Exit Game</kbd>)
-  * Run `Universe GTA install.bat` on the desktop (WARNING: If you play GTAV and have saved games or other settings, this will overwrite them. Your old settings will be backed up to `~/Documents`)
+  
   
 Now skip to [running the environment](#run-the-environment)
 
