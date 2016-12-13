@@ -39,7 +39,7 @@ ami-734efc17 (ca-central-1)
 * Purchase Steam version of GTAV and login to Steam on your new AWS instance
 * [optional] Open Autologon.exe on the desktop and input your credentials if you want Windows to logon automatically without an RDP session
 * Open GTAV and make sure you can play <kbd>Story Mode</kbd> (WARNING: NSFW)
-* If GTAV is not starting or is slow, restart Windows (it's likely a good idea to do this after initial instance boot from AMI either way)
+* There is a known issue with programs not working on first boot. If GTAV takes more than 1 minute to load, restart Windows and try again
 * Get our saved games
   * Close GTAV (<kbd>Esc</kbd> -> <kbd>Game</kbd> -> <kbd>Exit Game</kbd>)
   * Run `Universe GTA install.bat` on the desktop (WARNING: If you play GTAV and have saved games or other settings, this will overwrite them. Your old settings will be backed up to `~/Documents`)
