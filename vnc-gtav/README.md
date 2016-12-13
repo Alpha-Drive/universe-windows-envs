@@ -42,10 +42,7 @@ ami-734efc17 (ca-central-1)
 * [optional] Open Autologon.exe on the desktop and input your credentials if you want Windows to logon automatically without an RDP session
 * Recharge with some [meditation](http://marc.ucla.edu/mindful-meditations) for ~20 minutes while the game downloads
 * Run <kbd>Universe GTA install.bat</kbd> on the desktop (WARNING: If you play GTAV and have saved games or other settings, this will overwrite them. Your old settings will be backed up to `~/Documents`)
-* Open GTAV and make sure you can play <kbd>Story Mode</kbd> (WARNING: NSFW) - If you get an error about updating ScriptHook, make sure the install step above completed successfully and that you selected _yes_ to `restore to a known working version prompts`. It's okay to rerun install as many times as you need. GTA will take 5-10 minutes to load the _first time_, subsequent loads will be ~1 minute.  
-* Finally, get our saved games
-  * Close GTAV (<kbd>Esc</kbd> -> <kbd>Game</kbd> -> <kbd>Exit Game</kbd>)
-  
+* Open GTAV and make sure you can play <kbd>Story Mode</kbd> (WARNING: NSFW) - If you get an error about updating ScriptHook, make sure the install step above completed successfully and that you selected _yes_ to `restore to a known working version prompts`. It's okay to rerun install as many times as you need. GTA will take 5-10 minutes to load the _first time_, subsequent loads will be ~1 minute.
   
 Now skip to [running the environment](#run-the-environment)
 
