@@ -52,14 +52,14 @@ AMI setup from scratch
   * On AWS, in EC2, select launch instance. 
   * Under Community AMIs, search for *ec2gaming* and select one of the following:
 ```
-ami-017dbf6a	(us-east)
-ami-8735c5c3	(us-west-1)
-ami-dfefeeef	(us-west-2)
-ami-20175557	(eu-west-1)
-ami-e47842f9	(eu-central-1)
-ami-60cd6260	(ap-northeast-1)
-ami-8c5b5bde	(ap-southeast-1)
-ami-4d9eda77	(ap-southeast-2)
+ami-017dbf6a (us-east)
+ami-8735c5c3 (us-west-1)
+ami-dfefeeef (us-west-2)
+ami-20175557 (eu-west-1)
+ami-e47842f9 (eu-central-1)
+ami-60cd6260 (ap-northeast-1)
+ami-8c5b5bde (ap-southeast-1)
+ami-4d9eda77 (ap-southeast-2)
 ```
   * Choose the `g2.2xlarge` type in order to get the GPU required to run the game.
   * In step four _Add Storage_, make sure to change the EBS size from 35GB to 250GB+ (GTAV is around ~80GB and we want some extra room as well).
