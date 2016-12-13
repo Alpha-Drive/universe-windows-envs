@@ -44,7 +44,7 @@ ami-734efc17 (ca-central-1)
 dd if=\\.\PHYSICALDRIVE0 of=/dev/null bs=100M --progress --size
 ```
 and wake up to a preloaded EBS volume.
-* Get our saved games
+* Finally, get our saved games
   * Close GTAV (<kbd>Esc</kbd> -> <kbd>Game</kbd> -> <kbd>Exit Game</kbd>)
   * Run `Universe GTA install.bat` on the desktop (WARNING: If you play GTAV and have saved games or other settings, this will overwrite them. Your old settings will be backed up to `~/Documents`)
   
