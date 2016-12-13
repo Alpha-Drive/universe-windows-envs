@@ -59,7 +59,7 @@ ami-20175557 (eu-west-1)
 ami-e47842f9 (eu-central-1)
 ami-60cd6260 (ap-northeast-1)
 ami-8c5b5bde (ap-southeast-1)
-ami-4d9eda77 (ap-southeast-2)
+ami-4d9eda77 (ap-southeast-2) 
 ```
   * Choose the `g2.2xlarge` type in order to get the GPU required to run the game.
   * In step four _Add Storage_, make sure to change the EBS size from 35GB to 250GB+ (GTAV is around ~80GB and we want some extra room as well).
