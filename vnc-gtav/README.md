@@ -39,11 +39,11 @@ ami-734efc17 (ca-central-1)
 * Purchase Steam version of GTAV and login to Steam on your new AWS instance
 * [optional] Open Autologon.exe on the desktop and input your credentials if you want Windows to logon automatically without an RDP session
 * Open GTAV and make sure you can play <kbd>Story Mode</kbd> (WARNING: NSFW)
- * Note that this will take 10-20 minutes the first time you load the game due to [EBS intialization](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-initialize.html). If you'd like everything to be fast, you can follow [these instructions](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-initialize.html) on running `dd` **overnight** with something like:
+ * Note that this will take 10-20 minutes the first time you load the game due to [EBS intialization](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-initialize.html). If you'd like everything to be fast right away, you can follow [these instructions](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-initialize.html) and run `dd` **overnight** with something like:
 ```
 dd if=\\.\PHYSICALDRIVE0 of=/dev/null bs=100M --progress --size
 ```
-
+and wake up to a preloaded EBS volume.
 * Get our saved games
   * Close GTAV (<kbd>Esc</kbd> -> <kbd>Game</kbd> -> <kbd>Exit Game</kbd>)
   * Run `Universe GTA install.bat` on the desktop (WARNING: If you play GTAV and have saved games or other settings, this will overwrite them. Your old settings will be backed up to `~/Documents`)
