@@ -44,7 +44,7 @@ ami-734efc17 (ca-central-1)
   * If Steam begins to download GTAV, recharge with some [meditation](http://marc.ucla.edu/mindful-meditations) for ~20 minutes until it completes
   * If it uses the existing copy, the game will lazily load off S3 onto the SSD again due to EBS initialization. You may not see anything for several seconds while this happens. When you enter story mode, GTAV's memory will climb to ~2GB before the game launches.
 * Run <kbd>Universe GTA install.bat</kbd> on the desktop (WARNING: If you play GTAV and have saved games or other settings, this will overwrite them. Your old settings will be backed up to `~/Documents`)
-* Open GTAV and make sure you can play <kbd>Story Mode</kbd> (WARNING: NSFW) - If you get an error about updating ScriptHook, make sure the install step above completed successfully and that you selected _yes_ to `restore to a known working version prompts`. It's okay to rerun install as many times as you need. GTA will take 5-10 minutes to load the _first time_, subsequent loads will be ~1 minute.
+* Open GTAV and make sure you can play <kbd>Story Mode</kbd> (WARNING: NSFW) - If you get an error about updating ScriptHook, make sure the install step above completed successfully and that you selected _yes_ to `restore to a known working version prompts`. It's okay to rerun the install as many times as you need. GTA will take 5-10 minutes to load the _first time_, subsequent loads will be ~1 minute.
   
 Now skip to [running the environment](#run-the-environment)
 
