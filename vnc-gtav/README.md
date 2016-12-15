@@ -40,7 +40,9 @@ ami-734efc17 (ca-central-1)
 * The password for the instance is `d33pdriveisalive!`. Once you log in using Microsoft Remote Desktop, you’ll be asked to change the Administrator password. Change it to something.
 * Open Steam and purchase the game on your new instance (note that Steam will take a couple minutes to load the first time due to [EBS intialization](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-initialize.html)
 * [optional] Open Autologon.exe on the desktop and input your credentials if you want Windows to logon automatically without an RDP session
-* Recharge with some [meditation](http://marc.ucla.edu/mindful-meditations) for ~20 minutes while the game downloads
+* Try opening the game
+  * If Steam begins to download GTAV, recharge with some [meditation](http://marc.ucla.edu/mindful-meditations) for ~20 minutes until it completes
+  * If it uses the existing copy, the game will lazily load off S3 onto the SSD again due to EBS initialization. You may not see anything for several seconds while this happens. When you enter story mode, GTAV's memory will climb to ~2GB before the game launches.
 * Run <kbd>Universe GTA install.bat</kbd> on the desktop (WARNING: If you play GTAV and have saved games or other settings, this will overwrite them. Your old settings will be backed up to `~/Documents`)
 * Open GTAV and make sure you can play <kbd>Story Mode</kbd> (WARNING: NSFW) - If you get an error about updating ScriptHook, make sure the install step above completed successfully and that you selected _yes_ to `restore to a known working version prompts`. It's okay to rerun install as many times as you need. GTA will take 5-10 minutes to load the _first time_, subsequent loads will be ~1 minute.
   
