@@ -9,15 +9,15 @@
 #include "boost/date_time/posix_time/posix_time.hpp"
 using namespace boost::posix_time;
 
-GTAVEnv::GTAVEnv(std::string env_id, std::string instance_id, int websocket_port, std::shared_ptr<AgentConn> agent_conn, bool skip_loading_saved_game, int rewards_per_second) : 
-	Env(env_id, instance_id, websocket_port, agent_conn, rewards_per_second),
-	reward_calculator_(env_id)
+GTAVEnv::GTAVEnv(std::string env_id, std::string instance_id, int websocket_port, std::shared_ptr<AgentConn> agent_conn, bool skip_loading_saved_game, boost::log::sources::severity_logger_mt<ls::severity_level> lg, int rewards_per_second) :
+Env(env_id, instance_id, websocket_port, agent_conn, lg, rewards_per_second),
+reward_calculator_(env_id)
 {
 	skip_loading_saved_game_ = skip_loading_saved_game;
 	set_win_active_to_long_ago();
 }
 
-GTAVEnv::~GTAVEnv()
+GTAVEnv::~GTAVEnv() 
 {
 }
 
@@ -155,13 +155,13 @@ void GTAVEnv::set_win_active_to_long_ago()
 
 void GTAVEnv::change_settings(const Json::Value& settings)
 {
-	// Note that settings should be carefully chosen so as to not allow reward hacking.
+	// Note that settings should be carefully chosen so as to not allow reward hacking. https://arxiv.org/abs/1606.06565v1
 	// Only things we would expect an agent to control like the position / rotation of its head e.g. via the camera
-	// should be added. e.g. no cheat codes >)
+	// should be added. e.g. no cheat codes
 	if (settings[1].asString() == "use_custom_camera")
 	{
 		(*shared_).use_custom_camera = settings[2].asBool();
-		BOOST_LOG_SEV(lg_, ls::info) << "agent set custom camera to true";
+		BOOST_LOG_SEV(lg_, ls::debug) << "agent set custom camera to true";
 	}
 	if (settings[1].asString() == "desired_cam_x_offset")
 	{

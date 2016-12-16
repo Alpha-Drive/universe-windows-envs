@@ -34,12 +34,19 @@ bool websocket_send(server* ws_server, websocketpp::connection_hdl& cxn, std::st
 	try {
 		ws_server->send(cxn, msg, websocketpp::frame::opcode::text);
 		return true;
-	} catch (const websocketpp::lib::error_code& e) {
-		BOOST_LOG_SEV(lg, ls::error) << "Echo failed because: " << e
+	}
+	catch (const websocketpp::lib::error_code& e) {
+		BOOST_LOG_SEV(lg, ls::error) << "Send failed because: " << e
 			<< "(" << e.message() << ")";
 		return false;
 	}
+	catch (...)
+	{
+		BOOST_LOG_SEV(lg, ls::error) << "Send failed";
+		return false;
+	}
 }
+
 
 void AgentConn::run_server_thread()
 {

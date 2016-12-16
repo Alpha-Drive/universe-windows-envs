@@ -10,7 +10,7 @@ class GTAVEnv : public Env
 {
 public:
 	void set_win_active_to_long_ago();
-	GTAVEnv(std::string env_id, std::string instance_id, int websocket_port, std::shared_ptr<AgentConn> agent_conn, bool skip_loading_saved_game, int rewards_per_second);
+	GTAVEnv(std::string env_id, std::string instance_id, int websocket_port, std::shared_ptr<AgentConn> agent_conn, bool skip_loading_saved_game, boost::log::sources::severity_logger_mt<ls::severity_level> lg, int rewards_per_second);
 	~GTAVEnv();
 	void noop();
 	void loop() override;

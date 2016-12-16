@@ -9,7 +9,7 @@
 class Rewarder
 {
 public:
-	Rewarder(int websocket_port, std::string env_id, std::shared_ptr<AgentConn> agent_conn, int rewards_per_second);
+	Rewarder(int websocket_port, std::string env_id, std::shared_ptr<AgentConn> agent_conn, int rewards_per_second, boost::log::sources::severity_logger_mt<ls::severity_level> lg);
 	~Rewarder();
 	void sendRewardAndIncrementStepCounter(double reward, Json::Value info=Json::Value(Json::ValueType::objectValue));
 	bool ready_for_reward();
@@ -29,6 +29,7 @@ private:
 	
 	std::chrono::time_point<std::chrono::system_clock> last_reward_pushed_at_;
 	std::string env_id_;
+	boost::log::sources::severity_logger_mt<ls::severity_level> lg_;
 };
 
 #endif // !REWARDER_H_

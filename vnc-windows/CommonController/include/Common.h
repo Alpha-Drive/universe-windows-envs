@@ -28,7 +28,6 @@ namespace ls = boost::log::trivial;
 
 // _DEBUG is set by Visual Studio in debug mode. PROJ_DEBUG is our own flag that allows us to control debug statements separately from Visual Studio.
 #ifdef _DEBUG
-	// Note that printing debug messages to the console over RDP will significantly reduce throughput of the reward / action channel running over websockets.
     #define PROJ_DEBUG
 #endif
 
@@ -54,7 +53,8 @@ inline void init_logger()
 
 	boost::log::add_console_log(std::cout, boost::log::keywords::format = "[%TimeStamp%]: %Message%");
 
-#ifdef _DEBUG
+#ifdef PROJ_DEBUG
+	std::cerr << "\r\n\r\n ***** WARNING: TURN OFF PROJ_DEBUG IF YOU ARE ON RDP AS THIS WILL CRIPPLE THROUGHPUT OF THE REWARD / ACTION CHANNELS RUNNING OVER WEBSOCKETS. \r\n\";
 	boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::debug);
 #else
 	boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::info);

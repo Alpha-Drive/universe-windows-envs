@@ -54,15 +54,21 @@ int main(int argc, const char* argv[])
 
 	BOOST_LOG_SEV(lg, boost::log::trivial::debug) << "parsed arguments";
 
-	std::shared_ptr<AgentConn> agent_conn(new AgentConn(websocket_port, lg));
-
-	BOOST_LOG_SEV(lg, boost::log::trivial::debug) << "setup agent_conn";
-
-	GTAVEnv env(env_id, env_instance_id, websocket_port, agent_conn, skip_loading_saved_game, rewards_per_second);
-
-	BOOST_LOG_SEV(lg, boost::log::trivial::debug) << "instantiated environment";
-
-	env.loop();
+	try {
+		std::shared_ptr<AgentConn> agent_conn(new AgentConn(websocket_port, lg));
+		BOOST_LOG_SEV(lg, boost::log::trivial::debug) << "setup agent_conn";
+		GTAVEnv env(env_id, env_instance_id, websocket_port, agent_conn, skip_loading_saved_game, lg, rewards_per_second);
+		BOOST_LOG_SEV(lg, boost::log::trivial::debug) << "instantiated environment";
+		env.loop();
+	}
+	catch (std::exception const& e) {
+		BOOST_LOG_SEV(lg, ls::error) << e.what();
+		throw;
+	}
+	catch (...) {
+		BOOST_LOG_SEV(lg, ls::error) << "Exception occurred";
+		throw;
+	}
 
 #ifdef PROJ_DEBUG
 	BOOST_LOG_SEV(lg, boost::log::trivial::debug) << "Press ENTER to continue...";

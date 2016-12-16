@@ -13,10 +13,9 @@
 class Env
 {
 public:
-	Env::Env(std::string env_id, std::string instance_id, int websocket_port, std::shared_ptr<AgentConn> agent_conn, int rewards_per_second=60) :
-		rewarder(websocket_port, env_id, agent_conn, rewards_per_second),
-		joystick_(),
-		lg_()
+	Env::Env(std::string env_id, std::string instance_id, int websocket_port, std::shared_ptr<AgentConn> agent_conn, boost::log::sources::severity_logger_mt<ls::severity_level> lg, int rewards_per_second = 60) :
+		rewarder(websocket_port, env_id, agent_conn, rewards_per_second, lg),
+		joystick_()
 	{
 		env_id_ = env_id;
 		agent_conn_ = agent_conn;
@@ -24,6 +23,7 @@ public:
 		agent_action_connection = agent_conn->on_action(boost::bind(&Env::_act,  this, boost::placeholders::_1));
 		no_clients_connection = agent_conn->on_no_clients(boost::bind(&Env::_when_no_clients, this));
 		agent_conn_->send_env_describe(env_id_, "running", rewarder.get_episode_id(), rewarder.get_frames_per_second());
+		lg_ = lg;
 	}
 
 	virtual Env::~Env()
@@ -103,7 +103,6 @@ protected:
 private:
 	std::string env_id_;
 	std::shared_ptr<AgentConn> agent_conn_;
-
 };
 
 #endif // !ENV_H_

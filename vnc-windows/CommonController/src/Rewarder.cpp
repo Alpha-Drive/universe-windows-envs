@@ -2,7 +2,7 @@
 #include "Rewarder.h"
 #include "Common.h"
 
-Rewarder::Rewarder(int port, std::string env_id, std::shared_ptr<AgentConn> agent_conn, int frames_per_second)
+Rewarder::Rewarder(int port, std::string env_id, std::shared_ptr<AgentConn> agent_conn, int frames_per_second, boost::log::sources::severity_logger_mt<ls::severity_level> lg)
 {
 	episode_step_counter = 0;
 	episode_counter = 0;
@@ -10,6 +10,7 @@ Rewarder::Rewarder(int port, std::string env_id, std::shared_ptr<AgentConn> agen
 	last_reward_pushed_at_ = std::chrono::system_clock::now();
 	agent_conn_ = agent_conn;
 	frames_per_second_ = frames_per_second;
+	lg_ = lg;
 }
 
 Rewarder::~Rewarder()
@@ -49,7 +50,15 @@ void Rewarder::sendRewardAndIncrementStepCounter(double reward, Json::Value info
 	// Don't send rewards for the first couple steps
 	if (episode_step_counter > 5)
 	{
-		sendReward_(reward, false, info);
+		try {
+			sendReward_(reward, false, info);
+		}
+		catch (std::exception const& e) {
+			BOOST_LOG_SEV(lg_, ls::error) << e.what();
+		}
+		catch (...) {
+			BOOST_LOG_SEV(lg_, ls::error) << "Exception occurred";
+		}
 	}
 }
 
