@@ -45,6 +45,7 @@ ami-fb76c39b us-west-2
 * Try opening the game
   * If Steam begins to download GTAV, recharge with some [meditation](http://marc.ucla.edu/mindful-meditations) for ~20 minutes until it completes
   * If it uses the existing copy, the game will load off S3 onto the SSD. You may not see anything for several seconds while this happens. When you enter story mode, it will take ~10 minutes.
+* Close GTA
 * Run <kbd>Universe GTA install.bat</kbd> on the desktop (WARNING: If you play GTAV and have saved games or other settings, this will overwrite them. Your old settings will be backed up to `~/Documents`)
 * Open GTAV and make sure you can play <kbd>Story Mode</kbd> (WARNING: NSFW) - If you get an error about updating ScriptHook, make sure the install step above completed successfully and that you selected _yes_ to `restore to a known working version prompts`. It's okay to rerun the install as many times as you need. GTA will take 5-10 minutes to load the _first time_, subsequent loads will be ~1 minute.
   
