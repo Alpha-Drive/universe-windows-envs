@@ -40,7 +40,7 @@ ami-fb76c39b us-west-2
 * Under <kbd>Configure Instance</kbd> -> <kbd>EBS-optimized instance</kbd>, check <kbd>Launch as EBS-optimized instance</kbd>
 * Don't worry about the keypair
 * The password for the instance is `d33pdriveisalive!`. Once you log in using Microsoft Remote Desktop, you’ll be asked to change the Administrator password. Change it to something.
-* Open Steam and purchase the game on your new instance (note everything will feel very sluggish as the [SSD gets populated from S3](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-initialize.html). Please bear with it at first, everything will be _much_, _much_ faster when it's on the SSD.
+* Open Steam and purchase the game on your new instance (note everything will feel very sluggish as the [SSD gets populated from S3](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-initialize.html). Please bear with it at first, everything will be _much_, _much_ faster once it's on the SSD.
 * [optional] Open Autologon.exe on the desktop and input your credentials if you want Windows to logon automatically without an RDP session
 * Try opening the game
   * If Steam begins to download GTAV, recharge with some [meditation](http://marc.ucla.edu/mindful-meditations) for ~20 minutes until it completes
