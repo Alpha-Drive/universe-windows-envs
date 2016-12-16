@@ -138,7 +138,9 @@ Run the `Universe GTAV.bat` file on the desktop of the AMI or in PowerShell
 python $env:UNIVERSE_WINDOWS_ENVS_DIR/vnc-gtav/run_vnc_env.py
 ```
 
-The run script will start GTAV if it's not started and send keys to load <kbd>Story Mode</kbd> if it's not already loaded. Sit back and let it send the keys necessary. Note that closing your RDP session will kill the environment. The logout link on the desktop is an attempt to circumvent this behavior, but it does not always work and can change the chrome of the GTA window. (Help wanted!).
+The run script will start GTAV if it's not started and send keys to load <kbd>Story Mode</kbd> if it's not already loaded.
+
+Note that closing your RDP session will kill the environment. The logout link on the desktop is an attempt to circumvent this behavior, but it does not always work and can change the chrome of the GTA window. (Help wanted!).
 
 *ProTip*: To get back to the desktop from the game on hit the Windows key twice, or Alt+Tab
 
