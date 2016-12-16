@@ -40,11 +40,11 @@ ami-fb76c39b us-west-2
 * Under <kbd>Configure Instance</kbd> -> <kbd>EBS-optimized instance</kbd>, check <kbd>Launch as EBS-optimized instance</kbd>
 * Don't worry about the keypair
 * The password for the instance is `d33pdriveisalive!`. Once you log in using Microsoft Remote Desktop, you’ll be asked to change the Administrator password. Change it to something.
-* Open Steam and purchase the game on your new instance (note that Steam will take a couple minutes to load the first time due to [EBS intialization](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-initialize.html)
+* Open Steam and purchase the game on your new instance (note everything will feel very sluggish as the [SSD gets populated from S3](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-initialize.html). Please bear with it at first, everything will be _much_, _much_ faster when it's on the SSD.
 * [optional] Open Autologon.exe on the desktop and input your credentials if you want Windows to logon automatically without an RDP session
 * Try opening the game
   * If Steam begins to download GTAV, recharge with some [meditation](http://marc.ucla.edu/mindful-meditations) for ~20 minutes until it completes
-  * If it uses the existing copy, the game will lazily load off S3 onto the SSD again due to EBS initialization. You may not see anything for several seconds while this happens. When you enter story mode, GTAV's memory will climb to ~2GB before the game launches.
+  * If it uses the existing copy, the game will load off S3 onto the SSD. You may not see anything for several seconds while this happens. When you enter story mode, it will take several minutes as GTAV's memory climbs to ~2GB.
 * Run <kbd>Universe GTA install.bat</kbd> on the desktop (WARNING: If you play GTAV and have saved games or other settings, this will overwrite them. Your old settings will be backed up to `~/Documents`)
 * Open GTAV and make sure you can play <kbd>Story Mode</kbd> (WARNING: NSFW) - If you get an error about updating ScriptHook, make sure the install step above completed successfully and that you selected _yes_ to `restore to a known working version prompts`. It's okay to rerun the install as many times as you need. GTA will take 5-10 minutes to load the _first time_, subsequent loads will be ~1 minute.
   
@@ -138,7 +138,9 @@ Run the `Universe GTAV.bat` file on the desktop of the AMI or in PowerShell
 python $env:UNIVERSE_WINDOWS_ENVS_DIR/vnc-gtav/run_vnc_env.py
 ```
 
-The run script will start GTAV if it's not started and send keys to load <kbd>Story Mode</kbd> if it's not already loaded. Sit back and let it send the keys necessary. Note that closing your RDP session will kill the environment. The logout link on the desktop will is an attempt to circumvent this behavior, but it does not always work and can change the chrome of the GTA window. (Help wanted!).
+The run script will start GTAV if it's not started and send keys to load <kbd>Story Mode</kbd> if it's not already loaded. Sit back and let it send the keys necessary. Note that closing your RDP session will kill the environment. The logout link on the desktop is an attempt to circumvent this behavior, but it does not always work and can change the chrome of the GTA window. (Help wanted!).
+
+*ProTip*: To get back to the desktop from the game on hit the Windows key twice, or Alt+Tab
 
 #### Skip reload
 To avoid loading the saved game every episode (which takes ~40s), you can pass <kbd>-s</kbd> to run_vnc_env.py
