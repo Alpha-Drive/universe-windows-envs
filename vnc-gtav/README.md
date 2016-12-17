@@ -161,18 +161,19 @@ Copy-Item "$env:UNIVERSE_WINDOWS_ENVS_DIR/vnc-gtav/run_vnc_env_gtav_shortcut.lnk
 
 ## Connecting a client
 
-### Pretrained models
-
-See [deepdrive-universe](https://github.com/deepdrive/deepdrive-universe)
+Install [universe](https://github.com/openai/universe)
 
 ### Random Agent
-In \*nix, install [universe](https://github.com/openai/universe)
 
 Run your agent
 ```
 cd universe
 bin/random_agent.py -e gtav.SaneDriving-v0 -r vnc://<your-windows-ip>:5900+15900 --fps 8
 ```
+
+### Pretrained models
+
+Please see [deepdrive-universe](https://github.com/deepdrive/deepdrive-universe)
 
 ## Development
 
