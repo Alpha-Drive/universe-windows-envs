@@ -19,22 +19,22 @@ while a direct ethernet connection creates a nearly indistinguishable experience
 Using the prebuilt AMI
 -----------------------
 * On AWS, in EC2, select launch instance. 
-* Under Community AMIs, search for *universe-gtav-0.0.7* and select one of the following:
+* Under Community AMIs, search for *universe-gtav-0.0.9* and select one of the following:
 ```
-ami-87e790e8 ap-south-1
-ami-75eae011 eu-west-2
-ami-9af0d6e9 eu-west-1
-ami-ba9c4ad4 ap-northeast-2
-ami-6ffd9308 ap-northeast-1
-ami-39e67e55 sa-east-1
-ami-4b25972f ca-central-1
-ami-3e7dd25d ap-southeast-1
-ami-0a546f69 ap-southeast-2
-ami-5c6fae33 eu-central-1
-ami-c45851d3 us-east-1
-ami-edc99388 us-east-2
-ami-2ba2f44b us-west-1
-ami-fb76c39b us-west-2
+ami-83e493ec ap-south-1
+ami-9aefe5fe eu-west-2
+ami-3293b541 eu-west-1
+ami-99994ff7 ap-northeast-2
+ami-286a034f ap-northeast-1
+ami-5fcf5733 sa-east-1
+ami-57269433 ca-central-1
+ami-045bf467 ap-southeast-1
+ami-d63209b5 ap-southeast-2
+ami-09935366 eu-central-1
+ami-c5a6afd2 us-east-1
+ami-a1d68cc4 us-east-2
+ami-bedd8bde us-west-1
+ami-ec36838c us-west-2
 ```
 * Choose the `g2.2xlarge` type in order to get the GPU required to run the game.
 * Under <kbd>Configure Instance</kbd> -> <kbd>EBS-optimized instance</kbd>, check <kbd>Launch as EBS-optimized instance</kbd>
