@@ -48,7 +48,6 @@ _Note everything will feel very sluggish at first as the [SSD gets populated fro
   * Steam will begin to download, recharge with some [meditation](http://marc.ucla.edu/mindful-meditations) for ~20 minutes until it completes. 
 * Close GTA (<kbd>Esc</kbd> -> <kbd>Game</kbd> -> <kbd>Exit Game</kbd>)
 * Run <kbd>install.bat</kbd> on the desktop (WARNING: If you play GTAV and have saved games or other settings, this will overwrite them. Your old settings will be backed up to `~/Documents`)
-* Run <kbd>run.bat</kbd> If you get an error about updating ScriptHook, make sure the install step above completed successfully and that you selected _yes_ to `restore to a known working version prompts`. It's okay to rerun the install as many times as you need.
   
 Now skip to [running the environment](#run-the-environment)
 
@@ -135,14 +134,16 @@ C:\Program Files\vJoy\x86;C:\Program Files (x86)\AutoIt3\AutoItX;
 Restart Windows
 
 ### Run the environment
-Run the `Universe GTAV.bat` file on the desktop of the AMI or in PowerShell
+
+Open <kbd>run.bat</kbd> or run the following command in Powershell
+
 ```
 python $env:UNIVERSE_WINDOWS_ENVS_DIR/vnc-gtav/run_vnc_env.py
 ```
 
-The run script will start GTAV if it's not started and send keys to load <kbd>Story Mode</kbd> if it's not already loaded.
+The run script will now start GTAV if it's not started and send keys to load <kbd>Story Mode</kbd> if it's not already loaded.
 
-Note that closing your RDP session will kill the environment. The logout link on the desktop is an attempt to circumvent this behavior, but it does not always work and can change the chrome of the GTA window. (Help wanted!).
+Note that closing your RDP session will kill the environment.
 
 *ProTip*: To get back to the desktop from the game on hit the Windows key twice, or Alt+Tab
 
