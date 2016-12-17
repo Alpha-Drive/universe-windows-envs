@@ -40,11 +40,10 @@ ami-ec36838c us-west-2
 * Under <kbd>Configure Instance</kbd> -> <kbd>EBS-optimized instance</kbd>, check <kbd>Launch as EBS-optimized instance</kbd>
 * Don't worry about the keypair
 * The password for the instance is `d33pdriveisalive!`. Once you log in using Microsoft Remote Desktop, you’ll be asked to change the Administrator password. Change it to something.
-* Open Steam and purchase the game on your new instance (note everything will feel very sluggish as the [SSD gets populated from S3](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-initialize.html). Please bear with it at first, everything will be _much_, _much_ faster once it's on the SSD.
+* Open Steam and purchase the game on your new instance (note everything will feel very sluggish at first as the [SSD gets populated from S3](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-initialize.html). This is a one time thing, everything will be _much_ faster once the SSD is loaded.
 * [optional] Open Autologon.exe on the desktop and input your credentials if you want Windows to logon automatically without an RDP session
 * Open the game and run <kbd>Story Mode</kbd> (WARNING: NSFW)
-  * If Steam begins to download GTAV, recharge with some [meditation](http://marc.ucla.edu/mindful-meditations) for ~20 minutes until it completes
-  * If it uses the existing copy, the game will load off S3 onto the SSD. You may not see anything for several seconds while this happens. When you enter story mode, it will take ~10 minutes.
+  * Steam will begin to download, recharge with some [meditation](http://marc.ucla.edu/mindful-meditations) for ~20 minutes until it completes. 
 * Close GTA (<kbd>Esc</kbd> -> <kbd>Game</kbd> -> <kbd>Exit Game</kbd>)
 * Run <kbd>install.bat</kbd> on the desktop (WARNING: If you play GTAV and have saved games or other settings, this will overwrite them. Your old settings will be backed up to `~/Documents`)
 * Run <kbd>run.bat</kbd> If you get an error about updating ScriptHook, make sure the install step above completed successfully and that you selected _yes_ to `restore to a known working version prompts`. It's okay to rerun the install as many times as you need.
