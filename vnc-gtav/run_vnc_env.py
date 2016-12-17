@@ -212,7 +212,6 @@ def main():
     while True:
         running_procs = gym_windows.get_running_processes(ALL_PROCESS_NAMES)
         if len(running_procs) == len(ALL_PROCESS_NAMES):
-            print('processes running weeeee')
             if 'GTAV_DEAD_MANS_SNITCH_URL' in os.environ:
                 last_heartbeat = send_hearbeat(last_heartbeat)
         else:
