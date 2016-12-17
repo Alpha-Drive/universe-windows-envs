@@ -1,4 +1,5 @@
 #!/usr/bin/python
+from __future__ import print_function
 import argparse
 import json
 import logging
@@ -162,6 +163,21 @@ def try_stuff(fn, clean):
         six.reraise(*exc_info)
 
 
+def send_hearbeat(last_ping):
+    ping_diff = None
+    ping_period_seconds = 15 * 60
+    if last_ping is not None:
+        ping_diff = time.time() - last_ping
+    if ping_diff is None or ping_diff > ping_period_seconds:
+        logging.info('Sending heartbeat')
+        try:
+            last_ping = time.time()
+            urllib2.urlopen(os.environ['GTAV_DEAD_MANS_SNITCH_URL']).read()
+        except Exception as e:
+            logging.error('Error sending heartbeat \n' + traceback.format_exc())
+    return last_ping
+
+
 def main():
     parser = argparse.ArgumentParser(description=None)
     parser.add_argument('-v', '--verbose', action='count', dest='verbosity', default=0, help='Set verbosity.')
@@ -192,16 +208,18 @@ def main():
 
     try_stuff(runner.popen, runner.popen_cleanup)
 
+    last_heartbeat = None
     while True:
-        if gym_windows.processes_are_running(ALL_PROCESS_NAMES):
-            if 'GTAV_DEAD_MANS_SNITCH_URL' in os.environ:  # i.e. https://nosnch.in/a69389848a
-                # Send heartbeat
-                logging.info('Sending heartbeat')
-                try:
-                    urllib2.urlopen(os.environ['GTAV_DEAD_MANS_SNITCH_URL']).read()
-                except Exception as e:
-                    logging.error('Error sending heartbeat \n' + traceback.format_exc())
-        time.sleep(15 * 60)
+        running_procs = gym_windows.get_running_processes(ALL_PROCESS_NAMES)
+        if len(running_procs) == len(ALL_PROCESS_NAMES):
+            print('processes running weeeee')
+            if 'GTAV_DEAD_MANS_SNITCH_URL' in os.environ:
+                last_heartbeat = send_hearbeat(last_heartbeat)
+        else:
+            missing = str(list(set(ALL_PROCESS_NAMES) - set(running_procs)))
+            runner.popen_cleanup()
+            raise Exception('Environment crashed due to the following failed processes: ' + missing)
+        time.sleep(5)
 
 
 if __name__ == '__main__':

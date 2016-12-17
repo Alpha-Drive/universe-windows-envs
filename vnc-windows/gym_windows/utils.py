@@ -53,6 +53,12 @@ def get_reg(name, reg_path):
 
 
 def processes_are_running(expected):
+    intersection = get_running_processes(expected)
+    ret = intersection == expected
+    return ret
+
+
+def get_running_processes(expected):
     if type(expected) is not list:
         expected = [expected]
     expected = set(expected)
@@ -60,8 +66,7 @@ def processes_are_running(expected):
     actual = list(csv.DictReader(actual.stdout))
     actual = [p['Image Name'] for p in actual]
     intersection = set(actual).intersection(expected)
-    ret = intersection == expected
-    return ret
+    return intersection
 
 
 def enum_window_titles():

@@ -2,6 +2,7 @@ from utils import get_reg
 from utils import set_reg
 from utils import set_reg_values
 from utils import processes_are_running
+from utils import get_running_processes
 from utils import download_file
 from utils import download_folder
 from utils import run_win_cmd
