@@ -148,7 +148,7 @@ Note that closing your RDP session will kill the environment.
 *ProTip*: To get back to the desktop from the game on hit the Windows key twice, or Alt+Tab
 
 #### Skip reload
-To avoid loading the saved game every episode (which takes ~40s), you can pass <kbd>-s</kbd> to run_vnc_env.py
+To avoid loading the saved game every episode (which takes ~40s), you can open <kbd>run skip reload.bat</kbd> or pass <kbd>-s</kbd> to run_vnc_env.py
 ```
 python $env:UNIVERSE_WINDOWS_ENVS_DIR/vnc-gtav/run_vnc_env.py -s
 ```
