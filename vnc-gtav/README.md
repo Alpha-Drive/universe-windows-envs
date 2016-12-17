@@ -165,7 +165,6 @@ Install [Universe](https://github.com/openai/universe)
 
 ### Random Agent
 
-Run your agent
 ```
 cd universe
 bin/random_agent.py -e gtav.SaneDriving-v0 -r vnc://<your-windows-ip>:5900+15900 --fps 8
