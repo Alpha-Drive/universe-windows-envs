@@ -161,7 +161,7 @@ Copy-Item "$env:UNIVERSE_WINDOWS_ENVS_DIR/vnc-gtav/run_vnc_env_gtav_shortcut.lnk
 
 ## Connecting a client
 
-Install [universe](https://github.com/openai/universe)
+Install [Universe](https://github.com/openai/universe)
 
 ### Random Agent
 
