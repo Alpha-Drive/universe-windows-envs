@@ -51,16 +51,23 @@ void GTAVEnv::connect()
 	if(shared_)
 	{
 		P_INFO("Game already open, reusing." << std::endl);
+		reset_game();
 	}
-	while( ! shared_ )
+	else
 	{
-		shared_.reset(wait_for_shared_agent_memory(10));
-		P_INFO("Attempting to load story mode and get accesss to shared agent data" << std::endl);
-		try_loading_story_mode();
+		P_INFO("Waiting for game to load..." << std::endl);
+
+		std::this_thread::sleep_for(std::chrono::minutes(1));
+
+		P_WARN("\n\nSending keys to load story mode\n\n");
+
+		while ( ! shared_)
+		{
+			try_loading_story_mode();
+			shared_.reset(wait_for_shared_agent_memory(20000));
+		}
 	}
 
-	P_INFO("Loading saved game" << std::endl);
-	reset_game();
 }
 
 void GTAVEnv::step()

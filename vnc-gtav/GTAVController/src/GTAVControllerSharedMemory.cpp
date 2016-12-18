@@ -31,7 +31,7 @@ SharedAgentMemory * get_shared_agent_data()
 SharedAgentMemory * wait_for_shared_agent_memory(int milliseconds)
 {
 	SharedAgentMemory* _shared = nullptr;
-	P_INFO("Trying to access shared agent data... If GTAVScriptHookProxy.asi was not in the GTAV folder when the game started, copy it there and restart the game." << std::endl);
+	P_INFO("Trying to access game data - if you see this after Story Mode loads, rerun install.bat" << std::endl);
 	while (_shared == nullptr && milliseconds > 0) {
 		_shared = get_shared_agent_data();
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));

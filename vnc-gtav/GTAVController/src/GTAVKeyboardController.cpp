@@ -23,22 +23,24 @@ std::wstring s2ws(const std::string& s)
 	return sw;
 }
 
-void send_key(const std::string & key)
+void send_key(const std::string & key, const int down_up_wait_time = kUpDownWaitTime, const int between_key_wait_time = kBetweenKeyWaitTime)
 {
 	AU3_WinActivate(L"Grand Theft Auto V", L"");
-	AU3_Sleep(kBetweenKeyWaitTime);
+	AU3_Sleep(between_key_wait_time);
 	std::string cmd_up = kKeyStart + key + kKeyUp;
 	std::string cmd_down = kKeyStart + key + kKeyDown;
 	AU3_Send(s2ws(cmd_down).c_str()); 	// i.e. AU3_Send(L"{RIGHT down}");
-	AU3_Sleep(kUpDownWaitTime);
+	AU3_Sleep(down_up_wait_time);
 	AU3_Send(s2ws(cmd_up).c_str());	    // i.e. AU3_Send(L"{RIGHT up}");
 }
 
-void send_keys(const std::vector<std::string> & keys)
+void send_keys(const std::vector<std::string> & keys, const int down_up_wait_time = kUpDownWaitTime, const int between_key_wait_time = kBetweenKeyWaitTime)
 {
 	for(std::string key : keys)
 	{
-		send_key(key);
+		P_WARN("Sending " << key << " keystroke" << std::endl);
+
+		send_key(key, down_up_wait_time, between_key_wait_time);
 	}	
 }
 
@@ -70,8 +72,11 @@ void wait_for_win_to_exist()
 			}
 		}
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(300));
-		P_INFO("Waiting for GTAV Window to exist" << std::endl);
+		if ( ! found)
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(300));
+			P_INFO("Waiting for GTAV Window to exist" << std::endl);
+		}
 	}
 }
 
@@ -81,8 +86,11 @@ void try_loading_story_mode()
 
 	AU3_WinActivate(L"Grand Theft Auto V", L"");
 
-	// Go to game -> load game and select the most recently saved game
-	send_keys({ "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "ENTER", "ENTER" });
+	P_WARN("\n\nSending keys to load story mode. Leave the game open to skip this step in the future. \n\n");
+
+	// We're not sure when the loading splash comes up so button mash
+	// TODO: Switch to Universe vexpect or https://github.com/MyBotRun/Libraries/tree/master/ImageSearchDLL
+	send_keys({ "RIGHT", "RIGHT", "RIGHT", "RIGHT", "RIGHT", "ENTER", "ENTER" });
 }
 
 void wait_for_script_hook_to_load(SharedAgentMemory * shared)
