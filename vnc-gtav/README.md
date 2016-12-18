@@ -39,7 +39,7 @@ ami-2ff4404f us-west-2
 * Choose the `g2.2xlarge` type in order to get the GPU required to run the game.
 * Under <kbd>Configure Instance</kbd> -> <kbd>EBS-optimized instance</kbd>, check <kbd>Launch as EBS-optimized instance</kbd>
 * Don't worry about the keypair
-* The password for the instance is `d33pdriveisalive!`. Once you log in using Microsoft Remote Desktop or [Remmmina](http://askubuntu.com/questions/154121/why-wont-remmina-connect-to-windows-7-remote-desktop/204161#204161), you’ll be asked to change the Administrator password. Change it to something.
+* The password for the instance is `d33pdriveisalive!`. Once you log in using Microsoft Remote Desktop or [Remmina](http://askubuntu.com/questions/154121/why-wont-remmina-connect-to-windows-7-remote-desktop/204161#204161), you’ll be asked to change the Administrator password. Change it to something.
 * Open Steam and purchase the game on your new instance. 
 
 _Note everything will feel very sluggish at first as the [SSD gets populated from S3](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-initialize.html). This is a one time thing and will be much faster on subsequent runs._
@@ -69,7 +69,7 @@ ami-4d9eda77 (ap-southeast-2)
   * Choose the `g2.2xlarge` type in order to get the GPU required to run the game.
   * In step four _Add Storage_, make sure to change the EBS size from 35GB to 250GB+ (GTAV is around ~80GB and we want some extra room as well).
   * Don't worry about the keypair
-  * The password for the instance is `rRmbgYum8g`. Once you log in using Microsoft Remote Desktop, you’ll be asked to change the Administrator password. Change it to something.
+  * The password for the instance is `rRmbgYum8g`. Once you log in using Microsoft Remote Desktop or [Remmina](http://askubuntu.com/questions/154121/why-wont-remmina-connect-to-windows-7-remote-desktop/204161#204161), you’ll be asked to change the Administrator password. Change it to something.
   * When you log in, search for *disk management* and open _Create and format hard disk partitions_
     * Right click the C:\ drive and extend it to the full amount
 
