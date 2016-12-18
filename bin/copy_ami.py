@@ -32,7 +32,7 @@ def cleanup_old_amis(regions, versions_to_keep):
                 universe_images.append((image, im_version))
         universe_images = sorted(universe_images, key=lambda x: x[1])
         for image, _im_version in universe_images[:-(versions_to_keep - 1)]:
-            # Keep one pre-existing image
+            # Keep versions_to_keep - 1 pre-existing images
             ec2_region.deregister_image(ImageId=image['ImageId'])
 
 
