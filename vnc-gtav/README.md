@@ -42,7 +42,7 @@ ami-2ff4404f us-west-2
 * The password for the instance is `d33pdriveisalive!`. Once you log in using Microsoft Remote Desktop, you’ll be asked to change the Administrator password. Change it to something.
 * Open Steam and purchase the game on your new instance. 
 
-_Note everything will feel very sluggish at first as the [SSD gets populated from S3](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-initialize.html). This is a one time thing and everything will be much faster on subsequent runs._
+_Note everything will feel very sluggish at first as the [SSD gets populated from S3](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-initialize.html). This is a one time thing and will be much faster on subsequent runs._
 
 * Open the game and run <kbd>Story Mode</kbd> (WARNING: NSFW)
   * Steam will begin to download, recharge with some [meditation](http://marc.ucla.edu/mindful-meditations) for ~20 minutes until it completes. 
