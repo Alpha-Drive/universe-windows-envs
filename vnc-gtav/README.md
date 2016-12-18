@@ -39,7 +39,7 @@ ami-2ff4404f us-west-2
 * Choose the `g2.2xlarge` type in order to get the GPU required to run the game.
 * Under <kbd>Configure Instance</kbd> -> <kbd>EBS-optimized instance</kbd>, check <kbd>Launch as EBS-optimized instance</kbd>
 * Don't worry about the keypair
-* The password for the instance is `d33pdriveisalive!`. Once you log in using Microsoft Remote Desktop or [Remmina](http://askubuntu.com/questions/154121/why-wont-remmina-connect-to-windows-7-remote-desktop/204161#204161), you’ll be asked to change the Administrator password. Change it to something.
+* The username for the instance is `Administrator` with password `d33pdriveisalive!`. Once you log in using Microsoft Remote Desktop or [Remmina](http://askubuntu.com/questions/154121/why-wont-remmina-connect-to-windows-7-remote-desktop/204161#204161), you’ll be asked to change the Administrator password. Change it to something.
 * Open Steam and purchase the game on your new instance. 
 
 _Note everything will feel very sluggish at first as the [SSD gets populated from S3](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-initialize.html). This is a one time thing and will be much faster on subsequent runs._
