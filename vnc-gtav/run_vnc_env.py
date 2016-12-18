@@ -209,12 +209,14 @@ def main():
     try_stuff(runner.popen, runner.popen_cleanup)
 
     last_heartbeat = None
+    started = False
     while True:
         running_procs = gym_windows.get_running_processes(ALL_PROCESS_NAMES)
         if len(running_procs) == len(ALL_PROCESS_NAMES):
+            started = True
             if 'GTAV_DEAD_MANS_SNITCH_URL' in os.environ:
                 last_heartbeat = send_hearbeat(last_heartbeat)
-        else:
+        elif started:
             missing = str(list(set(ALL_PROCESS_NAMES) - set(running_procs)))
             runner.popen_cleanup()
             raise Exception('Environment crashed due to the following failed processes: ' + missing)
