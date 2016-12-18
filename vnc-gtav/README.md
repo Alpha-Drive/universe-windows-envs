@@ -143,7 +143,7 @@ python $env:UNIVERSE_WINDOWS_ENVS_DIR/vnc-gtav/run_vnc_env.py
 
 The run script will now start GTAV if it's not started and send keys to load <kbd>Story Mode</kbd> if it's not already loaded.
 
-Note that closing your RDP session will kill the environment.
+Note that closing your RDP session will kill the environment (there is a nice logout of RDP batch file on the desktop that can close the RDP session without killing the env)
 
 *ProTip*: To get back to the desktop from the game on hit the Windows key twice, or Alt+Tab
 
