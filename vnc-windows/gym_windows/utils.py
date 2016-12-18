@@ -54,7 +54,9 @@ def get_reg(name, reg_path):
 
 def processes_are_running(expected):
     intersection = get_running_processes(expected)
-    ret = intersection == expected
+    if type(expected) is not list:
+        expected = [expected]
+    ret = intersection == set(expected)
     return ret
 
 
