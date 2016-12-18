@@ -44,8 +44,9 @@ ami-2ff4404f us-west-2
 * Open Steam and login on your new instance. 
 
 _Note everything will feel very sluggish at first as the [SSD gets populated from S3](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-initialize.html). This is a one time thing and will be much faster on subsequent runs._
-* Open the game and run <kbd>Story Mode</kbd> (WARNING: NSFW)
-  * Steam will begin to download the game or will open the existing copy, either way, recharge with some [meditation](http://marc.ucla.edu/mindful-meditations) while this happens.
+* Open the game
+  * Steam may begin to download the game, if so, recharge with some [meditation](http://marc.ucla.edu/mindful-meditations) while it completes.
+* Run <kbd>Story Mode</kbd> (WARNING: NSFW)
 * Close GTA (<kbd>Esc</kbd> -> <kbd>Game</kbd> -> <kbd>Exit Game</kbd>)
 * Run <kbd>install.bat</kbd> on the desktop (WARNING: If you play GTAV and have saved games or other settings, this will overwrite them. Your old settings will be backed up to `~/Documents`)
   
