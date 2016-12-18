@@ -1,6 +1,6 @@
 # Universe GTAV
 
-This environment is focused on using GTAV as a self-driving car simulator with emphasis on learning to drive a real car vs playing GTAV as you normally would.
+This environment is focused on using GTAV as a self-driving car simulator.
 Controls are continuous **steering** from right to left (-1 to 1) on the x-axis of the `JoyStickActionSpace` and reverse to forward **throttle** (-1 to 1) on the joystick's z-axis.
 
 GTAV only runs on Windows which makes this environment unique. 
