@@ -1,12 +1,13 @@
 import boto3
-import os
 import sys
 
 import time
+from collections import deque
+from distutils.version import StrictVersion
 
 SOURCE_REGION = 'us-west-2'
-SOURCE_IMAGE = 'ami-f68f3a96'
-IMAGE_NAME = 'universe-gtav-0.0.7'
+SOURCE_IMAGE = 'ami-ec36838c'
+IMAGE_NAME = 'universe-gtav-0.0.9'
 IMAGE_DESCRIPTION = 'Runs steam version of GTAV as an OpenAI Universe environment'
 
 
@@ -14,6 +15,25 @@ def main():
     regions = boto3.client('ec2').describe_regions()['Regions']
     new_image_ids = copy_ami(regions)
     make_amis_public(new_image_ids)
+    cleanup_old_amis(regions, versions_to_keep=2)
+
+
+def cleanup_old_amis(regions, versions_to_keep):
+    for region in regions:
+        region_name = region['RegionName']
+        ec2_region = boto3.client('ec2', region_name=region_name)
+        images = ec2_region.describe_images(Owners=['self'])
+        images = images['Images']
+        universe_images = []
+        for image in images:
+            im_name = image['Name']
+            if im_name.startswith('universe-gtav-') and im_name != IMAGE_NAME:
+                im_version = StrictVersion(im_name[len('universe-gtav-'):])
+                universe_images.append((image, im_version))
+        universe_images = sorted(universe_images, key=lambda x: x[1])
+        for image, _im_version in universe_images[:-(versions_to_keep - 1)]:
+            # Keep one pre-existing image
+            ec2_region.deregister_image(ImageId=image['ImageId'])
 
 
 def copy_ami(regions):
@@ -35,18 +55,19 @@ def copy_ami(regions):
 
 
 def make_amis_public(new_image_ids):
-    for new_image_id, region_name in new_image_ids:
-        made_public = False
-        ec2_dest = boto3.client('ec2', region_name=region_name)
-        while not made_public:
-            try:
-                ec2_dest.modify_image_attribute(
-                    ImageId=new_image_id,
-                    LaunchPermission={'Add': [{'Group': 'all'}]})
-                made_public = True
-            except Exception as e:
-                print('AMI not ready, retrying - details: ', e)
-            time.sleep(5)
+    new_image_ids = deque(new_image_ids)
+    while new_image_ids:
+        new_image_id, region_name = new_image_ids[-1]
+        ec2 = boto3.client('ec2', region_name=region_name)
+        try:
+            ec2.modify_image_attribute(
+                ImageId=new_image_id,
+                LaunchPermission={'Add': [{'Group': 'all'}]})
+            new_image_ids.pop()
+        except Exception as e:
+            print('AMI not ready, retrying - details: ', e)
+            new_image_ids.rotate()
+        time.sleep(1)
         print('Image public!', new_image_id, region_name)
 
 
