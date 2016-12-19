@@ -46,7 +46,7 @@ ami-9bcc78fb us-west-2
 _Note everything will feel very sluggish at first as the [SSD gets populated from S3](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-initialize.html). This is a one time thing and will be much faster on subsequent runs._
 
 * Open the game
-  * Steam may begin to download the game, if so, recharge with some [meditation](http://marc.ucla.edu/mindful-meditations) while it completes. Otherwise, please be patient while the game loads (you may not see anything for several seconds the first time). 
+  * Steam may begin to download the game, if so, recharge with some [meditation](http://marc.ucla.edu/mindful-meditations) while it completes. Otherwise, please be patient while the game loads (you may not see anything for several seconds between screens the first time). 
 * Open <kbd>Story Mode</kbd> (WARNING: NSFW) - this may take ~10 minutes on first run
 * Close GTA (<kbd>Esc</kbd> -> <kbd>Game</kbd> -> <kbd>Exit Game</kbd>)
 * Run <kbd>install.bat</kbd> on the desktop (WARNING: If you play GTAV and have saved games or other settings, this will overwrite them. Your old settings will be backed up to `~/Documents`)
