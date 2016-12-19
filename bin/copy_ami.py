@@ -6,8 +6,8 @@ from collections import deque
 from distutils.version import StrictVersion
 
 SOURCE_REGION = 'us-west-2'
-SOURCE_IMAGE = 'ami-ec36838c'
-IMAGE_NAME = 'universe-gtav-0.0.9'
+SOURCE_IMAGE = 'ami-9bcc78fb'
+IMAGE_NAME = 'universe-gtav-0.0.12'
 IMAGE_DESCRIPTION = 'Runs steam version of GTAV as an OpenAI Universe environment'
 
 
@@ -34,6 +34,7 @@ def cleanup_old_amis(regions, versions_to_keep):
         for image, _im_version in universe_images[:-(versions_to_keep - 1)]:
             # Keep versions_to_keep - 1 pre-existing images
             ec2_region.deregister_image(ImageId=image['ImageId'])
+            print('deleted', region_name, image)
 
 
 def copy_ami(regions):
@@ -64,11 +65,11 @@ def make_amis_public(new_image_ids):
                 ImageId=new_image_id,
                 LaunchPermission={'Add': [{'Group': 'all'}]})
             new_image_ids.pop()
+            print('Image public!', new_image_id, region_name)
         except Exception as e:
-            print('AMI not ready, retrying - details: ', e)
+            print('AMI not ready, retrying - details: ', new_image_id, region_name, e)
             new_image_ids.rotate()
         time.sleep(1)
-        print('Image public!', new_image_id, region_name)
 
 
 if __name__ == '__main__':
