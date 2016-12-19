@@ -20,22 +20,22 @@ Using the prebuilt AMI
 -----------------------
 * Purchase the game on [steam](http://store.steampowered.com/)
 * On AWS, in EC2, select launch instance. 
-* Under Community AMIs, search for *universe-gtav-0.0.11* and select one of the following:
+* Under Community AMIs, search for *universe-gtav-0.0.12* and select one of the following:
 ```
-ami-e9d5a286 ap-south-1
-ami-bcefe5d8 eu-west-2
-ami-05fddc76 eu-west-1
-ami-3a895f54 ap-northeast-2
-ami-a10d65c6 ap-northeast-1
-ami-6caa3200 sa-east-1
-ami-9b289aff ca-central-1
-ami-481fb02b ap-southeast-1
-ami-df0338bc ap-southeast-2
-ami-67c60608 eu-central-1
-ami-1fe3e808 us-east-1
-ami-32c99357 us-east-2
-ami-a7e3b5c7 us-west-1
-ami-8ed86cee us-west-2
+ami-06e89f69 ap-south-1
+ami-3dece659 eu-west-2
+ami-31d2f342 eu-west-1
+ami-79b66017 ap-northeast-
+ami-a0046cc7 ap-northeast-
+ami-9baa32f7 sa-east-1
+ami-de2b99ba ca-central-1
+ami-061db265 ap-southeast-
+ami-22003b41 ap-southeast-
+ami-90c707ff eu-central-1
+ami-abf0fbbc us-east-1
+ami-bbc993de us-east-2
+ami-31e1b751 us-west-1
+ami-9bcc78fb us-west-2
 ```
 * Choose the `g2.2xlarge` type in order to get the GPU required to run the game.
 * Under <kbd>Configure Instance</kbd> -> <kbd>EBS-optimized instance</kbd>, check <kbd>Launch as EBS-optimized instance</kbd>
