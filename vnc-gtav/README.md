@@ -25,12 +25,12 @@ Using the prebuilt AMI
 ami-06e89f69 ap-south-1
 ami-3dece659 eu-west-2
 ami-31d2f342 eu-west-1
-ami-79b66017 ap-northeast-
-ami-a0046cc7 ap-northeast-
+ami-79b66017 ap-northeast-2
+ami-a0046cc7 ap-northeast-1
 ami-9baa32f7 sa-east-1
 ami-de2b99ba ca-central-1
-ami-061db265 ap-southeast-
-ami-22003b41 ap-southeast-
+ami-061db265 ap-southeast-1
+ami-22003b41 ap-southeast-2
 ami-90c707ff eu-central-1
 ami-abf0fbbc us-east-1
 ami-bbc993de us-east-2
