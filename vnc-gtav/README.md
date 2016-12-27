@@ -43,7 +43,7 @@ ami-9bcc78fb us-west-2
 * The username and password for the instance is `Administrator`, `d33pdriveisalive!`. Once you log in using Microsoft Remote Desktop or [Remmina](http://askubuntu.com/questions/154121/why-wont-remmina-connect-to-windows-7-remote-desktop/204161#204161), you’ll be asked to change the Administrator password. Change it to something.
 * Open Steam and login on your new instance. 
 
-_Note everything will feel very sluggish at first as the [SSD gets populated from S3](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-initialize.html). This is a one time thing and will be much faster on subsequent runs._
+_Note everything will feel very as [S3 populates the SSD](http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-initialize.html). This is a one time thing and will be much faster on subsequent runs._
 
 * Open the game
   * Steam may begin to download the game, if so, recharge with some [meditation](http://marc.ucla.edu/mindful-meditations) while it completes. Otherwise, please be patient while the game loads (you may not see anything for several seconds between screens the first time). 
