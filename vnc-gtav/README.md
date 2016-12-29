@@ -147,6 +147,8 @@ python $env:UNIVERSE_WINDOWS_ENVS_DIR/vnc-gtav/run_vnc_env.py
 
 The run script will now start GTAV if it's not started and send keys to load <kbd>Story Mode</kbd> if it's not already loaded.
 
+Using the mouse to control the camera does not work well over RDP, so if you find yourself wanting to center the camera, press <kbd>w</kbd> for a bit and the camera will straighten automatically.
+
 Note that closing your RDP session will kill the environment (there is a nice logout of RDP batch file on the desktop that can close the RDP session without killing the env)
 
 *ProTip*: To get back to the desktop from the game on hit the Windows key twice, or Alt+Tab
@@ -158,7 +160,7 @@ python $env:UNIVERSE_WINDOWS_ENVS_DIR/vnc-gtav/run_vnc_env.py -s
 ```
 This can speed up iterative development of non-ML work, but is bad for long training runs where the car can drive off the road and get into other irrecoverable states.
 
-#### Have the server start on admin boot (likely AWS only) - still needs RDP session for GTAV to start
+Have the server start on admin boot (likely AWS only) - still needs RDP session for GTAV to start
 ```
 Copy-Item "$env:UNIVERSE_WINDOWS_ENVS_DIR/vnc-gtav/run_vnc_env_gtav_shortcut.lnk" "$env:USERPROFILE\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup"
 ```
