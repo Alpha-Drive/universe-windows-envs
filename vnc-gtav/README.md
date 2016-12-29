@@ -41,7 +41,7 @@ ami-9bcc78fb us-west-2
 * Under <kbd>Configure Instance</kbd> -> <kbd>EBS-optimized instance</kbd>, check <kbd>Launch as EBS-optimized instance</kbd>
   * You'll need port 3389 for RDP, 5900 for VNC, and 15900 for websockets open to your ip address
   
-![](https://www.dropbox.com/s/woxvznqyete3bgl/SecurityGroup.jpg?dl=1)
+![](https://www.dropbox.com/s/woxvznqyete3bgl/SecurityGroup.png?dl=1)
 * Don't worry about the keypair
 * The username and password for the instance is `Administrator`, `d33pdriveisalive!`. Once you log in using Microsoft Remote Desktop or [Remmina](http://askubuntu.com/questions/154121/why-wont-remmina-connect-to-windows-7-remote-desktop/204161#204161), you’ll be asked to change the Administrator password. Change it to something.
 * Open Steam and login on your new instance. 
