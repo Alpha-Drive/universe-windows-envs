@@ -172,9 +172,10 @@ Install [Universe](https://github.com/openai/universe)
 
 ### Random Agent
 
+Fix by adding locally
 ```
 cd universe
-bin/random_agent.py -e gtav.SaneDriving-v0 -r vnc://<your-windows-ip>:5900+15900 --fps 8
+example/random-agent/random-agent.py -e gtav.SaneDriving-v0 -r vnc://<your-windows-ip>:5900+15900 --fps 8
 ```
 
 ### Pretrained models
