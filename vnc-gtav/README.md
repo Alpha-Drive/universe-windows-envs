@@ -160,7 +160,7 @@ python $env:UNIVERSE_WINDOWS_ENVS_DIR/vnc-gtav/run_vnc_env.py -s
 ```
 This can speed up iterative development of non-ML work, but is bad for long training runs where the car can drive off the road and get into other irrecoverable states.
 
-Have the server start on admin boot (likely AWS only) - still needs RDP session for GTAV to start
+To have the server start on admin boot (likely AWS only) - still needs RDP session for GTAV to start
 ```
 Copy-Item "$env:UNIVERSE_WINDOWS_ENVS_DIR/vnc-gtav/run_vnc_env_gtav_shortcut.lnk" "$env:USERPROFILE\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup"
 ```
