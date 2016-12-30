@@ -151,7 +151,7 @@ Using the mouse to control the camera does not work well over RDP, so if you fin
 
 Note that closing your RDP session will kill the environment (there is a nice logout of RDP batch file on the desktop that can close the RDP session without killing the env)
 
-*ProTip*: To get back to the desktop from the game on hit the Windows key twice, or Alt+Tab
+*ProTip*: To get back to the desktop from the game on hit <kbd>Windows</kbd>+<kbd>d</kbd> or <kbd>Alt</kbd>+<kbd>Tab<kbd>
 
 #### Skip reload
 To avoid loading the saved game every episode (which takes ~40s), you can open <kbd>run skip reload.bat</kbd> or pass <kbd>-s</kbd> to run_vnc_env.py
