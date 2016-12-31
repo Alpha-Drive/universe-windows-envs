@@ -151,9 +151,13 @@ Using the mouse to control the camera does not work well over RDP, so if you fin
 
 Note that closing your RDP session will kill the environment (there is a nice logout of RDP batch file on the desktop that can close the RDP session without killing the env)
 
-*ProTip*: To get back to the desktop from the game on hit <kbd>Windows</kbd>+<kbd>d</kbd> or <kbd>Alt</kbd>+<kbd>Tab</kbd>
+#### Tips and Tricks
 
-#### Skip reload
+To get back to the desktop from the game on hit <kbd>Windows</kbd>+<kbd>d</kbd> or <kbd>Alt</kbd>+<kbd>Tab</kbd>.
+
+If you ever find that your mouse behaves strangely in Windows after running the simulator, open and close "Vjoy Feeder Demo" to reset things. (Note this only works when the simulator is off)
+
+##### Skip reload
 To avoid loading the saved game every episode (which takes ~40s), you can open <kbd>run skip reload.bat</kbd> or pass <kbd>-s</kbd> to run_vnc_env.py
 ```
 python $env:UNIVERSE_WINDOWS_ENVS_DIR/vnc-gtav/run_vnc_env.py -s
