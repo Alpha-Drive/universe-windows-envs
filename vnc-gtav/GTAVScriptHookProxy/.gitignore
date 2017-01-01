@@ -1,7 +1,6 @@
 VisualStudio/Release
 VisualStudio/Debug
 VisualStudio/tmp
-bin/*
 source/*.o
 
 ## Ignore Visual Studio temporary files, build results, and

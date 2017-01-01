@@ -286,6 +286,9 @@ void Script::set_reward_and_info_shared_mem(SharedAgentMemory* shared, int vehic
 	int year = TIME::GET_CLOCK_YEAR();
 	int ms_per_game_min = TIME::GET_MILLISECONDS_PER_GAME_MINUTE();
 
+	float distance_from_destination = PATHFIND::CALCULATE_TRAVEL_DISTANCE_BETWEEN_POINTS(
+		shared->x_coord, shared->y_coord, shared->z_coord, shared->dest_x, shared->dest_y, shared->dest_z);
+
 	add_debug_status_text("collision mat hash: " + std::to_string(last_material_collided_with));
 	add_debug_status_text("last collision time: " + std::to_string(last_collision_time));
 	add_debug_status_text("second: " + std::to_string(second));
@@ -316,6 +319,7 @@ void Script::set_reward_and_info_shared_mem(SharedAgentMemory* shared, int vehic
 	shared->time.year                   = year;
 	shared->time.ms_per_game_min        = ms_per_game_min;
 	shared->forward_vector              = forward_vector;
+	shared->distance_from_destination   = distance_from_destination;
 }
 
 void Script::display_loading_paths_message()

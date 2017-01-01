@@ -34,6 +34,9 @@ struct SharedAgentMemory
 	double x_coord;
 	double y_coord;
 	double z_coord;
+	double dest_x;
+	double dest_y;
+	double dest_z;
 	bool on_road;
 	bool should_reset_agent;
 	double heading;

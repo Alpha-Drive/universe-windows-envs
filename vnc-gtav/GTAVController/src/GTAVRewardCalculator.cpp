@@ -1,5 +1,6 @@
 #include "GTAVRewardCalculator.h"
 #include <cassert>
+#include "../../GTAVScriptHookProxy/vendor/ScriptHookV/include/natives.h"
 
 
 GTAVRewardCalculator::GTAVRewardCalculator(std::string envId)
@@ -24,34 +25,21 @@ GTAVRewardCalculator::~GTAVRewardCalculator()
 
 double GTAVRewardCalculator::calc_sane_driving(SharedAgentMemory * shared)
 {
-	double end_x = 0;
-	double end_y = 0;
-	double end_z = 0;
-
-	// TODO: Return distance between alternating ends of road, whether we've stayed on the road, and whether we've hit something.
 	if(winding_road_direction_is_down_)
 	{
-		end_x = WINDING_BOTTOM_X;
-		end_y = WINDING_BOTTOM_Y;
-		end_z = WINDING_BOTTOM_Z;
+		shared->dest_x = WINDING_BOTTOM_X;
+		shared->dest_y = WINDING_BOTTOM_Y;
+		shared->dest_z = WINDING_BOTTOM_Z;
 	} 
 	else
 	{
-		end_x = WINDING_TOP_X;
-		end_y = WINDING_TOP_Y;
-		end_z = WINDING_TOP_Z;
+		shared->dest_x = WINDING_TOP_X;
+		shared->dest_y = WINDING_TOP_Y;
+		shared->dest_z = WINDING_TOP_Z;
 	}
 
-	double curr_x = shared->x_coord;
-	double curr_y = shared->y_coord;
-	double curr_z = shared->z_coord;
+	double distance = shared->distance_from_destination;
 
-	double distance = sqrt( 
-			pow(end_x - double(curr_x), 2) + 
-			pow(end_y - double(curr_y), 2) + 
-			pow(end_z - double(curr_z), 2));
-
-	shared->distance_from_destination = distance;
 	double distance_reward;
 	distance_reward = last_distance_ - distance;
 	if(distance < 10)
@@ -75,9 +63,9 @@ double GTAVRewardCalculator::calc_sane_driving(SharedAgentMemory * shared)
 		on_road_reward = -pow(1.6, 6) / (5 * 8); // every 100 miles (in meters) over 5 seconds at 8FPS
 	}
 
-	double speed_limit = 30;
+	double speed_limit = 20;
 	double speed_infraction_reward = 0;
-	if (shared->speed > 20)
+	if (shared->speed > speed_limit)
 	{
 		// Squared to outweigh distance advantage of speeding (proportional to kinetic energy - yay!)
 		speed_infraction_reward = -pow(shared->speed - speed_limit, 2);
@@ -89,14 +77,9 @@ double GTAVRewardCalculator::calc_sane_driving(SharedAgentMemory * shared)
 void GTAVRewardCalculator::reset(SharedAgentMemory * shared)
 {
 	last_reward_ = 0;
-	double end_x = WINDING_BOTTOM_X;
-	double end_y = WINDING_BOTTOM_Y;
-	double end_z = WINDING_BOTTOM_Z;
-
-	last_distance_ = sqrt( 
-		pow(end_x - double(shared->x_coord), 2) + 
-		pow(end_y - double(shared->y_coord), 2) + 
-		pow(end_z - double(shared->z_coord), 2));
+	shared->dest_x = WINDING_BOTTOM_X;
+	shared->dest_y = WINDING_BOTTOM_Y;
+	shared->dest_z = WINDING_BOTTOM_Z;
 }
 
 // Return the rewards that we have aggregated since the last call to getReward()
