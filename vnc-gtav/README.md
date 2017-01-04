@@ -39,7 +39,7 @@ ami-9bcc78fb us-west-2
 ```
 * Choose the `g2.2xlarge` type in order to get the GPU required to run the game.
 * Under <kbd>Configure Instance</kbd> -> <kbd>EBS-optimized instance</kbd>, check <kbd>Launch as EBS-optimized instance</kbd>
-* [You'll need port 3389 for RDP, 5900 for VNC, and 15900 for websockets open to your ip address](http://i.imgur.com/RelNwJK)
+* [You'll need port 3389 for RDP, 5900 for VNC, and 15900 for websockets open to your ip address](http://i.imgur.com/RelNwJK.jpg)
 * Don't worry about the keypair
 * The username and password for the instance is `Administrator`, `d33pdriveisalive!`. Once you log in using Microsoft Remote Desktop or [Remmina](http://askubuntu.com/questions/154121/why-wont-remmina-connect-to-windows-7-remote-desktop/204161#204161), you’ll be asked to change the Administrator password. Change it to something.
 * Open Steam and login on your new instance. 
@@ -72,7 +72,7 @@ ami-4d9eda77 (ap-southeast-2)
   * Choose the `g2.2xlarge` type in order to get the GPU required to run the game.
   * In step four _Add Storage_, make sure to change the EBS size from 35GB to 250GB+ (GTAV is around ~80GB and we want some extra room as well).
   * Don't worry about the keypair
-  * [You'll need port 3389 for RDP, 5900 for VNC, and 15900 for websockets open to your ip address](http://i.imgur.com/RelNwJK)
+  * [You'll need port 3389 for RDP, 5900 for VNC, and 15900 for websockets open to your ip address](http://i.imgur.com/RelNwJK.jpg)
   * The username and password for the instance is `Administrator`, `rRmbgYum8g`. Once you log in using Microsoft Remote Desktop or [Remmina](http://askubuntu.com/questions/154121/why-wont-remmina-connect-to-windows-7-remote-desktop/204161#204161), you’ll be asked to change the Administrator password. Change it to something.
   * When you log in, search for *disk management* and open _Create and format hard disk partitions_
     * Right click the C:\ drive and extend it to the full amount
