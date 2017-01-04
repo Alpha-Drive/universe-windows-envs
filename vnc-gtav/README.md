@@ -39,7 +39,7 @@ ami-9bcc78fb us-west-2
 ```
 * Choose the `g2.2xlarge` type in order to get the GPU required to run the game.
 * Under <kbd>Configure Instance</kbd> -> <kbd>EBS-optimized instance</kbd>, check <kbd>Launch as EBS-optimized instance</kbd>
-  * [You'll need port 3389 for RDP, 5900 for VNC, and 15900 for websockets open to your ip address](http://i.imgur.com/RelNwJK)
+* [You'll need port 3389 for RDP, 5900 for VNC, and 15900 for websockets open to your ip address](http://i.imgur.com/RelNwJK)
 * Don't worry about the keypair
 * The username and password for the instance is `Administrator`, `d33pdriveisalive!`. Once you log in using Microsoft Remote Desktop or [Remmina](http://askubuntu.com/questions/154121/why-wont-remmina-connect-to-windows-7-remote-desktop/204161#204161), you’ll be asked to change the Administrator password. Change it to something.
 * Open Steam and login on your new instance. 
