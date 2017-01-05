@@ -149,7 +149,7 @@ The run script will now start GTAV if it's not started and send keys to load <kb
 
 Using the mouse to control the camera does not work well over RDP, so if you find yourself wanting to center the camera, press <kbd>w</kbd> for a bit and the camera will straighten automatically.
 
-Note that closing your RDP session will kill the environment (there is a nice logout of RDP batch file on the desktop that can close the RDP session without killing the env)
+Note that closing your RDP session will kill the environment (the `RDP nice logout.bat` file on the desktop can close the RDP session without killing the env, but it will add a border to the window which will mess up the [pretrained agents](https://github.com/deepdrive/deepdrive-universe).)
 
 #### Tips and Tricks
 
