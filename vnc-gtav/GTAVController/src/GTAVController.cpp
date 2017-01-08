@@ -48,7 +48,7 @@ int main(int argc, const char* argv[])
 	bool stop_for_attach = pause_for_attach_str == "true";
 	if(stop_for_attach)
 	{
-		BOOST_LOG_SEV(lg, boost::log::trivial::debug) << "\n\n\n>>>>>>>>>>>>>>>> Press ENTER after you have chosen 'Attach to Process...' in the Visual Studio DEBUG menu. <<<<<<<<<<<<<<<<\n\n";
+		BOOST_LOG_SEV(lg, boost::log::trivial::info) << "\n\n\n>>>>>>>>>>>>>>>> Press ENTER after you have chosen 'Attach to Process...' in the Visual Studio DEBUG menu. <<<<<<<<<<<<<<<<\n\n";
 		std::cin.ignore();
 	}
 

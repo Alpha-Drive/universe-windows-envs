@@ -11,7 +11,7 @@ using namespace boost::posix_time;
 
 GTAVEnv::GTAVEnv(std::string env_id, std::string instance_id, int websocket_port, std::shared_ptr<AgentConn> agent_conn, bool skip_loading_saved_game, boost::log::sources::severity_logger_mt<ls::severity_level> lg, int rewards_per_second) :
 Env(env_id, instance_id, websocket_port, agent_conn, lg, rewards_per_second),
-reward_calculator_(env_id)
+reward_calculator_(env_id, lg)
 {
 	skip_loading_saved_game_ = skip_loading_saved_game;
 	set_win_active_to_long_ago();
@@ -30,19 +30,24 @@ void GTAVEnv::noop()
 void GTAVEnv::loop()
 {
 	connect(); // Blocks until GTAV starts
-	BOOST_LOG_SEV(lg_, boost::log::trivial::debug) << "connected to gtav";
+	BOOST_LOG_SEV(lg_, boost::log::trivial::info) << "Connected to gtav, waiting for clients to connect...";
 	noop(); // In case joystick defaults have us moving already
-	int steps = 0;
-	while (true) // EPISODE LOOP
+	while (true) 
 	{
-		while (true) // STEP LOOP
-		{			
+		if (is_done())
+		{
+			BOOST_LOG_SEV(lg_, boost::log::trivial::info) << "Episode over, waiting for reset...";
+			while (is_done())
+			{
+				std::this_thread::sleep_for(std::chrono::seconds(10));
+			}
+		}
+		else if (agent_conn_->client_is_connected())
+		{
 			check_win_active_every_n_secs(10);
 			step();
-			steps++;
-		} // END STEP LOOP
-
-	} // END EPISODE LOOP
+		}
+	}
 }
 
 void GTAVEnv::connect()
@@ -50,7 +55,7 @@ void GTAVEnv::connect()
 	shared_.reset(wait_for_shared_agent_memory(10));
 	if(shared_)
 	{
-		P_INFO("Game already open, reusing." << std::endl);
+		BOOST_LOG_SEV(lg_, boost::log::trivial::info) << "Game already open, reusing.";
 		reset_game();
 	}
 	else
@@ -75,40 +80,49 @@ void GTAVEnv::step()
 	// Push rewards at our throttled rate
 	if (rewarder.ready_for_reward()) {
 		Json::Value info;
-		info["speed"]                       = shared_->speed;
-		info["spin"]                        = shared_->spin;
-		info["x_coord"]                     = shared_->x_coord;
-		info["y_coord"]                     = shared_->y_coord;
-		info["z_coord"]                     = shared_->z_coord;
-		info["heading"]                     = shared_->heading;
-		info["is_game_driving"]             = shared_->is_game_driving;
-		info["script_hook_loadtime"]        = shared_->script_hook_loadtime;
-		info["on_road"]                     = shared_->on_road;
-		info["center_of_lane_reward"]       = shared_->center_of_lane_reward; // TODO: Add distance from right / left lanes
-		info["game_time.second"]            = shared_->time.second;
-		info["game_time.minute"]            = shared_->time.minute;
-		info["game_time.hour"]              = shared_->time.hour;
-		info["game_time.day_of_month"]      = shared_->time.day_of_month;
-		info["game_time.month"]             = shared_->time.month;
-		info["game_time.year"]              = shared_->time.year;
-		info["game_time.ms_per_game_min"]   = shared_->time.ms_per_game_min;
-		info["last_collision_time"]         = shared_->last_collision_time;
-		info["last_material_collided_with"] = std::to_string(shared_->last_material_collided_with); // unsigned long to json hack
+		info["speed"]                            = shared_->speed;
+		info["spin_x"]                           = shared_->pitch_velocity;
+		info["spin_y"]                           = shared_->roll_velocity;
+		info["spin_z"]                           = shared_->yaw_velocity;
+		info["x_coord"]                          = shared_->x_coord;
+		info["y_coord"]                          = shared_->y_coord;
+		info["z_coord"]                          = shared_->z_coord;
+		info["velocity_x"]                       = shared_->velocity_x;
+		info["velocity_y"]                       = shared_->velocity_y;
+		info["velocity_z"]                       = shared_->velocity_z;
+		info["forward_acceleration"]             = shared_->forward_acceleration;
+		info["lateral_acceleration"]             = shared_->lateral_acceleration;
+		info["vertical_acceleration"]            = shared_->vertical_acceleration;
+		info["forward_jariness"]                 = shared_->forward_jariness;
+		info["lateral_jariness"]                 = shared_->lateral_jariness;
+		info["vertical_jariness"]                = shared_->vertical_jariness;
+		info["heading"]                          = shared_->heading;
+		info["is_game_driving"]                  = shared_->is_game_driving;
+		info["script_hook_loadtime"]             = shared_->script_hook_loadtime;
+		info["on_road"]                          = shared_->on_road;
+//		info["center_of_lane_reward"]            = shared_->center_of_lane_reward; // TODO: Add distance from right / left lanes
+		info["game_time.second"]                 = shared_->time.second;
+		info["game_time.minute"]                 = shared_->time.minute;
+		info["game_time.hour"]                   = shared_->time.hour;
+		info["game_time.day_of_month"]           = shared_->time.day_of_month;
+		info["game_time.month"]                  = shared_->time.month;
+		info["game_time.year"]                   = shared_->time.year;
+		info["game_time.ms_per_game_min"]        = shared_->time.ms_per_game_min;
+		info["last_collision_time"]              = shared_->last_collision_time;
+		info["last_material_collided_with"]      = std::to_string(shared_->last_material_collided_with); // unsigned long to json hack
+		info["forward_vector_x"]                 = shared_->forward_vector.x;
+		info["forward_vector_y"]                 = shared_->forward_vector.y;
+		info["forward_vector_z"]                 = shared_->forward_vector.z;
+		info["time_since_drove_against_traffic"] = shared_->time_since_drove_against_traffic;
+		info["distance_from_destination"]        = shared_->distance_from_destination;
 
-		// Forward vector for measuring accerlation / comfort
-		info["forward_vector_x"]            = shared_->forward_vector.x;
-		info["forward_vector_y"]            = shared_->forward_vector.y;
-		info["forward_vector_z"]            = shared_->forward_vector.z;
-
-		info["distance_from_destination"]   = shared_->distance_from_destination;
-
-		rewarder.sendRewardAndIncrementStepCounter(reward_calculator_.get_reward(shared_.get()), info);
+		rewarder.sendRewardAndIncrementStepCounter(reward_calculator_.get_reward(shared_.get()), is_done(), info);
 	}
 }
 
 bool GTAVEnv::is_done()
 {
-	return false;
+	return reward_calculator_.get_is_done();
 }
 
 void GTAVEnv::reset_game()
@@ -133,11 +147,12 @@ void GTAVEnv::reset_game()
 void GTAVEnv::after_reset()
 {
 	noop();
+	reward_calculator_.set_is_done(false);
 }
 
 void GTAVEnv::when_no_clients()
 {
-	BOOST_LOG_SEV(lg_, ls::info) << "no clients, sending noop";
+	BOOST_LOG_SEV(lg_, ls::debug) << "no clients, sending noop";
 	noop();
 }
 

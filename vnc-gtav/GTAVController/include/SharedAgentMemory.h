@@ -41,7 +41,21 @@ struct SharedAgentMemory
 	bool should_reset_agent;
 	double heading;
 	double speed;
-	double spin;
+	double pitch_velocity;
+	double roll_velocity;
+	double yaw_velocity;
+	double forward_acceleration;
+	double lateral_acceleration;
+	double vertical_acceleration;
+	
+	// jariness is measured in g-force seconds over some max comfortable g-force
+	double forward_jariness;
+	double lateral_jariness;
+	double vertical_jariness;
+
+	double velocity_x;
+	double velocity_y;
+	double velocity_z;
 	bool should_game_drive;
 	bool is_game_driving;
 	int script_hook_loadtime;
@@ -55,6 +69,7 @@ struct SharedAgentMemory
 	unsigned long last_material_collided_with;
 	int last_collision_time;
 	double distance_from_destination;
+	int time_since_drove_against_traffic;
 	Vector forward_vector;
 	AgentTime time;
 	const char * scenario_name;

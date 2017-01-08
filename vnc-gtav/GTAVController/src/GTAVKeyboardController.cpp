@@ -96,12 +96,12 @@ void try_loading_story_mode()
 void wait_for_script_hook_to_load(SharedAgentMemory * shared)
 {
 	bool has_loaded = false;
+	P_INFO("Waiting for GTAVScriptHookProxy to load (make sure you're in a car, the game is not paused, and that you are running as Administrator)" << std::endl);
 	while ( ! has_loaded )
 	{
 		int game_seconds = shared->time.second;
 		std::this_thread::sleep_for(std::chrono::milliseconds(311)); // Should be about 30ms per game second, so wait ~10x that
 		has_loaded = shared->time.second != game_seconds;
-		P_INFO("Waiting for GTAVScriptHookProxy to load (make sure you're in a car, the game is not paused, and that you are running as Administrator) - game seconds:" << game_seconds << std::endl);
 	}
 	P_INFO("GTAVScriptHookProxy has loaded" << std::endl);
 }

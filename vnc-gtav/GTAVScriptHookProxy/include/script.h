@@ -25,7 +25,8 @@ namespace OpenAIGym
 		static void detect_if_in_vehicle(int vehicle);
 		static void handle_artificial_demonstration_switching(SharedAgentMemory* shared, Ped player_ped, int vehicle, bool is_game_driving);
 		static void add_debug_status_text(std::string text);
-		static void set_reward_and_info_shared_mem(SharedAgentMemory* shared, int vehicle);
+		static void get_acceleration(Vector3 speed, Vector3& acceleration, Vector3& jariness);
+		static void set_reward_and_info_shared_mem(SharedAgentMemory* shared, int player, int vehicle);
 		static void display_loading_paths_message();
 		static void write_shared();
 		static void set_camera(const int vehicle, SharedAgentMemory* shared, const int curr_vehicle);

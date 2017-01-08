@@ -97,6 +97,12 @@ void AgentConn::send_reward(const double reward, int episode_id, const bool done
 	send_json_("v0.env.reward", body, episode_id);
 }
 
+bool AgentConn::client_is_connected()
+{
+	std::lock_guard<std::mutex> guard(m_connection_lock_);
+	return m_connections_.size() > 0;
+}
+
 void AgentConn::populate_sent_at_in_headers_(Json::Value& headers)
 {
 	time_t seconds_past_epoch = time(0);

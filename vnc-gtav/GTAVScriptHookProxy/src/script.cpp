@@ -31,6 +31,13 @@ bool first_camera_load = true;
 bool shared_mem_initialized = false;
 unsigned long last_material_collided_with = 0;
 int last_collision_time = 0;
+Vector3 last_speed;
+bool first_speed_reading = true;
+std::chrono::time_point<std::chrono::system_clock> last_speed_measurement_time;
+Vector3 jariness = { 0, 0, 0 };
+int last_time_since_drove_against_traffic = 0;
+
+
 
 void Script::initializeLogger()
 {
@@ -90,17 +97,17 @@ void Script::set_camera(const int vehicle, SharedAgentMemory* shared, const int 
 	}
 }
 
-void Script::refresh(Player& player_id, Ped& player_ped, int& vehicle, SharedAgentMemory* shared)
+void Script::refresh(Player& player, Ped& player_ped, int& vehicle, SharedAgentMemory* shared)
 {
 	// Avoid getting car-jacked, police chasing us, etc...
 
 	int curr_vehicle = vehicle;
-	player_id = PLAYER::PLAYER_ID();
+	player = PLAYER::PLAYER_ID();
 	player_ped = PLAYER::PLAYER_PED_ID();
 	vehicle = PED::GET_VEHICLE_PED_IS_USING(player_ped);
-	PLAYER::SET_EVERYONE_IGNORE_PLAYER(player_id, true);
-	PLAYER::SET_POLICE_IGNORE_PLAYER(player_id, true);
-	PLAYER::CLEAR_PLAYER_WANTED_LEVEL(player_id); // Never wanted
+	PLAYER::SET_EVERYONE_IGNORE_PLAYER(player, true);
+	PLAYER::SET_POLICE_IGNORE_PLAYER(player, true);
+	PLAYER::CLEAR_PLAYER_WANTED_LEVEL(player); // Never wanted
 
 	// Put on seat belt
 	const int PED_FLAG_CAN_FLY_THRU_WINDSCREEN = 32;
@@ -119,7 +126,7 @@ void Script::refresh(Player& player_id, Ped& player_ped, int& vehicle, SharedAge
 	ENTITY::SET_ENTITY_PROOFS(vehicle, 1, 1, 1, 1, 1, 1, 1, 1);
 
 	// Player invinsible
-	PLAYER::SET_PLAYER_INVINCIBLE(player_id, TRUE);
+	PLAYER::SET_PLAYER_INVINCIBLE(player, TRUE);
 
 	// Driving characteristics
 	PED::SET_DRIVER_AGGRESSIVENESS(player_ped, 0.0);
@@ -237,13 +244,59 @@ void Script::add_debug_status_text(std::string text)
 
 }
 
-void Script::set_reward_and_info_shared_mem(SharedAgentMemory* shared, int vehicle)
+void Script::get_acceleration(Vector3 speed, Vector3& acceleration, Vector3& jariness)
+{
+	if (first_speed_reading)
+	{
+		first_speed_reading = false;
+		jariness = { 0, 0, 0 };
+	}
+	else {
+		std::chrono::time_point<std::chrono::system_clock> current_time = std::chrono::steady_clock::now();
+		std::chrono::duration<double> elapsed_seconds = current_time - last_speed_measurement_time;
+		double seconds = static_cast<double>(elapsed_seconds.count());
+		acceleration.x = (speed.x - last_speed.x) / seconds;
+		acceleration.y = (speed.y - last_speed.y) / seconds;
+		acceleration.z = (speed.z - last_speed.z) / seconds;
+
+		double gforce_seconds = seconds / 9.8;
+
+		// https://www.quora.com/Hyperloop-What-is-a-physically-comfortable-rate-of-acceleration-for-human-beings
+		double max_comfortable_accleration = 5; // roughly 0.5 g forces 
+
+		if (abs(acceleration.x) > max_comfortable_accleration)
+		{
+			jariness.x += abs(acceleration.x) * gforce_seconds;
+		}
+		if (abs(acceleration.y) > max_comfortable_accleration)
+		{
+			jariness.y += abs(acceleration.y) * gforce_seconds;
+		}
+		if (abs(acceleration.z) > max_comfortable_accleration)
+		{
+			jariness.z += abs(acceleration.z) * gforce_seconds;
+		}
+	}
+	last_speed = speed;
+	last_speed_measurement_time = std::chrono::steady_clock::now();
+}
+
+void Script::set_reward_and_info_shared_mem(SharedAgentMemory* shared, int player, int vehicle)
 {
 	Vector3 speed = ENTITY::GET_ENTITY_SPEED_VECTOR(vehicle, true);
 	auto spin = ENTITY::GET_ENTITY_ROTATION_VELOCITY(vehicle);
 	double heading = ENTITY::GET_ENTITY_HEADING(vehicle);
 	Vector3 veh_coords = ENTITY::GET_ENTITY_COORDS(vehicle, true);
 	bool point_on_road = PATHFIND::IS_POINT_ON_ROAD(veh_coords.x, veh_coords.y, veh_coords.z, vehicle);
+	int time_since_drove_against_traffic = PLAYER::GET_TIME_SINCE_PLAYER_DROVE_AGAINST_TRAFFIC(player);
+	if (time_since_drove_against_traffic == last_time_since_drove_against_traffic)
+	{
+		time_since_drove_against_traffic = 0;
+	}
+	
+
+	Vector3 acceleration;
+	get_acceleration(speed, acceleration, jariness);
 
 	// TODO: Enable directly setting actions (and avoiding Vjoy) by setting actions in Env.act and reading here
 	// TODONT?: Can we perform all actions (honk horn, flip off :) )? Also, vJoy allows easily adding other PC games...
@@ -289,37 +342,55 @@ void Script::set_reward_and_info_shared_mem(SharedAgentMemory* shared, int vehic
 	float distance_from_destination = PATHFIND::CALCULATE_TRAVEL_DISTANCE_BETWEEN_POINTS(
 		shared->x_coord, shared->y_coord, shared->z_coord, shared->dest_x, shared->dest_y, shared->dest_z);
 
-	add_debug_status_text("collision mat hash: " + std::to_string(last_material_collided_with));
+//	add_debug_status_text("collision mat hash: " + std::to_string(last_material_collided_with));
 	add_debug_status_text("last collision time: " + std::to_string(last_collision_time));
-	add_debug_status_text("second: " + std::to_string(second));
+//	add_debug_status_text("second: " + std::to_string(second));
 //	add_debug_status_text("camera x: " + std::to_string(shared->desired_cam_x_offset));
 //	add_debug_status_text("camera y: " + std::to_string(shared->desired_cam_y_offset));
 //	add_debug_status_text("camera z: " + std::to_string(shared->desired_cam_z_offset));
-	add_debug_status_text("use custom camera: " + std::to_string(shared->use_custom_camera));
-	add_debug_status_text("is colliding: " + std::to_string(is_colliding));
+//	add_debug_status_text("use custom camera: " + std::to_string(shared->use_custom_camera));
+//	add_debug_status_text("is colliding: " + std::to_string(is_colliding));
+//	add_debug_status_text("acceleration: " + std::to_string(acceleration.y));
+//	add_debug_status_text("lateral accl: " + std::to_string(acceleration.x));
+//	add_debug_status_text("vert accl: "    + std::to_string(acceleration.z));
+	add_debug_status_text("forward jariness: "    + std::to_string(jariness.y));
+	add_debug_status_text("lateral jariness: "    + std::to_string(jariness.x));
+	add_debug_status_text("vertical jariness: "   + std::to_string(jariness.z));
 //	add_debug_status_text("lane reward: " + std::to_string(center_of_lane_reward));
 
-	shared->reward                      = 0.0; // rewardFunction(vehicle, 23.0, 0.5);
-	shared->x_coord                     = veh_coords.x;
-	shared->y_coord                     = veh_coords.y;
-	shared->z_coord                     = veh_coords.z;
-	shared->on_road                     = point_on_road;
-	shared->spin                        = spin.z; // yaw
-	shared->heading                     = heading;
-	shared->speed                       = speed.y;
-	shared->center_of_lane_reward       = center_of_lane_reward;
-	shared->is_colliding                = is_colliding;
-	shared->last_material_collided_with = last_material_collided_with;
-	shared->last_collision_time         = last_collision_time;
-	shared->time.second                 = second;
-	shared->time.minute                 = minute;
-	shared->time.hour                   = hour;
-	shared->time.day_of_month           = day_of_month;
-	shared->time.month                  = month;
-	shared->time.year                   = year;
-	shared->time.ms_per_game_min        = ms_per_game_min;
-	shared->forward_vector              = forward_vector;
-	shared->distance_from_destination   = distance_from_destination;
+	shared->reward                           = 0.0; // rewardFunction(vehicle, 23.0, 0.5);
+	shared->x_coord                          = veh_coords.x;
+	shared->y_coord                          = veh_coords.y;
+	shared->z_coord                          = veh_coords.z;
+	shared->on_road                          = point_on_road;
+	shared->pitch_velocity                   = spin.x;
+	shared->roll_velocity                    = spin.y;
+	shared->yaw_velocity                     = spin.z;
+	shared->forward_acceleration             = acceleration.y;
+	shared->lateral_acceleration             = acceleration.x;
+	shared->vertical_acceleration            = acceleration.z;
+	shared->forward_jariness                 = jariness.y;
+	shared->lateral_jariness                 = jariness.x;
+	shared->vertical_jariness                = jariness.x;
+	shared->heading                          = heading;
+	shared->speed                            = speed.y;
+	shared->velocity_x                       = speed.x;
+	shared->velocity_y                       = speed.y;
+	shared->velocity_z                       = speed.z;
+	shared->center_of_lane_reward            = center_of_lane_reward;
+	shared->is_colliding                     = is_colliding;
+	shared->last_material_collided_with      = last_material_collided_with;
+	shared->last_collision_time              = last_collision_time;
+	shared->time.second                      = second;
+	shared->time.minute                      = minute;
+	shared->time.hour                        = hour;
+	shared->time.day_of_month                = day_of_month;
+	shared->time.month                       = month;
+	shared->time.year                        = year;
+	shared->time.ms_per_game_min             = ms_per_game_min;
+	shared->forward_vector                   = forward_vector;
+	shared->distance_from_destination        = distance_from_destination;
+	shared->time_since_drove_against_traffic = time_since_drove_against_traffic;
 }
 
 void Script::display_loading_paths_message()
@@ -337,7 +408,7 @@ void Script::deep_drive()
 	BOOST_LOG_TRIVIAL(info) << "Starting deep drive";
 	int iter = 0;
 	SharedAgentMemory* shared = ScriptHookSharedMemory::shared();
-	Player player_id;
+	Player player;
 	Ped player_ped;
 	int vehicle = -1;
 	bool is_game_driving = false;
@@ -349,7 +420,7 @@ void Script::deep_drive()
 		if(iter % 100 == 0) // Do this every second as the game seems to unset certain mod settings every once in a while
 		{
 			BOOST_LOG_TRIVIAL(info) << "Refreshing mod settings...";
-			refresh(player_id, player_ped, vehicle, shared);
+			refresh(player, player_ped, vehicle, shared);
 			detect_if_in_vehicle(vehicle);
 			BOOST_LOG_TRIVIAL(info) << "Done refreshing mod settings";
 		}
@@ -359,7 +430,7 @@ void Script::deep_drive()
 			status_text = "";
 			handle_artificial_demonstration_switching(shared, player_ped, vehicle, is_game_driving); 
 
-			//if(pathsNotYetLoaded())
+			//if(pathsNotYetLoaded())  // TODO: Fix path loading crash on AWS
 			//{
 			//	display_loading_paths_message();
 			//}
@@ -369,8 +440,14 @@ void Script::deep_drive()
 				BOOST_LOG_TRIVIAL(info) << "Toggling debug status text";
 				show_debug_status_text = ! show_debug_status_text;
 			}
+			if (shared->should_reset_agent || isKeyJustUp(VK_F11))
+			{
+				BOOST_LOG_TRIVIAL(info) << "Resetting agent";
+				set_shared_mem_initial_values(shared);
+				shared->should_reset_agent = false;
+			}
 
-			set_reward_and_info_shared_mem(shared, vehicle);
+			set_reward_and_info_shared_mem(shared, player, vehicle);
 
 			if(shared->use_custom_camera)
 			{
@@ -414,6 +491,14 @@ void Script::set_shared_mem_initial_values(SharedAgentMemory* shared)
 
 	(*shared).desired_cam_fov = 92.3;
 	(*shared).distance_from_destination = -1;
+
+	last_time_since_drove_against_traffic = shared->time_since_drove_against_traffic;
+	(*shared).time_since_drove_against_traffic = 0;
+
+	(*shared).last_collision_time = 0;
+	(*shared).forward_jariness = 0;
+	(*shared).lateral_jariness = 0;
+	(*shared).vertical_jariness = 0;
 
 }
 

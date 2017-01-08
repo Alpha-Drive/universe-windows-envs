@@ -28,6 +28,7 @@ public:
 	void send_reply_control_ping(Json::Value const& request);
 	void send_reset_reply(Json::Value const& request, int episode_id);
 	void send_reward(const double reward, int episode_id, const bool done, Json::Value info=Json::Value(Json::ValueType::objectValue));
+	bool client_is_connected();
 	boost::signals2::connection on_reset(const ResetSignal::slot_type &subscriber);
 	boost::signals2::connection on_action(const ActionSignal::slot_type& subscriber);
 	boost::signals2::connection on_no_clients(const NoClientsSignal::slot_type& subscriber);

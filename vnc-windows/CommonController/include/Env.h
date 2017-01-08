@@ -19,9 +19,9 @@ public:
 	{
 		env_id_ = env_id;
 		agent_conn_ = agent_conn;
-		agent_reset_connection  = agent_conn->on_reset (boost::bind(&Env::reset, this, boost::placeholders::_1));
-		agent_action_connection = agent_conn->on_action(boost::bind(&Env::_act,  this, boost::placeholders::_1));
-		no_clients_connection = agent_conn->on_no_clients(boost::bind(&Env::_when_no_clients, this));
+		agent_reset_connection  = agent_conn->on_reset      (boost::bind(&Env::reset,            this, boost::placeholders::_1));
+		agent_action_connection = agent_conn->on_action     (boost::bind(&Env::_act,             this, boost::placeholders::_1));
+		no_clients_connection   = agent_conn->on_no_clients (boost::bind(&Env::_when_no_clients, this));
 		agent_conn_->send_env_describe(env_id_, "running", rewarder.get_episode_id(), rewarder.get_frames_per_second());
 		lg_ = lg;
 	}
@@ -100,9 +100,9 @@ public:
 protected:
 	JoystickController joystick_;
 	boost::log::sources::severity_logger_mt<ls::severity_level> lg_;
+	std::shared_ptr<AgentConn> agent_conn_;
 private:
 	std::string env_id_;
-	std::shared_ptr<AgentConn> agent_conn_;
 };
 
 #endif // !ENV_H_

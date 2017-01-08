@@ -31,17 +31,22 @@ void Rewarder::reset() {
 	episode_counter += 1;
 }
 
-void Rewarder::sendReward_(const double reward, const bool done, Json::Value info)
+void Rewarder::sendReward_(const double reward, const bool done, const Json::Value& info)
 {
 	if (episode_step_counter % 100 == 0)
 	{
 		BOOST_LOG_TRIVIAL(info) << "Reward num: " << episode_step_counter;
 	}
+	if (done)
+	{
+		BOOST_LOG_TRIVIAL(info) << "Is done: " << done;
+	}
+
 	int episode_id = get_episode_id();
 	agent_conn_->send_reward(reward, episode_id, done, info);
 }
 
-void Rewarder::sendRewardAndIncrementStepCounter(double reward, Json::Value info)
+void Rewarder::sendRewardAndIncrementStepCounter(const double reward, const bool done, const Json::Value& info)
 {
 	// This method is throttled to rewardRateInHertz
 //	P_DEBUG("episode_step_counter: " << episode_step_counter << std::endl);
@@ -51,7 +56,7 @@ void Rewarder::sendRewardAndIncrementStepCounter(double reward, Json::Value info
 	if (episode_step_counter > 5)
 	{
 		try {
-			sendReward_(reward, false, info);
+			sendReward_(reward, done, info);
 		}
 		catch (std::exception const& e) {
 			BOOST_LOG_SEV(lg_, ls::error) << e.what();
@@ -63,9 +68,6 @@ void Rewarder::sendRewardAndIncrementStepCounter(double reward, Json::Value info
 }
 
 bool Rewarder::ready_for_reward() {
-	// If it's the first few moves of the episode, do not send a reward
-
-
 	// If we have sent a reward too recently, do not send a reward
 	std::chrono::time_point<std::chrono::system_clock> current_time = std::chrono::system_clock::now();
 	std::chrono::duration<double> elapsed_seconds = current_time - last_reward_pushed_at_;
@@ -76,7 +78,6 @@ bool Rewarder::ready_for_reward() {
 //	P_INFO("Time elapsed for reward check: " << elapsedSeconds.count() << " ms" << std::endl);
 #endif
 	bool ready = elapsed_seconds.count() > minimum_seconds_to_wait;
-
 	if (ready)
 	{
 		last_reward_pushed_at_ = current_time;
