@@ -116,7 +116,10 @@ void GTAVEnv::step()
 		info["time_since_drove_against_traffic"] = shared_->time_since_drove_against_traffic;
 		info["distance_from_destination"]        = shared_->distance_from_destination;
 
-		rewarder.sendRewardAndIncrementStepCounter(reward_calculator_.get_reward(shared_.get()), is_done(), info);
+		double reward;
+		bool done;
+		reward_calculator_.get_reward(shared_.get(), reward, done, info);
+		rewarder.sendRewardAndIncrementStepCounter(reward, done, info);
 	}
 }
 

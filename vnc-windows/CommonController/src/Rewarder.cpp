@@ -35,11 +35,11 @@ void Rewarder::sendReward_(const double reward, const bool done, const Json::Val
 {
 	if (episode_step_counter % 100 == 0)
 	{
-		BOOST_LOG_TRIVIAL(info) << "Reward num: " << episode_step_counter;
+		BOOST_LOG_SEV(lg_, boost::log::trivial::info) << "Reward num: " << episode_step_counter;
 	}
 	if (done)
 	{
-		BOOST_LOG_TRIVIAL(info) << "Is done: " << done;
+		BOOST_LOG_SEV(lg_, boost::log::trivial::info) << "Is done: " << done;
 	}
 
 	int episode_id = get_episode_id();

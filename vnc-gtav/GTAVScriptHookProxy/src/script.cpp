@@ -34,6 +34,7 @@ int last_collision_time = 0;
 Vector3 last_speed;
 bool first_speed_reading = true;
 std::chrono::time_point<std::chrono::system_clock> last_speed_measurement_time;
+std::chrono::time_point<std::chrono::system_clock> last_reset_time;
 Vector3 jariness = { 0, 0, 0 };
 int last_time_since_drove_against_traffic = 0;
 
@@ -262,7 +263,7 @@ void Script::get_acceleration(Vector3 speed, Vector3& acceleration, Vector3& jar
 		double gforce_seconds = seconds / 9.8;
 
 		// https://www.quora.com/Hyperloop-What-is-a-physically-comfortable-rate-of-acceleration-for-human-beings
-		double max_comfortable_accleration = 5; // roughly 0.5 g forces 
+		double max_comfortable_accleration = 5; // roughly 0.5 g's
 
 		if (abs(acceleration.x) > max_comfortable_accleration)
 		{
@@ -281,6 +282,20 @@ void Script::get_acceleration(Vector3 speed, Vector3& acceleration, Vector3& jar
 	last_speed_measurement_time = std::chrono::steady_clock::now();
 }
 
+void Script::get_time_since_drove_against_traffic(int player, int& time_since_drove_against_traffic)
+{
+	time_since_drove_against_traffic = PLAYER::GET_TIME_SINCE_PLAYER_DROVE_AGAINST_TRAFFIC(player);
+	std::chrono::time_point<std::chrono::system_clock> current_time = std::chrono::steady_clock::now();
+	std::chrono::duration<double> time_since_reset = current_time - last_reset_time;
+	add_debug_status_text("last reset time: " + std::to_string(time_since_reset.count()));
+
+	if (time_since_drove_against_traffic > (time_since_reset.count() + 10) * 1000)
+	{
+		// time since drove against traffic has not changed since reset
+		time_since_drove_against_traffic = 0;
+	}
+}
+
 void Script::set_reward_and_info_shared_mem(SharedAgentMemory* shared, int player, int vehicle)
 {
 	Vector3 speed = ENTITY::GET_ENTITY_SPEED_VECTOR(vehicle, true);
@@ -288,12 +303,9 @@ void Script::set_reward_and_info_shared_mem(SharedAgentMemory* shared, int playe
 	double heading = ENTITY::GET_ENTITY_HEADING(vehicle);
 	Vector3 veh_coords = ENTITY::GET_ENTITY_COORDS(vehicle, true);
 	bool point_on_road = PATHFIND::IS_POINT_ON_ROAD(veh_coords.x, veh_coords.y, veh_coords.z, vehicle);
-	int time_since_drove_against_traffic = PLAYER::GET_TIME_SINCE_PLAYER_DROVE_AGAINST_TRAFFIC(player);
-	if (time_since_drove_against_traffic == last_time_since_drove_against_traffic)
-	{
-		time_since_drove_against_traffic = 0;
-	}
-	
+
+	int time_since_drove_against_traffic;
+	get_time_since_drove_against_traffic(player, time_since_drove_against_traffic);
 
 	Vector3 acceleration;
 	get_acceleration(speed, acceleration, jariness);
@@ -342,8 +354,9 @@ void Script::set_reward_and_info_shared_mem(SharedAgentMemory* shared, int playe
 	float distance_from_destination = PATHFIND::CALCULATE_TRAVEL_DISTANCE_BETWEEN_POINTS(
 		shared->x_coord, shared->y_coord, shared->z_coord, shared->dest_x, shared->dest_y, shared->dest_z);
 
-//	add_debug_status_text("collision mat hash: " + std::to_string(last_material_collided_with));
+	add_debug_status_text("distance_from_destination: " + std::to_string(distance_from_destination));
 	add_debug_status_text("last collision time: " + std::to_string(last_collision_time));
+	add_debug_status_text("last drove against traffic time: " + std::to_string(time_since_drove_against_traffic));
 //	add_debug_status_text("second: " + std::to_string(second));
 //	add_debug_status_text("camera x: " + std::to_string(shared->desired_cam_x_offset));
 //	add_debug_status_text("camera y: " + std::to_string(shared->desired_cam_y_offset));
@@ -430,7 +443,7 @@ void Script::deep_drive()
 			status_text = "";
 			handle_artificial_demonstration_switching(shared, player_ped, vehicle, is_game_driving); 
 
-			//if(pathsNotYetLoaded())  // TODO: Fix path loading crash on AWS
+			//if(pathsNotYetLoaded())  // TODO: Fix path loading crash on slow machines like AWS
 			//{
 			//	display_loading_paths_message();
 			//}
@@ -443,7 +456,7 @@ void Script::deep_drive()
 			if (shared->should_reset_agent || isKeyJustUp(VK_F11))
 			{
 				BOOST_LOG_TRIVIAL(info) << "Resetting agent";
-				set_shared_mem_initial_values(shared);
+				reset_agent(shared);
 				shared->should_reset_agent = false;
 			}
 
@@ -463,7 +476,7 @@ void Script::deep_drive()
 }
 
 
-void Script::set_shared_mem_initial_values(SharedAgentMemory* shared)
+void Script::reset_agent(SharedAgentMemory* shared)
 {
 	BOOST_LOG_TRIVIAL(info) << "Before setting script load time";
 	auto now = time(NULL);
@@ -495,11 +508,18 @@ void Script::set_shared_mem_initial_values(SharedAgentMemory* shared)
 	last_time_since_drove_against_traffic = shared->time_since_drove_against_traffic;
 	(*shared).time_since_drove_against_traffic = 0;
 
+	last_material_collided_with = 0;
+	last_collision_time = 0;
+	last_speed = {0, 0, 0};
+	first_speed_reading = true;
+	last_speed_measurement_time = std::chrono::steady_clock::now();
+	last_reset_time = std::chrono::steady_clock::now();
+	jariness = { 0, 0, 0 };
+
 	(*shared).last_collision_time = 0;
 	(*shared).forward_jariness = 0;
 	(*shared).lateral_jariness = 0;
 	(*shared).vertical_jariness = 0;
-
 }
 
 void Script::main()
@@ -508,7 +528,7 @@ void Script::main()
 	BOOST_LOG_TRIVIAL(info) << "Allocating shared memory";
 	ScriptHookSharedMemory::allocate_shared_agent_memory();
 	SharedAgentMemory* shared = ScriptHookSharedMemory::shared();
-	set_shared_mem_initial_values(shared);
+	reset_agent(shared);
 
 #ifdef USE_NVIDIA_SCENARIOS
 	// Use NVIDIA's JSON scenario and reward definition language

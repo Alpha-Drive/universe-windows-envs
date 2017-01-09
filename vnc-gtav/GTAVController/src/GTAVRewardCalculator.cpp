@@ -2,6 +2,7 @@
 #include <cassert>
 #include "../../GTAVScriptHookProxy/vendor/ScriptHookV/include/natives.h"
 #include <thread>
+#include <json/json.h>
 
 
 GTAVRewardCalculator::GTAVRewardCalculator(std::string envId, boost::log::sources::severity_logger_mt<ls::severity_level> lg)
@@ -20,6 +21,25 @@ GTAVRewardCalculator::GTAVRewardCalculator(std::string envId, boost::log::source
 	
 	last_reward_ = 0.0;
 	lg = lg_;
+}
+
+// Return the rewards that we have aggregated since the last call to getReward()
+void GTAVRewardCalculator::get_reward(SharedAgentMemory* shared, double& reward, bool& done, Json::Value& info)
+{
+	done = is_done_;
+	switch (reward_mode_)
+	{
+	case SANE_DRIVING:
+		calc_sane_driving(shared, reward, done, info);
+		break;
+	case SPEED:
+		reward = shared->speed;
+		break;
+	default:
+		P_ERR("Reward mode unrecognised!" << std::endl);
+		break;
+	}
+	is_done_ = done;
 }
 
 GTAVRewardCalculator::~GTAVRewardCalculator()
@@ -41,28 +61,42 @@ void GTAVRewardCalculator::set_destination(SharedAgentMemory* shared)
 	}
 }
 
-double GTAVRewardCalculator::get_distance_reward(SharedAgentMemory* shared)
+double GTAVRewardCalculator::get_distance_reward(SharedAgentMemory* shared, bool& done, bool& reached_destination, bool& stalled)
 {
-	// Returns meters of progress made towards destination.
+	// Returns meters of progress made towards destination
+	reached_destination = false;
+	stalled = false;
 
 	set_destination(shared);
-	double distance = shared->distance_from_destination;
-	if ( ! embarked_ && distance >= kEndDistance)
+	current_distance_ = shared->distance_from_destination;
+	int distance_check = static_cast<int>(current_distance_);
+	if (distance_check != current_distance_)
+	{
+		// Valid distances are whole numbers.
+		return 0;
+	}
+
+	if ( ! embarked_ && current_distance_ >= kEndDistance)
 	{
 		embarked_ = true;
-		closest_distance_ = distance;
+		closest_distance_ = current_distance_;
 		last_closest_distance_time_ = std::chrono::steady_clock::now();
 	}
 
+	if ( ! embarked_)
+	{
+		return 0;
+	}
+
 	double distance_reward = 0;
-	if (distance >= 0)
+	if (current_distance_ > kEndDistance)
 	{
 		// Pathfind returned actual distance (i.e. not -1 when not found)
-		if (closest_distance_ > distance)
+		if (closest_distance_ > current_distance_)
 		{
 			// We've made progress
-			distance_reward = closest_distance_ - distance;
-			closest_distance_ = distance;
+			distance_reward = closest_distance_ - current_distance_;
+			closest_distance_ = current_distance_;
 			last_closest_distance_time_ = std::chrono::steady_clock::now();
 		}
 		else
@@ -73,13 +107,13 @@ double GTAVRewardCalculator::get_distance_reward(SharedAgentMemory* shared)
 			std::chrono::duration<double> elapsed_seconds = current_time - last_closest_distance_time_;
 			if (elapsed_seconds.count() > kMaxSecondsNoProgress)
 			{
-				BOOST_LOG_SEV(lg_, boost::log::trivial::info) << "No progress in last " << kMaxSecondsNoProgress << " seconds. Ending episode.";
-				is_done_ = true;
+				BOOST_LOG_SEV(lg_, boost::log::trivial::info) << "No progress in last " << kMaxSecondsNoProgress << " seconds. Stalled, ending episode.";
+				stalled = true;
+				done = true;
 			}
 		}
 	}
-
-	if (embarked_ && distance >= 0 && distance < kEndDistance)
+	else if (current_distance_ >= 0 && current_distance_ < kEndDistance)
 	{
 		// We may have reached our destination
 		double eucl_distance = sqrt( 
@@ -89,6 +123,7 @@ double GTAVRewardCalculator::get_distance_reward(SharedAgentMemory* shared)
 
 		if (eucl_distance < kEndDistance) {
 			// Euclidean distance agrees! We're close.
+			reached_destination = true;
 #ifdef ENDLESS_EPISODE
 			// Turn around
 			winding_road_direction_is_down_ = !winding_road_direction_is_down_;
@@ -100,36 +135,49 @@ double GTAVRewardCalculator::get_distance_reward(SharedAgentMemory* shared)
 				std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			}
 #else
-			is_done_ = true;
-			BOOST_LOG_SEV(lg_, boost::log::trivial::info) << "Reached destination, finishing episode: distance from destination " << distance;
+			done = true;
+			BOOST_LOG_SEV(lg_, boost::log::trivial::info) << "Reached destination, finishing episode: distance from destination " << current_distance_;
 #endif
 		}
 	}
+
+	BOOST_LOG_SEV(lg_, boost::log::trivial::debug) << "distance reward " << distance_reward;
+
+	if (std::isnan(distance_reward))
+	{
+		BOOST_LOG_SEV(lg_, boost::log::trivial::error) << "Distance reward is NaN" << distance_reward;
+		return 0;
+	}
+
+	if (distance_reward != 0)
+	{
+		BOOST_LOG_SEV(lg_, boost::log::trivial::info) << "Distance reward " << distance_reward;
+	}
+
 	return distance_reward;
 }
 
-void GTAVRewardCalculator::get_speed_penalties(SharedAgentMemory* shared, double& slow_penalty, double& speed_infraction_penalty)
+void GTAVRewardCalculator::get_speed_penalties(SharedAgentMemory* shared, double& slow_penalty, double& speeding_penalty)
 {
-	double speed_limit = 25; // meters per second // TODO: Pull this dynamically from an IPL file
-	double speed = shared->speed;
-	double expected_avg_speed = speed_limit * 0.95;
-	if (speed > speed_limit)
+	double speed_limit = 10; // meters per second // TODO: Pull this dynamically from an IPL file
+	const double speed = shared->speed;
+	if (speed > speed_limit + 3)
 	{
 		std::chrono::time_point<std::chrono::system_clock> current_time = std::chrono::steady_clock::now();
-		std::chrono::duration<double> elapsed_seconds = current_time - last_speed_infraction_time_;
-		if ( ! delivered_first_speed_infraction_penatly_ || elapsed_seconds.count() > kSpeedInfractionPenaltyPeriod)
+		std::chrono::duration<double> elapsed_seconds = current_time - last_speeding_time_;
+		if ( ! delivered_first_speeding_penatly_ || elapsed_seconds.count() > kSpeedingPenaltyPeriod)
 		{
-			last_speed_infraction_time_ = std::chrono::steady_clock::now();
+			last_speeding_time_ = std::chrono::steady_clock::now();
 			// Squared to outweigh distance advantage of speeding (proportional to kinetic energy - yay!)
-			speed_infraction_penalty = pow(shared->speed - speed_limit, 2);
-			delivered_first_speed_infraction_penatly_ = true;
-			BOOST_LOG_SEV(lg_, boost::log::trivial::info) << "Speed infraction penalty";
+			speeding_penalty = pow(speed - speed_limit, 2);
+			delivered_first_speeding_penatly_ = true;
+			BOOST_LOG_SEV(lg_, boost::log::trivial::info) << "Speeding penalty " << speeding_penalty;
 		}
 
 	}
-	else if (speed < expected_avg_speed)
+	else if (speed < speed_limit - 3)
 	{
-		// Too slow
+		// Too slow - this only makes sense on this particular stretch of road where there are no stop signs or backups.
 		std::chrono::time_point<std::chrono::system_clock> current_time = std::chrono::steady_clock::now();
 		std::chrono::duration<double> elapsed_seconds = current_time - last_slow_penalty_time_;
 		if ( ! delivered_first_slow_penalty_ || elapsed_seconds.count() > kSlowPenaltyPeriod)
@@ -137,7 +185,7 @@ void GTAVRewardCalculator::get_speed_penalties(SharedAgentMemory* shared, double
 			last_slow_penalty_time_ = std::chrono::steady_clock::now();
 			slow_penalty = 1;
 			delivered_first_slow_penalty_ = true;
-			BOOST_LOG_SEV(lg_, boost::log::trivial::info) << "Driving too slow penalty";
+			BOOST_LOG_SEV(lg_, boost::log::trivial::info) << "Driving too slow penalty " << slow_penalty;
 		}
 	}
 }
@@ -171,73 +219,86 @@ void GTAVRewardCalculator::get_discomfort_penalty(SharedAgentMemory* shared, dou
 	{
 		last_discomfort_penalty_time_ = std::chrono::steady_clock::now();
 		discomfort_penalty = 
-			shared->forward_jariness - last_forward_jariness_ +
-			shared->lateral_jariness - last_lateral_jariness_ + 
+			shared->forward_jariness  - last_forward_jariness_ +
+			shared->lateral_jariness  - last_lateral_jariness_ + 
 			shared->vertical_jariness - last_vertical_jariness_;
+
+		last_forward_jariness_ = shared->forward_jariness;
+		last_lateral_jariness_ = shared->lateral_jariness;
+		last_vertical_jariness_ = shared->vertical_jariness;
+
+		if (discomfort_penalty != 0)
+		{
+			BOOST_LOG_SEV(lg_, boost::log::trivial::info) << "Discomfort penalty " << discomfort_penalty;
+		}
 		delivered_first_slow_penalty_ = true;
 	}
 }
 
-double GTAVRewardCalculator::calc_sane_driving(SharedAgentMemory * shared)
+void GTAVRewardCalculator::calc_sane_driving(SharedAgentMemory* shared, double& reward, bool& done, Json::Value& info)
 {
-	// All rewards on scale of meters towards destination
+	// Returns meters of progress made towards destination minus speeding, slowness, jariness, offroad, and driving against traffic penalties.
 
-	double distance_reward = get_distance_reward(shared);
+	bool reached_destination;
+	bool stalled;
+	double distance_reward = get_distance_reward(shared, done, reached_destination, stalled);
+
+	bool had_collision = false;
+	bool drove_against_traffic = false;
 
 	if (shared->last_collision_time > 0)
 	{
 		// Collision = Game over
 		BOOST_LOG_SEV(lg_, boost::log::trivial::info) << "Collision! GAME OVER";
-		is_done_ = true;
+		done = true;
 	}
 
 	if (shared->time_since_drove_against_traffic > 0)
 	{
 		// Drove against traffic = Game over
 		BOOST_LOG_SEV(lg_, boost::log::trivial::info) << "Drove against traffic! GAME OVER";
-		is_done_ = true;
+		done = true;
 	}
 
 	double off_road_penalty = 0;
 	get_offroad_penalty(shared, off_road_penalty);
 
 	double slow_penalty = 0;
-	double speed_infraction_penalty = 0;
-	get_speed_penalties(shared, slow_penalty, speed_infraction_penalty);
+	double speeding_penalty = 0;
+	get_speed_penalties(shared, slow_penalty, speeding_penalty);
 
 	double discomfort_penalty = 0;
 	get_discomfort_penalty(shared, discomfort_penalty);
 
-	return distance_reward - off_road_penalty - speed_infraction_penalty - slow_penalty - discomfort_penalty;
+	info["reward.distance_reward"] = distance_reward;
+	info["reward.off_road_penalty"] = off_road_penalty;
+	info["reward.speeding_penalty"] = speeding_penalty;
+	info["reward.slow_penalty"] = slow_penalty;
+	info["reward.discomfort_penalty"] = discomfort_penalty;
+	info["reward.reached_destination"] = reached_destination;
+	info["reward.stalled"] = stalled;
+
+	reward = distance_reward - off_road_penalty - speeding_penalty - slow_penalty - discomfort_penalty;
+
+	if (std::isnan(reward))
+	{
+		BOOST_LOG_SEV(lg_, boost::log::trivial::error) << "Reward is NaN" << reward;
+		reward = 0;
+	}
 }
 
 void GTAVRewardCalculator::reset(SharedAgentMemory * shared)
 {
 	last_reward_ = 0;
 	embarked_ = false;
+	closest_distance_ = 0;
 	shared->dest_x = WINDING_BOTTOM_X;
 	shared->dest_y = WINDING_BOTTOM_Y;
 	shared->dest_z = WINDING_BOTTOM_Z;
 	shared->should_reset_agent = true;
-}
-
-// Return the rewards that we have aggregated since the last call to getReward()
-double GTAVRewardCalculator::get_reward(SharedAgentMemory * shared)
-{
-	double current_reward = 0;
-	switch (reward_mode_)
-	{
-	case SANE_DRIVING:
-		current_reward = calc_sane_driving(shared);
-		break;
-	case SPEED:
-		current_reward = shared->speed;
-		break;
-	default:
-		P_ERR("Reward mode unrecognised!" << std::endl);
-		break;
-	}
-	return current_reward;
+	last_forward_jariness_ = 0;
+	last_lateral_jariness_ = 0;
+	last_vertical_jariness_ = 0;
 }
 
 bool GTAVRewardCalculator::get_is_done()
