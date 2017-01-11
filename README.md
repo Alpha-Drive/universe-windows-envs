@@ -1,7 +1,10 @@
 # universe-windows-envs
 
+This repo contains the necessary components for running Windows games in [Universe](https://github.com/openai/universe). The initial environment we are releasing is GTA V.
+
 ## Setup
-Follow the setup for our initial windows env, [GTA](vnc-gtav/README.md).
+
+To setup the GTA V environment, follow the [readme here](vnc-gtav/README.md).
 
 ## Development
 This repo contains a Visual Studio solution for hosting Universe environments in Windows. Unlike the other Universe environments, Windows does not run dockerized, so the environment runs natively. 
