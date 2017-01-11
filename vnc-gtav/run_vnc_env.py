@@ -97,8 +97,9 @@ class GTAVEnvRunner(object):
             # Kill existing servers that may be running
             logger.info("Starting GTAV with the following command: /n{}".format(_start_gtav_command()))
             self.gtav_proc = subprocess.Popen(_start_gtav_command(), shell=True)  # Needs shell for `cd`
+            logger.info('Waiting for %s to start...', GTAV_PROCESS_NAME)
             while not gym_windows.processes_are_running(GTAV_PROCESS_NAME):
-                logger.info('Waiting for %s to start', GTAV_PROCESS_NAME)
+                time.sleep(1)
 
         subprocess.call("taskkill /IM %s /F" % TIGHTVNC_PROCESS_NAME)
         self.tightvnc_server, self.tightvnc_config = gym_windows.configure_and_start_tightvnc(

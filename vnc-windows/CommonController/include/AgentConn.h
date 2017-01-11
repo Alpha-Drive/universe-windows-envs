@@ -27,7 +27,7 @@ public:
 	void send_env_describe(std::string const& env_id, std::string const& env_state, int episode_id, int fps, std::string const& metadata="");
 	void send_reply_control_ping(Json::Value const& request);
 	void send_reset_reply(Json::Value const& request, int episode_id);
-	void send_reward(const double reward, int episode_id, const bool done, Json::Value info=Json::Value(Json::ValueType::objectValue));
+	void sendReward(const double reward, int episode_id, const bool done, Json::Value info=Json::Value(Json::ValueType::objectValue));
 	bool client_is_connected();
 	boost::signals2::connection on_reset(const ResetSignal::slot_type &subscriber);
 	boost::signals2::connection on_action(const ActionSignal::slot_type& subscriber);
@@ -47,7 +47,7 @@ private:
 	void on_websocket_msg_(websocketpp::connection_hdl websocket_cxn, message_ptr msg);
 	void run_server_thread();
 	Json::Value get_headers_(const long long message_id, int episode_id);
-	void send_json_(std::string const& method, Json::Value const& body, int episode_id, const long long parent_message_id=-1);
+	void sendJson_(std::string const& method, Json::Value const& body, int episode_id, const long long parent_message_id=-1);
 	void populate_sent_at_in_headers_(Json::Value& headers);
 	ResetSignal reset_signal_;
 	ActionSignal action_signal_;

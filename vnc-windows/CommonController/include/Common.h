@@ -54,7 +54,7 @@ inline void init_logger()
 	boost::log::add_console_log(std::cout, boost::log::keywords::format = "[%TimeStamp%]: %Message%");
 
 #ifdef PROJ_DEBUG
-	std::cerr << "\n\n\n***** WARNING: TURN OFF PROJ_DEBUG IF YOU ARE ON RDP AS THIS WILL CRIPPLE THROUGHPUT OF THE REWARD / ACTION CHANNELS RUNNING OVER WEBSOCKETS.\n\n\n";
+	std::cerr << "\n\n\n***** WARNING: DEBUG OUTPUT IS ON - THIS WILL CRIPPLE THROUGHPUT OF THE REWARD / ACTION CHANNELS OVER RDP. USE LOCALLY ONLY. \n\n\n";
 	boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::debug);
 #else
 	boost::log::core::get()->set_filter(boost::log::trivial::severity >= boost::log::trivial::info);

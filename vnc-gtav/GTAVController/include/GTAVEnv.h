@@ -12,7 +12,7 @@ public:
 	void set_win_active_to_long_ago();
 	GTAVEnv(std::string env_id, std::string instance_id, int websocket_port, std::shared_ptr<AgentConn> agent_conn, bool skip_loading_saved_game, boost::log::sources::severity_logger_mt<ls::severity_level> lg, int rewards_per_second);
 	~GTAVEnv();
-	void noop();
+	void no_op();
 	void loop() override;
 	void connect() override;
 	void step() override;
@@ -22,6 +22,7 @@ public:
 	// N.B. Using override in conjunction with boost signals causes a "pure virtual function call" error - thus no override below
 	void reset_game();
 	void after_reset();
+	void before_reset();
 	void when_no_clients();
 
 private:
@@ -29,7 +30,8 @@ private:
 	std::unique_ptr<SharedAgentMemory> shared_;
 	bool skip_loading_saved_game_;
 	std::chrono::time_point<std::chrono::system_clock> last_win_activate_at_;
-	void check_win_active_every_n_secs(int seconds);
+	void check_win_active_every_n_secs_(int seconds);
+	void sendReward_();
 };
 
 #endif // !GTAV_ENV_H_

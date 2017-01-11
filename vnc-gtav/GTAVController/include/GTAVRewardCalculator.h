@@ -7,6 +7,7 @@
 #include <GTAVControllerSharedMemory.h>
 #include <chrono>
 #include <json/json.h>
+#include <atomic>
 
 enum GTAVRewardMode
 {
@@ -51,7 +52,7 @@ private:
 	GTAVRewardMode reward_mode_;
 	double last_reward_;
 	bool winding_road_direction_is_down_ = true;
-	bool is_done_ = false;
+	std::atomic<bool> is_done_;
 	boost::log::sources::severity_logger_mt<ls::severity_level> lg_;
 	bool embarked_ = false;
 	double closest_distance_ = 0;

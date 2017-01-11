@@ -8,14 +8,17 @@
 #include "Rewarder.h"
 #include "JoystickController.h"
 #include <boost/algorithm/string/predicate.hpp>
+#include <atomic>
 
+const int kMaxResetWaitSecs = 10;
 
 class Env
 {
 public:
 	Env::Env(std::string env_id, std::string instance_id, int websocket_port, std::shared_ptr<AgentConn> agent_conn, boost::log::sources::severity_logger_mt<ls::severity_level> lg, int rewards_per_second = 60) :
 		rewarder(websocket_port, env_id, agent_conn, rewards_per_second, lg),
-		joystick_()
+		joystick_(), 
+		reset_lock_(reset_mtx_, std::defer_lock)
 	{
 		env_id_ = env_id;
 		agent_conn_ = agent_conn;
@@ -34,8 +37,21 @@ public:
 		no_clients_connection.disconnect();
 	}
 
+	bool resetting() const
+	{
+		return reset_lock_.owns_lock();
+	};
+
 	void reset(const Json::Value agent_request=Json::nullValue)
 	{
+		if (resetting())
+		{
+			// Skip concurrent reset requests
+			BOOST_LOG_SEV(lg_, ls::warning) << "Concurrent: reset request, ignoring";
+			return;
+		}
+		std::lock_guard<decltype(reset_lock_)> g(reset_lock_);
+		before_reset();
 		agent_conn_->send_reset_reply(agent_request, rewarder.get_episode_id());
 		agent_conn_->send_env_describe(env_id_, "resetting", rewarder.get_episode_id(), rewarder.get_frames_per_second());
 		reset_game();
@@ -61,6 +77,7 @@ public:
 	virtual void step() = 0;
 	virtual bool is_done() = 0;
 	virtual void reset_game() = 0;
+	virtual void before_reset() = 0;
 	virtual void after_reset() = 0;
 	virtual void when_no_clients()
 	{
@@ -88,7 +105,7 @@ public:
 			}
 			catch (...)
 			{
-				P_ERR("Error processing act request" << std::endl << boost::current_exception_diagnostic_information() << std::endl);
+				BOOST_LOG_SEV(lg_, ls::error) << "Error processing act request" << std::endl << boost::current_exception_diagnostic_information();
 			}
 		}
 	}
@@ -101,8 +118,10 @@ protected:
 	JoystickController joystick_;
 	boost::log::sources::severity_logger_mt<ls::severity_level> lg_;
 	std::shared_ptr<AgentConn> agent_conn_;
+	std::unique_lock<std::mutex> reset_lock_;
 private:
 	std::string env_id_;
+	std::mutex reset_mtx_;
 };
 
 #endif // !ENV_H_

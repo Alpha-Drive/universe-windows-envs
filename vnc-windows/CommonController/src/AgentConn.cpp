@@ -29,7 +29,7 @@ AgentConn::~AgentConn()
 	BOOST_LOG_SEV(lg_, ls::info) << "Agent conn shutdown successfully";
 }
 
-bool websocket_send(server* ws_server, websocketpp::connection_hdl& cxn, std::string const& msg, boost::log::sources::severity_logger_mt<ls::severity_level> lg)
+bool websocketSend(server* ws_server, websocketpp::connection_hdl& cxn, std::string const& msg, boost::log::sources::severity_logger_mt<ls::severity_level> lg)
 {
 	try {
 		ws_server->send(cxn, msg, websocketpp::frame::opcode::text);
@@ -71,30 +71,30 @@ void AgentConn::send_env_describe(std::string const& env_id, std::string const& 
 	body["env_state"] = env_state;
 	body["metadata"] = metadata;
 	body["fps"] = fps;
-	send_json_("v0.env.describe", body, episode_id);
+	sendJson_("v0.env.describe", body, episode_id);
 }
 
 void AgentConn::send_reply_control_ping(Json::Value const& request)
 {
 	Json::Value body = Json::Value::null;
 	const long long parent_message_id = request["headers"]["message_id"].asInt64();
-	send_json_("v0.reply.control.ping", body, -1, parent_message_id);
+	sendJson_("v0.reply.control.ping", body, -1, parent_message_id);
 }
 
 void AgentConn::send_reset_reply(Json::Value const& request, int episode_id)
 {
 	Json::Value body = Json::Value::null;
 	const long long parent_message_id = request["headers"]["message_id"].asInt64();
-	send_json_("v0.reply.env.reset", body, episode_id, parent_message_id);
+	sendJson_("v0.reply.env.reset", body, episode_id, parent_message_id);
 }
 
-void AgentConn::send_reward(const double reward, int episode_id, const bool done, Json::Value info)
+void AgentConn::sendReward(const double reward, int episode_id, const bool done, Json::Value info)
 {
 	Json::Value body;
 	body["reward"] = reward;
 	body["done"] = done;
 	body["info"] = info;
-	send_json_("v0.env.reward", body, episode_id);
+	sendJson_("v0.env.reward", body, episode_id);
 }
 
 bool AgentConn::client_is_connected()
@@ -189,7 +189,7 @@ void AgentConn::on_websocket_msg_(websocketpp::connection_hdl websocket_cxn, mes
 	}
 }
 
-void AgentConn::send_json_(std::string const& method, Json::Value const& body, int episode_id, const long long parent_message_id)
+void AgentConn::sendJson_(std::string const& method, Json::Value const& body, int episode_id, const long long parent_message_id)
 {
 	Json::Value payload;
 	payload["method"] = method;
@@ -202,5 +202,5 @@ void AgentConn::send_json_(std::string const& method, Json::Value const& body, i
 		no_clients_signal_();
 		return;
 	}
-	websocket_send(&websocket_server_, most_recent_websocket_cxn_, msg_string, lg_);
+	websocketSend(&websocket_server_, most_recent_websocket_cxn_, msg_string, lg_);
 }
