@@ -21,5 +21,5 @@ There are two channels by which information flows in Universe (websockets and VN
 
 In addition to implementing the [websocket protocol](https://github.com/openai/universe/blob/master/universe/rewarder/remote.py) in C++, processes like the VNC server, the game, and the websocket server are managed [via python](https://github.com/openai/universe-windows-envs/blob/master/vnc-gtav/run_vnc_env.py)
 
-For more on the structure of specific environments (like [GTA](vnc-gtav/README.md#structure)) see their readmes.
+For more on the structure of specific environments (like [GTA](vnc-gtav/README.md#structure)) see their readme's.
 
